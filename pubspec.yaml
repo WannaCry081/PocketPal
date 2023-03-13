@@ -76,6 +76,7 @@ flutter:
     - assets/svg/screen_2.svg
     - assets/svg/screen_3.svg
     - assets/svg/forgot_password.svg
+    - assets/svg/profile_page_bg.svg
 
     - assets/icon/Facebook.svg
     - assets/icon/Github.svg

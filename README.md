@@ -1,6 +1,34 @@
-# pocket_pal
+# Pocket Pal
 
 A new Flutter project.
+
+## Features
+
+1. Splash Screen
+2. Onboarding Page
+3. Login Page
+4. Registration Page
+5. Forgot Password Page
+6. Social Media Authentication
+7. Dashboard
+8. Menu Bar
+9. Settings Page
+10. Main Directory/Board Wall [CRUD]
+11. File/Envelope [CRUD]
+12. Insert Comments [Personal]
+13. Group Directory/Wall [CRUD]
+14. Group Files/Envelope [CRUD]
+15. Picture Gallery
+16. In-app Notification
+17. Push Notification
+18. Authorization Level Tag for Group Directory/Wall
+19. Picture Gallery
+20. Stamping
+21. Recurring Payments Tracker
+22. E-Wallet Integration
+23. Calculator
+24. Calendar
+25. Discussion Wall/Chat Box
 
 ## Getting Started
 

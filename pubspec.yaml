@@ -46,6 +46,7 @@ dependencies:
   flutter_feather_icons: ^2.0.0+1
   flutter_zoom_drawer: ^3.0.4+1
   hidden_drawer_menu: ^3.0.1
+  flutter_native_splash: ^2.2.19
 
 dev_dependencies:
   flutter_test:
@@ -111,3 +112,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+
+flutter_native_splash:
+  color : "#FFFFFF"
+  image : assets/images/Splash.png

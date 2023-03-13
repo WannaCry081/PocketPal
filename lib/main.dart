@@ -5,7 +5,6 @@ import "package:firebase_core/firebase_core.dart";
 import "package:pocket_pal/screens/auth/auth.dart";
 import "package:pocket_pal/screens/onboard/onboard.dart";
 
-import "package:pocket_pal/providers/theme_manager.dart";
 import "package:pocket_pal/providers/settings_provider.dart";
 import "package:pocket_pal/providers/auth_provider.dart";
 import "package:pocket_pal/providers/menuscreen_provider.dart";
@@ -22,10 +21,6 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create : (context) => ThemeManager()
-        ),
-
         ChangeNotifierProvider(
           create : (context) => SettingsProvider()
         ),
@@ -54,10 +49,10 @@ class PocketPalApp extends StatelessWidget{
   @override
   Widget build(BuildContext context){
 
-    final theme = context.watch<ThemeManager>().getTheme;
     final wSettings = context.watch<SettingsProvider>();
 
     final bool firstInstall = wSettings.getFirstInstall;
+    final bool isDark = wSettings.getIsDarkTheme;
     
     return MaterialApp(
       title : "Pocket Pal",
@@ -65,7 +60,9 @@ class PocketPalApp extends StatelessWidget{
 
       theme : lightTheme,
       darkTheme: darkTheme,
-      themeMode : theme, 
+      themeMode : (isDark) ? 
+        ThemeMode.dark : 
+        ThemeMode.light, 
 
       home : (firstInstall) ? 
         const OnboardView() : 

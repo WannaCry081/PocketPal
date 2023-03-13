@@ -9,7 +9,7 @@ class SettingsProvider with ChangeNotifier {
     _initPref();
   }
 
-    Future<void> _initPref() async{
+  Future<void> _initPref() async{
     pref = await SharedPreferences.getInstance();
     notifyListeners();
     return;
@@ -20,10 +20,16 @@ class SettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  set setDarkTheme(bool value){
+    pref?.setBool("isDark", value);
+    notifyListeners();
+  }
+
+  bool get getIsDarkTheme => pref?.getBool("isDark") ?? false;
   bool get getFirstInstall => pref?.getBool("firstInstall") ?? true;
 
   void setDefaultSettings() {
-    pref?.setBool("firstInstall", true);
+    pref?.setBool("isDark", false);
     notifyListeners();
     return;
   }

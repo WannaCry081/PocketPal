@@ -1,47 +1,41 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:pocket_pal/const/color_palette.dart';
+import "package:flutter/material.dart";
+import "package:google_fonts/google_fonts.dart";
+import "package:pocket_pal/const/color_palette.dart";
 
-class MyProfileWidget extends StatelessWidget{
-
+class MyProfileWidget extends StatelessWidget {
   final String imagePath;
   final String nickname;
   final String profileName;
 
-  const MyProfileWidget ({
-    super.key,
+  const MyProfileWidget({
+    Key? key,
     this.imagePath = "",
-    required this.profileName,
     required this.nickname,
-    });
-  
+    required this.profileName,
+  }) : super(key: key);
+
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Column(
       children: [
         CircleAvatar(
           radius: 55,
           backgroundColor: ColorPalette.murky,
-          backgroundImage: AssetImage(imagePath)
+          backgroundImage: _getImageProvider(),
         ),
-
-        const SizedBox(height: 15,),
-
+        const SizedBox(height: 20),
         RichText(
-          textAlign: TextAlign.center,
           text: TextSpan(
             children: [
               TextSpan(
-                text: "$profileName\n",
+                text: "$nickname\n",
                 style: GoogleFonts.poppins(
                   fontSize: 22,
                   fontWeight: FontWeight.w600,
                   color: ColorPalette.black,
-                )
+                ),
               ),
-              TextSpan(
-                text: nickname
-              )
+              TextSpan(text: profileName)
             ],
             style: GoogleFonts.poppins(
               fontSize: 18,
@@ -49,10 +43,17 @@ class MyProfileWidget extends StatelessWidget{
               color: ColorPalette.grey,
               height: 1.5
             )
-          )
+          ),
         ),
-       
       ],
     );
+  }
+
+  ImageProvider _getImageProvider() {
+    if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+      return NetworkImage(imagePath);
+    } else {
+      return AssetImage(imagePath);
+    }
   }
 }

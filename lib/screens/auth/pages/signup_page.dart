@@ -18,7 +18,7 @@ import "package:pocket_pal/services/auth_services.dart";
 import "package:pocket_pal/providers/auth_provider.dart";
 
 
-class SignUpTemplate extends StatelessWidget{
+class SignUpPage extends StatelessWidget{
   final TextEditingController passwordController;
   final TextEditingController confirmPasswordController;
 
@@ -28,7 +28,7 @@ class SignUpTemplate extends StatelessWidget{
   final double screenWidth;
   final double screenHeight;
 
-  const SignUpTemplate({ 
+  const SignUpPage({ 
     super.key,
     required this.formKey,
     required this.changePage,
@@ -51,7 +51,7 @@ class SignUpTemplate extends StatelessWidget{
             child: Form(
               key : formKey,
               child: SizedBox(
-                width : screenWidth - (screenWidth * 0.16),
+                width : screenWidth - (screenWidth * .12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -199,6 +199,7 @@ class SignUpTemplate extends StatelessWidget{
                           formKey.currentState!.save();
 
                           AuthFirebaseService().signUpUser(
+                            wAuth.getName.trim(),
                             wAuth.getEmail.trim(),
                             wAuth.getPassword.trim()
                           );

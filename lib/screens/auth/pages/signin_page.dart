@@ -17,7 +17,7 @@ import "package:pocket_pal/services/auth_services.dart";
 import "package:pocket_pal/providers/auth_provider.dart";
 
 
-class SignInTemplate extends StatelessWidget{
+class SignInPage extends StatelessWidget{
 
   final GlobalKey<FormState> formKey;
   final void Function(int) changePage;
@@ -25,7 +25,7 @@ class SignInTemplate extends StatelessWidget{
   final double screenWidth;
   final double screenHeight;
 
-  const SignInTemplate({ 
+  const SignInPage({ 
     super.key,
     required this.formKey,
     required this.changePage,
@@ -47,7 +47,7 @@ class SignInTemplate extends StatelessWidget{
               key : formKey,
 
               child: SizedBox(
-                width : screenWidth - (screenWidth * 0.16),
+                width : screenWidth - (screenWidth * .12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,

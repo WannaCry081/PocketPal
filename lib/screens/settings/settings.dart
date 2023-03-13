@@ -1,6 +1,10 @@
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:provider/provider.dart";
+
+import "package:pocket_pal/providers/settings_provider.dart";
+
 import 'package:pocket_pal/const/color_palette.dart';
 
 import "package:pocket_pal/widgets/pocket_pal_menu_button.dart";
@@ -9,18 +13,14 @@ import "package:pocket_pal/screens/settings/widgets/settings_items_widget.dart";
 import "package:pocket_pal/screens/settings/widgets/settings_header_widget.dart";
 
 
-class SettingsView extends StatefulWidget {
+class SettingsView extends StatelessWidget {
   const SettingsView({ super.key });
 
   @override
-  State<SettingsView> createState() => _SettingsViewState();
-}
-
-class _SettingsViewState extends State<SettingsView> {
-  bool switchState = true;
-
-  @override
   Widget build(BuildContext context){
+
+    final rSettings = context.read<SettingsProvider>();
+    final wSettings = context.watch<SettingsProvider>();
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -95,14 +95,9 @@ class _SettingsViewState extends State<SettingsView> {
                         const Spacer(),
                   
                         Switch(
-                          value: switchState,
+                          value: wSettings.getIsDarkTheme,
                           activeColor: ColorPalette.rustic,
-                          onChanged: (value) => {
-                            setState((){
-                              switchState =  value;
-                            })
-                          },
-        
+                          onChanged: (value) => rSettings.setDarkTheme = value
                         )
                       ]
                     ),

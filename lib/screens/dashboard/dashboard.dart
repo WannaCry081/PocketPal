@@ -20,52 +20,31 @@ class DashboardView extends StatelessWidget {
     
     return Scaffold(
       backgroundColor: ColorPalette.white,
-      body : SafeArea(
-        child : NestedScrollView(
-          headerSliverBuilder :(context, innerBoxIsScrolled) {
-            return [
-              SliverAppBar(
-                surfaceTintColor: ColorPalette.white,
-                backgroundColor: ColorPalette.white,
-                floating: false,
-                pinned: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: const PocketPalMenuButton(),
+        title: const Text("")
+      ),
 
-                title: const Padding(
-                  padding:  EdgeInsets.all(10),
-                  child: PocketPalMenuButton(),
-                ),
-                
-                expandedHeight: 360,
+      body : Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: (screenWidth * .1) /2 
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children : [
+              const MySearchBarWidget(),
 
-                flexibleSpace: FlexibleSpaceBar(
-                  background : Padding(
-                    padding : EdgeInsets.only(
-                      top : kToolbarHeight,
-                      left : screenWidth * 0.06,
-                      right : screenWidth * 0.06,
-                    ),
-                    child: Column(
-                      children : [
-
-                        const MySearchBarWidget(),
-
-                        SizedBox( height : screenHeight * 0.03 ),
-
-                        MyCardWidget(
-                          screenHeight : screenHeight,
-                          screenWidth : screenWidth
-                        ),
-
-                      ]
-                    ),
-                  )
-                  
-                ),
-              )
-            ];
-          },
-          body: Container(),
-        )
+              SizedBox(height : screenHeight * 0.04),
+              MyCardWidget(
+                screenHeight: screenHeight,
+                screenWidth: screenWidth,
+              ),
+              
+            ]
+          ),
+        ),
       )
     );
   }

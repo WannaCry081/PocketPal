@@ -13,7 +13,7 @@ import "package:pocket_pal/services/auth_services.dart";
 import "package:pocket_pal/providers/auth_provider.dart";
 
 
-class ForgotPasswordTemplate extends StatelessWidget{
+class ForgotPasswordPage extends StatelessWidget{
   
   final GlobalKey<FormState> formKey;
   final void Function(int) changePage;
@@ -21,7 +21,7 @@ class ForgotPasswordTemplate extends StatelessWidget{
   final double screenWidth;
   final double screenHeight;
 
-  const ForgotPasswordTemplate({ 
+  const ForgotPasswordPage({ 
     super.key,
     required this.formKey, 
     required this.changePage,
@@ -71,7 +71,7 @@ class ForgotPasswordTemplate extends StatelessWidget{
             child: Form(
               key : formKey,
               child: SizedBox(
-                width : screenWidth - (screenWidth * 0.16),
+                width : screenWidth - (screenWidth * .12),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children : [

@@ -85,6 +85,7 @@ flutter:
     - assets/icon/Folder.svg
 
     - assets/images/Splash.png
+    - assets/images/Profile.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

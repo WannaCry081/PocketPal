@@ -105,6 +105,7 @@ class _OnboardViewState extends State<OnboardView> {
               child : GestureDetector(
                 onTap: (){
                   rSettings.setFirstInstall = false;
+                  rSettings.setDefaultSettings();
 
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
@@ -129,7 +130,7 @@ class _OnboardViewState extends State<OnboardView> {
               child: Column(
                 children: [
                   PocketPalButton(
-                    buttonWidth : screenWidth - (screenWidth * .1),
+                    buttonWidth : screenWidth - (screenWidth * .12),
                     buttonHeight : screenHeight * .075,
                     buttonVerticalMargin: screenHeight * .04,
                     buttonHorizontalMargin: 20,
@@ -138,6 +139,7 @@ class _OnboardViewState extends State<OnboardView> {
                     buttonOnTap: (){
                       if (_currentPage == 2){
                         rSettings.setFirstInstall = false;
+                        rSettings.setDefaultSettings();
                         
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(

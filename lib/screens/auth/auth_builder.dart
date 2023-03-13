@@ -1,9 +1,9 @@
 import "package:flutter/material.dart"; 
 import "package:provider/provider.dart";
 
-import "package:pocket_pal/screens/auth/pages/forgot_password_template.dart";
-import "package:pocket_pal/screens/auth/pages/signup_template.dart";
-import "package:pocket_pal/screens/auth/pages/signin_template.dart";
+import "package:pocket_pal/screens/auth/pages/forgot_password_page.dart";
+import "package:pocket_pal/screens/auth/pages/signup_page.dart";
+import "package:pocket_pal/screens/auth/pages/signin_page.dart";
 
 import "package:pocket_pal/providers/auth_provider.dart";
 
@@ -59,8 +59,8 @@ class _AuthViewBuilderState extends State<AuthViewBuilder> {
     final screenWidth = screenSize.width;
 
     if (_currentPage == -1){
-      // Sign Up Template
-      return SignUpTemplate(
+      // Sign Up Page
+      return SignUpPage(
         formKey : signUpFormKey,
         screenHeight : screenHeight,
         screenWidth : screenWidth,
@@ -71,8 +71,8 @@ class _AuthViewBuilderState extends State<AuthViewBuilder> {
       );
 
     } else if (_currentPage == 1){
-      // Sign In Template
-      return SignInTemplate(
+      // Sign In Page
+      return SignInPage(
         formKey : signInFormKey,
         screenHeight : screenHeight,
         screenWidth : screenWidth,
@@ -80,8 +80,8 @@ class _AuthViewBuilderState extends State<AuthViewBuilder> {
       );
 
     } else {
-      // Forgot Password Template
-      return ForgotPasswordTemplate(
+      // Forgot Password Page
+      return ForgotPasswordPage(
         formKey : forgotPasswordFormKey,
         screenHeight : screenHeight,
         screenWidth : screenWidth,

@@ -28,7 +28,7 @@ class MyCardWidget extends StatelessWidget {
             height : 180,
             width : (screenWidth - ((screenWidth * 0.06)*2))- 60,
             decoration: BoxDecoration(
-              color: ColorPalette.rustic!.withOpacity(.4),
+              color: ColorPalette.rustic[100],
               borderRadius: BorderRadius.circular(20),
             ),
           ),
@@ -40,7 +40,7 @@ class MyCardWidget extends StatelessWidget {
             height : 180,
             width : (screenWidth - ((screenWidth * 0.06)*2))- 30,
             decoration: BoxDecoration(
-              color: ColorPalette.rustic!.withOpacity(.6),
+              color: ColorPalette.rustic[200],
               borderRadius: BorderRadius.circular(20),
             ),
           ),

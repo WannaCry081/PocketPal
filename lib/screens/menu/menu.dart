@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:provider/provider.dart";
 import "package:firebase_auth/firebase_auth.dart";
-// import "package:cloud_firestore/cloud_firestore.dart";
 import "package:google_sign_in/google_sign_in.dart";
 
 import "package:pocket_pal/screens/menu/widgets/logout_button_widget.dart";
@@ -44,8 +43,9 @@ class MenuView extends StatelessWidget {
               SizedBox(height: screenHeight * 0.08),
               
               MyProfileWidget(
-                profileName: "  ", 
-                nickname: "",
+                imagePath: FirebaseAuth.instance.currentUser!.photoURL!, 
+                profileName: FirebaseAuth.instance.currentUser!.email!, 
+                nickname: FirebaseAuth.instance.currentUser!.displayName!, 
               ),
             
               SizedBox(

@@ -7,7 +7,7 @@ import "package:google_sign_in/google_sign_in.dart";
 import "package:pocket_pal/screens/menu/widgets/logout_button_widget.dart";
 import "package:pocket_pal/screens/menu/widgets/profile_widget.dart";
 
-import "package:pocket_pal/utils/menu_item_utils.dart";
+import 'package:pocket_pal/utils/menu_item_util.dart';
 
 import "package:pocket_pal/providers/menuscreen_provider.dart";
 

@@ -1,4 +1,7 @@
 import "package:flutter/material.dart";
+import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_widget.dart";
+import "package:pocket_pal/screens/dashboard/widgets/dialog_box_widget.dart";
+import "package:pocket_pal/screens/dashboard/widgets/folder_widget.dart";
 
 import "package:pocket_pal/screens/dashboard/widgets/search_bar_widget.dart";
 import "package:pocket_pal/screens/dashboard/widgets/card_widget.dart";
@@ -42,6 +45,88 @@ class DashboardView extends StatelessWidget {
                 screenWidth: screenWidth,
               ),
               
+
+              SizedBox(height : screenHeight * 0.06),
+              MyFolderWidget(
+                folderName: "Personal Folder", 
+                screenHeight: screenHeight, 
+                screenWidth: screenWidth, 
+                folderLength: 4, 
+                folderItem: [
+                  ["Title", "Description"],
+                  ["Title", "Description"],
+                  ["Title", "Description"],
+                  ["Title", "Description"]
+                ], 
+                folderAdd: (){
+                  showDialog(
+                    context : context,
+                    builder : (context){
+                      return MyDialogBoxWidget(
+                        screenHeight : screenHeight,
+                        screenWidth : screenWidth
+                      );
+                    }
+                  );
+
+                  
+                }, 
+                folderEdit: (){
+                  showModalBottomSheet(
+                    context: context, 
+                    builder: (context){
+                      return MyBottomEditWidget(
+                        screenHeight : screenHeight,
+                        screenWidth : screenWidth
+                      );
+                    }
+                  );
+                }, 
+                folderOpen: (){
+                  
+                }
+              ),
+
+              SizedBox(height : screenHeight * 0.02),
+              MyFolderWidget(
+                folderName: "Group Folder", 
+                screenHeight: screenHeight, 
+                screenWidth: screenWidth, 
+                folderLength: 4, 
+                folderItem: [
+                  ["Title", "Description"],
+                  ["Title", "Description"],
+                  ["Title", "Description"],
+                  ["Title", "Description"]
+                ], 
+                folderAdd: (){
+                  showDialog(
+                    context : context,
+                    builder : (context){
+                      return MyDialogBoxWidget(
+                        screenHeight : screenHeight,
+                        screenWidth : screenWidth
+                      );
+                    }
+                  );
+                }, 
+                folderEdit: (){
+                  showModalBottomSheet(
+                    context: context, 
+                    builder: (context){
+                      return MyBottomEditWidget(
+                        screenHeight : screenHeight,
+                        screenWidth : screenWidth
+                      );
+                    }
+                  );
+                }, 
+                folderOpen: (){
+
+
+                }
+              )
+
             ]
           ),
         ),

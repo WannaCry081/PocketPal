@@ -5,7 +5,7 @@ import "package:pocket_pal/screens/dashboard/dashboard.dart";
 import "package:pocket_pal/screens/profile/profile.dart";
 import "package:pocket_pal/screens/settings/settings.dart";
 
-import "package:pocket_pal/utils/menu_item_utils.dart"; 
+import 'package:pocket_pal/utils/menu_item_util.dart'; 
 
 class MenuScreenProvider with ChangeNotifier {
 

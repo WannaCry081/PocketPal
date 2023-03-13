@@ -1,19 +1,22 @@
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
+import "package:firebase_core/firebase_core.dart";
 
-import "package:pocket_pal/screens/dashboard/dashboard.dart";
+import "package:pocket_pal/screens/auth/auth.dart";
 import "package:pocket_pal/screens/onboard/onboard.dart";
 
 import "package:pocket_pal/providers/theme_manager.dart";
 import "package:pocket_pal/providers/settings_provider.dart";
+import "package:pocket_pal/providers/auth_provider.dart";
 
 import "package:pocket_pal/const/dark_theme.dart";
 import "package:pocket_pal/const/light_theme.dart";
 
 
-void main(){
+Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
   runApp(
     MultiProvider(
@@ -25,6 +28,10 @@ void main(){
         ChangeNotifierProvider(
           create : (context) => SettingsProvider()
         ),
+
+        ChangeNotifierProvider(
+          create : (context) => AuthProvider()
+        ),  
       ],
 
       child : const PocketPalApp()
@@ -55,7 +62,7 @@ class PocketPalApp extends StatelessWidget{
 
       home : (firstInstall) ? 
         const OnboardView() : 
-        const DashboardView()
+        const AuthView()
 
       
     );

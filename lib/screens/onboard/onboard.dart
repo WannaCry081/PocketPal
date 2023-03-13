@@ -4,7 +4,7 @@ import "package:provider/provider.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
 import 'package:pocket_pal/screens/onboard/widgets/pageview_indicator_widget.dart';
-// import "package:pocket_pal/screens/auth/auth.dart";
+import "package:pocket_pal/screens/auth/auth.dart";
 
 import "package:pocket_pal/providers/settings_provider.dart";
 
@@ -106,11 +106,11 @@ class _OnboardViewState extends State<OnboardView> {
                 onTap: (){
                   rSettings.setFirstInstall = false;
 
-                  // Navigator.of(context).pushReplacement(
-                  //   MaterialPageRoute(
-                  //     builder : (context) => const AuthView()
-                  //   )
-                  // ); 
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder : (context) => const AuthView()
+                    )
+                  ); 
                 },
                 child : Text(
                   "skip",
@@ -139,11 +139,11 @@ class _OnboardViewState extends State<OnboardView> {
                       if (_currentPage == 2){
                         rSettings.setFirstInstall = false;
                         
-                        // Navigator.of(context).pushReplacement(
-                        //   MaterialPageRoute(
-                        //     builder : (context) => const AuthView()
-                        //   )
-                        // );
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder : (context) => const AuthView()
+                          )
+                        );
                       }
                   
                       _pageController.animateToPage(

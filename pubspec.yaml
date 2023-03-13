@@ -44,6 +44,8 @@ dependencies:
   google_sign_in: ^6.0.2
   cloud_firestore: ^4.4.4
   flutter_feather_icons: ^2.0.0+1
+  flutter_zoom_drawer: ^3.0.4+1
+  hidden_drawer_menu: ^3.0.1
 
 dev_dependencies:
   flutter_test:

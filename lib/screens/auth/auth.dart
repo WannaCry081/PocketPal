@@ -1,8 +1,8 @@
 import "package:flutter/material.dart"; 
 import "package:firebase_auth/firebase_auth.dart";
+
 import "package:pocket_pal/screens/auth/auth_builder.dart";
-import "package:pocket_pal/screens/dashboard/dashboard.dart";
-// import "package:pocket_pal/screens/menu/menu_drawer.dart";
+import "package:pocket_pal/screens/menu/menu_drawer.dart";
 
 class AuthView extends StatelessWidget {
   const AuthView({ super.key });
@@ -18,7 +18,7 @@ class AuthView extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasData){
             // return const MenuDrawerView();
-            return const DashboardView();
+            return const MenuDrawerView();
 
           } else {
             return const AuthViewBuilder();

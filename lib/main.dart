@@ -8,6 +8,7 @@ import "package:pocket_pal/screens/onboard/onboard.dart";
 import "package:pocket_pal/providers/theme_manager.dart";
 import "package:pocket_pal/providers/settings_provider.dart";
 import "package:pocket_pal/providers/auth_provider.dart";
+import "package:pocket_pal/providers/menuscreen_provider.dart";
 
 import "package:pocket_pal/const/dark_theme.dart";
 import "package:pocket_pal/const/light_theme.dart";
@@ -31,7 +32,13 @@ Future<void> main() async {
 
         ChangeNotifierProvider(
           create : (context) => AuthProvider()
-        ),  
+        ),
+
+        ChangeNotifierProvider(
+          create : (context) => MenuScreenProvider()
+        ),
+
+
       ],
 
       child : const PocketPalApp()

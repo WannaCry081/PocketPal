@@ -1,10 +1,11 @@
 import "package:flutter/material.dart";
-import "package:pocket_pal/screens/dashboard/dashboard.dart";
-import "package:pocket_pal/screens/onboard/onboard.dart";
 import "package:provider/provider.dart";
 
+import "package:pocket_pal/screens/dashboard/dashboard.dart";
+import "package:pocket_pal/screens/onboard/onboard.dart";
+
 import "package:pocket_pal/providers/theme_manager.dart";
-import "package:pocket_pal/providers/settings.dart";
+import "package:pocket_pal/providers/settings_provider.dart";
 
 import "package:pocket_pal/const/dark_theme.dart";
 import "package:pocket_pal/const/light_theme.dart";
@@ -23,8 +24,7 @@ void main(){
 
         ChangeNotifierProvider(
           create : (context) => SettingsProvider()
-        )
-
+        ),
       ],
 
       child : const PocketPalApp()

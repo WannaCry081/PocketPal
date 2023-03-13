@@ -6,11 +6,12 @@ import "package:provider/provider.dart";
 import "package:pocket_pal/providers/auth_provider.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
-import "package:pocket_pal/widgets/pocket_pal_button.dart";
 import "package:pocket_pal/widgets/pocket_pal_formfield.dart";
 
 
 class MyPasswordBottomSheet extends StatelessWidget {
+
+  final TextEditingController bottomSheetController;
 
   final GlobalKey<FormState> formKey;
 
@@ -28,6 +29,7 @@ class MyPasswordBottomSheet extends StatelessWidget {
     required this.screenHeight,
     required this.screenWidth,
     required this.bottomSheetHintText,
+    required this.bottomSheetController
   });
 
   @override
@@ -65,9 +67,13 @@ class MyPasswordBottomSheet extends StatelessWidget {
               ),
               GestureDetector(
                 onTap : (){
-                  Navigator.of(context).pop();
-                  formKey.currentState!.save();
-                  rAuth.reset();
+                  if (wAuth.getContainsCharacter && wAuth.getContainsUpperLower 
+                    && wAuth.getContainsSymbols && wAuth.getContainsUpperLower
+                    && wAuth.getContainsNumerics){
+                      Navigator.of(context).pop();
+                      formKey.currentState!.save();
+                      rAuth.reset();
+                    }
                 },
                 child: Text(
                   "Done",
@@ -83,14 +89,12 @@ class MyPasswordBottomSheet extends StatelessWidget {
           
           SizedBox( height : screenHeight * .02),
           PocketPalFormField(
-            formOnSaved: (value) => text(value),
+            formController: bottomSheetController,
+            formOnSaved: text,
             formHintText: bottomSheetHintText,
             formIsObsecure: wAuth.getIsObsecure,
             formOnChange: (value){
-              myFormOnChange(
-                value,
-                rAuth
-              );
+              rAuth.passwordValidator(value);
             },
             formSuffixIcon: IconButton(
               icon : Icon(
@@ -142,30 +146,6 @@ class MyPasswordBottomSheet extends StatelessWidget {
           SizedBox( height : screenHeight * .04),
         ]
       ),
-    );
-  }
-
-  void myFormOnChange(String value, AuthProvider rAuth) {
-    RegExp containsCharacters = RegExp(r'^.{8,}$');
-    RegExp containsUpper = RegExp(r"(?=.*?[A-Z])");
-    RegExp containsLower = RegExp(r"(?=.*?[a-z])");
-    RegExp containsNumerics = RegExp(r"(?=.*?[0-9])");
-    RegExp containsSymbols = RegExp(r"(?=.*?[!@#\$&*~._,<>+-])");
-
-    rAuth.setContainsCharacter(
-      (containsCharacters.hasMatch(value)) ? true : false
-    );
-    rAuth.setContainsUpperLower(
-      (
-        containsLower.hasMatch(value) &&
-        containsUpper.hasMatch(value) 
-      ) ? true : false
-    );
-    rAuth.setContainsNumerics(
-      (containsNumerics.hasMatch(value)) ? true : false
-    );
-    rAuth.setContainsSymbol(
-      (containsSymbols.hasMatch(value)) ? true : false
     );
   }
 }

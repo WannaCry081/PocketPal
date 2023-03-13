@@ -19,7 +19,9 @@ import "package:pocket_pal/providers/auth_provider.dart";
 
 
 class SignUpTemplate extends StatelessWidget{
-  
+  final TextEditingController passwordController;
+  final TextEditingController confirmPasswordController;
+
   final GlobalKey<FormState> formKey;
   final void Function(int) changePage;
 
@@ -32,6 +34,8 @@ class SignUpTemplate extends StatelessWidget{
     required this.changePage,
     required this.screenWidth,
     required this.screenHeight,
+    required this.passwordController,
+    required this.confirmPasswordController,
   });
 
   @override 
@@ -107,15 +111,16 @@ class SignUpTemplate extends StatelessWidget{
       
                     SizedBox( height : screenHeight * 0.02 ),
                     PocketPalFormField(
+                      formController: passwordController,
                       formHintText : "Password",
                       formIsReadOnly: true,
                       formIsObsecure: true,
-                      formOnSaved: (value) => wAuth.setPassword(value),
+                      formOnSaved: rAuth.setPassword,
                       formValidator: (value) {
                         if (value!.isEmpty){
                           return "Password Field must not be Empty";
                         } else if (value != wAuth.getConfirmPassword){
-                          return "Password does not Match with the confirm password";
+                          return "Password does not match with the confirm password";
                         } else {
                           return null;
                         }
@@ -126,8 +131,10 @@ class SignUpTemplate extends StatelessWidget{
                           isScrollControlled: true ,
                           context: context, 
                           builder: (context){
+                            rAuth.passwordValidator(passwordController.text);
                             return MyPasswordBottomSheet(
-                              text : wAuth.setPassword,
+                              bottomSheetController: passwordController,
+                              text : rAuth.setPassword,
                               formKey: formKey,
                               screenHeight: screenHeight,
                               screenWidth: screenWidth,
@@ -141,15 +148,18 @@ class SignUpTemplate extends StatelessWidget{
                     
                     SizedBox( height : screenHeight * 0.02 ),
                     PocketPalFormField(
+                      formController: confirmPasswordController,
                       formHintText : "Confirm Password",
                       formIsObsecure: true,
+                      formOnSaved: rAuth.setConfirmPassword,
                       formIsReadOnly: true,
-                      formOnSaved: (value) => wAuth.setConfirmPassword(value),
                       formValidator: (value) {
                         if (value!.isEmpty){
                           return "Confirm Password Field must not be Empty";
                         } else if (value != wAuth.getPassword){
-                          return "Confirm Password does not Match with the password";
+                          print(wAuth.getPassword);
+                          print(wAuth.getConfirmPassword);
+                          return "Confirm Password does not match with the password";
                         } else {
                           return null;
                         }
@@ -160,7 +170,9 @@ class SignUpTemplate extends StatelessWidget{
                           isScrollControlled: true ,
                           context: context, 
                           builder: (context){
+                            rAuth.passwordValidator(confirmPasswordController.text);
                             return MyPasswordBottomSheet(
+                              bottomSheetController: confirmPasswordController,
                               formKey: formKey,
                               text : rAuth.setConfirmPassword,
                               screenHeight: screenHeight,

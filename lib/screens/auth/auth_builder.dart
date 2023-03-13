@@ -1,8 +1,11 @@
 import "package:flutter/material.dart"; 
+import "package:provider/provider.dart";
 
 import "package:pocket_pal/screens/auth/pages/forgot_password_template.dart";
 import "package:pocket_pal/screens/auth/pages/signup_template.dart";
 import "package:pocket_pal/screens/auth/pages/signin_template.dart";
+
+import "package:pocket_pal/providers/auth_provider.dart";
 
 
 
@@ -15,6 +18,9 @@ class AuthViewBuilder extends StatefulWidget {
 
 class _AuthViewBuilderState extends State<AuthViewBuilder> {
   
+  late final TextEditingController password;
+  late final TextEditingController confirmPassword;
+
   final GlobalKey<FormState> signInFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> forgotPasswordFormKey = GlobalKey<FormState>();
@@ -24,7 +30,26 @@ class _AuthViewBuilderState extends State<AuthViewBuilder> {
 
   void changeCurrentPage(int value) => setState((){
     _currentPage = value;
+    password.text = "";
+    confirmPassword.text = "";
+
   });
+
+  @override
+  void initState(){
+    super.initState();
+    password = TextEditingController(text : "");
+    confirmPassword = TextEditingController(text : "");
+    return;
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    password.dispose();
+    confirmPassword.dispose();
+    return;
+  }
 
   @override 
   Widget build(BuildContext context){
@@ -40,6 +65,9 @@ class _AuthViewBuilderState extends State<AuthViewBuilder> {
         screenHeight : screenHeight,
         screenWidth : screenWidth,
         changePage: changeCurrentPage,
+
+        passwordController : password,
+        confirmPasswordController : confirmPassword
       );
 
     } else if (_currentPage == 1){

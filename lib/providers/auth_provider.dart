@@ -52,30 +52,6 @@ class AuthProvider with ChangeNotifier {
   bool get getContainsNumerics => _containsNumerics;
   bool get getContainsSymbols => _containsSymbols;
 
-  void setContainsCharacter(bool value){
-    _containsCharacter = value;
-    notifyListeners();
-    return;
-  }
-
-  void setContainsUpperLower(bool value) {
-    _containsUpperLower = value;
-    notifyListeners();
-    return;
-  }
-
-  void setContainsNumerics(bool value) {
-    _containsNumerics = value;
-    notifyListeners();
-    return;
-  }
-
-  void setContainsSymbol(bool value){
-    _containsSymbols = value;
-    notifyListeners();
-    return;
-  }
-
   void reset(){
     _isObsecure = true;
     _containsCharacter = false;
@@ -85,6 +61,22 @@ class AuthProvider with ChangeNotifier {
 
     notifyListeners();
     return;
+  }
+
+  void passwordValidator(String value) {
+    RegExp containsCharacters = RegExp(r'^.{8,}$');
+    RegExp containsUpper = RegExp(r"(?=.*?[A-Z])");
+    RegExp containsLower = RegExp(r"(?=.*?[a-z])");
+    RegExp containsNumerics = RegExp(r"(?=.*?[0-9])");
+    RegExp containsSymbols = RegExp(r"(?=.*?[!@#\$&*~._,<>+-])");
+
+    _containsCharacter = containsCharacters.hasMatch(value) ? true : false;
+    _containsUpperLower = (containsLower.hasMatch(value) &&
+                            containsUpper.hasMatch(value)) 
+                            ? true : false;
+    _containsNumerics = containsNumerics.hasMatch(value) ? true : false;
+    _containsSymbols = containsSymbols.hasMatch(value) ? true : false;
+    notifyListeners();
   }
 }
 

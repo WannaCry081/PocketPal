@@ -17,6 +17,7 @@ class ForgotPasswordTemplate extends StatelessWidget{
   
   final GlobalKey<FormState> formKey;
   final void Function(int) changePage;
+  
   final double screenWidth;
   final double screenHeight;
 

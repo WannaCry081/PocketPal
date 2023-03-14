@@ -1,6 +1,9 @@
 import "package:flutter/material.dart";
 import "package:firebase_auth/firebase_auth.dart";
+import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_svg/flutter_svg.dart";
+import "package:google_fonts/google_fonts.dart";
+
 import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/screens/profile/widgets/overview_widget.dart";
 import "package:pocket_pal/screens/profile/widgets/profile_widget.dart";
@@ -72,6 +75,29 @@ class ProfileView extends StatelessWidget {
                 )
             ),
           ),
+
+          Positioned(
+            bottom: (screenHeight / 2) - 250,
+            child: GestureDetector(
+              onTap: (){},
+              child: Row(
+                children: [
+                  Icon(
+                    FeatherIcons.edit3,
+                    color: ColorPalette.rustic ),
+                  const SizedBox (width: 10),
+                  Text(
+                    "Edit profile avatar",
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      color: ColorPalette.rustic,
+                      fontWeight: FontWeight.w600
+                    )
+                  ),
+                ],
+              ),
+            ),
+          )
         ],
       )
     );

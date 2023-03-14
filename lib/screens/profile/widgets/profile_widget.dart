@@ -17,6 +17,7 @@ class MyProfileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CircleAvatar(
           radius: 55,
@@ -25,6 +26,7 @@ class MyProfileWidget extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         RichText(
+          textAlign: TextAlign.center,
           text: TextSpan(
             children: [
               TextSpan(

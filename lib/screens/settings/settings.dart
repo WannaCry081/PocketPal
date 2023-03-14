@@ -5,7 +5,7 @@ import "package:provider/provider.dart";
 
 import "package:pocket_pal/providers/settings_provider.dart";
 
-import 'package:pocket_pal/const/color_palette.dart';
+import "package:pocket_pal/const/color_palette.dart";
 
 import "package:pocket_pal/widgets/pocket_pal_menu_button.dart";
 import "package:pocket_pal/screens/settings/widgets/container_widget.dart";

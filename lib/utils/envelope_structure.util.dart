@@ -1,7 +1,7 @@
 // import "package:cloud_firestore/cloud_firestore.dart";
 
 // class Envelope {
-//   String ? folderName;
+//   String ? envelopeName;
 //   String ? folderDescription;
 
 //   late DateTime folderDate;
@@ -15,7 +15,7 @@
 //   bool ? folderIsShared;
 
 //   Envelope({
-//     required this.folderName,
+//     required this.envelopeName,
 //     required this.folderDescription,
 //     this.folderIsShared = false,
 //   }){
@@ -31,7 +31,7 @@
 
 //   Map<String, dynamic> toMap(){
 //     return {
-//       "folderName" : folderName,
+//       "folderName" : envelopeName,
 //       "folderDescription" : folderDescription,
 //       "folderDate" : folderDate,
 //       "folderTime" : folderTime,
@@ -45,7 +45,7 @@
 
 //   factory Folder.fromMap(Map<String, dynamic> map){
 //     return Folder(
-//       folderName: map["folderName"], 
+//       envelopeName: map["envelopeName"], 
 //       folderDescription: map["folderDescription"]
 //     );
 //   }

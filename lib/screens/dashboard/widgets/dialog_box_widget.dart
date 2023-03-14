@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/widgets/pocket_pal_formfield.dart";
 
 
 class MyDialogBoxWidget extends StatelessWidget {
@@ -7,8 +8,19 @@ class MyDialogBoxWidget extends StatelessWidget {
   final double screenWidth;
   final double screenHeight;
 
+  final TextEditingController titleController;
+  final TextEditingController descriptionController;
+
+  final void Function(String) addFolderFunction;
+
+  final String fieldName;
+
   const MyDialogBoxWidget({ 
     super.key,
+    required this.fieldName,
+    required this.titleController,
+    required this.descriptionController,
+    required this.addFolderFunction,
     required this.screenHeight,
     required this.screenWidth,
   });
@@ -28,9 +40,21 @@ class MyDialogBoxWidget extends StatelessWidget {
         child : Column(
           children : [
 
+            PocketPalFormField(
+              formController: titleController,
+              formHintText: "Folder Name"
+            ),
+
+            PocketPalFormField(
+              formController: descriptionController,
+              formHintText: "Folder Description"
+            ),
+
             ElevatedButton(
-              child : Text("Add"),
-              onPressed: (){},
+              child : Text("Submit"),
+              onPressed: (){
+                addFolderFunction(fieldName);
+              }
             )
           ]
         )

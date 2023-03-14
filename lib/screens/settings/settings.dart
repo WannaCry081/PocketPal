@@ -45,19 +45,19 @@ class SettingsView extends StatelessWidget {
                   const SettingsHeaderWidget(
                     headerName: "PROFILE"
                   ),
-        
+                    
                   SettingsItemsWidget(
                     prefixIcon: FeatherIcons.user,
                     itemName: "Change display name",
                     onTap: (){}
                   ),
-        
+                    
                   SizedBox( height: screenHeight * 0.035),
-        
+                    
                   const SettingsHeaderWidget(
                     headerName: "ACCOUNTS"
                   ),
-        
+                    
                   SettingsItemsWidget(
                     prefixIcon: FeatherIcons.lock,
                     itemName: "Change password",
@@ -68,9 +68,9 @@ class SettingsView extends StatelessWidget {
                     itemName: "Delete Account",
                     onTap: (){}
                   ),
-        
+                    
                   SizedBox( height: screenHeight * 0.035),
-        
+                    
                   const SettingsHeaderWidget(
                     headerName: "APP SETTINGS"
                   ),
@@ -102,7 +102,7 @@ class SettingsView extends StatelessWidget {
                       ]
                     ),
                   ),
-        
+                    
                  SettingsItemsWidget(
                     prefixIcon: FeatherIcons.bell,
                     itemName: "Push Notifications",

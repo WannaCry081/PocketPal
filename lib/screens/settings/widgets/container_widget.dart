@@ -16,7 +16,7 @@ class SettingsContainerWidget extends StatelessWidget {
 
     return Container(
       child: child,
-      height: 460, 
+      height: 500, 
       width: screenWidth - (screenWidth * 0.12),
       margin: const EdgeInsets.only (top: 45.0),
       decoration: BoxDecoration(

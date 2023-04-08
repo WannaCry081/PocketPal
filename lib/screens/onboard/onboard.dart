@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:provider/provider.dart";
 
@@ -22,33 +23,27 @@ class OnboardView extends StatefulWidget {
 
 class _OnboardViewState extends State<OnboardView> {
 
-  late final PageController _pageController;
+  final PageController _pageController = PageController();
 
   final List _onboardItems = [
     [
       "assets/svg/screen_1.svg",
       "Manage finances \nconveniently",
-      "Map out and organize your finances \nsmoohtly and easily."
+      "Map out and organize your finances\nsmoohtly and easily."
     ],
     [
       "assets/svg/screen_2.svg",
       "Collaborate with \nyour peers",
-      "Peer collaboration reinforces brainstorming \nof ideas for budget management."
+      "Peer collaboration improves budget\nmanagement brainstorming."
     ],
     [
       "assets/svg/screen_3.svg",
       "Brainstorm and \nStrategize",
-      "Collect ideas and assess financial \nstrategies together.",
+      "Collect ideas and assess financial\nstrategies together.",
     ]
   ];
-  int _currentPage = 0;
 
-  @override
-  void initState(){
-    super.initState();
-    _pageController = PageController();
-    return;
-  }
+  int _currentPage = 0;
 
   @override
   void dispose(){
@@ -57,130 +52,100 @@ class _OnboardViewState extends State<OnboardView> {
     return;
   }
 
-  void onPageChanged(int value) => setState((){
-    _currentPage = value;
-  }); 
-
   @override
   Widget build(BuildContext context){
 
     final rSettings = context.read<SettingsProvider>();
     
-    final screenSize = MediaQuery.of(context).size;
-    final screenHeight = screenSize.height;
-    final screenWidth = screenSize.width;
-
     return Scaffold(
       body : SafeArea(
-        child: Stack(
-          alignment : Alignment.center,
-          children: [
-            PageView.builder(
-              controller: _pageController,
-              onPageChanged: onPageChanged,
-              itemCount : _onboardItems.length,
-              itemBuilder: (context, index){
-                return Stack(
-                  children: [
-                    Positioned(
-                      width : screenWidth,
-                      height : screenHeight-(screenHeight * .18),
-                      child: MyPageViewTileWidget(
-                        pageViewTileImage: _onboardItems[index][0], 
-                        pageViewTileTitle: _onboardItems[index][1], 
-                        pageViewTileDescription: _onboardItems[index][2], 
-                        screenHeight: screenHeight, 
-                        screenWidth: screenWidth
+        child : Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children : [
+            Expanded(
+              flex: 7,
+              child : PageView.builder(
+                controller: _pageController,
+                onPageChanged: _onPageChanged,
+                itemCount : _onboardItems.length,
+                itemBuilder : (context, index){
+                  return MyPageViewTileWidget(
+                    pageViewTileImage: _onboardItems[index][0], 
+                    pageViewTileTitle: _onboardItems[index][1], 
+                    pageViewTileDescription: _onboardItems[index][2], 
+                  );
+                }
+              )
+            ),
+
+            Flexible(
+              flex: 2,
+              child : Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 10.w, 
+                  vertical: 20.h
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children : [
+                    PocketPalButton(
+                      buttonOnTap: (){
+                        if (_currentPage == 2){
+                          rSettings.setFirstInstall = false;
+                          rSettings.setDefaultSettings();
+                          
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder : (context) => const AuthView()
+                            )
+                          );
+                        }
+                    
+                        _pageController.animateToPage(
+                          _currentPage + 1, 
+                          duration: const Duration( milliseconds: 300 ), 
+                          curve: Curves.easeOutCubic
+                        );
+                      }, 
+                      buttonWidth: double.infinity, 
+                      buttonHeight: 55.h, 
+
+                      buttonColor: (_currentPage == 2) ? 
+                        ColorPalette.rustic : 
+                        ColorPalette.lightGrey, 
+
+                      buttonBorderRadius: 10, 
+                      buttonChild: Text(
+                        (_currentPage == 2) ? 
+                          "Get Started!" : 
+                          "Next",
+                        style : GoogleFonts.poppins(
+                          fontSize : 16.sp,
+                          color : (_currentPage == 2) ? 
+                            ColorPalette.white : 
+                            ColorPalette.black,
+                          fontWeight : FontWeight.w600
+                        )
                       ),
                     ),
-                  ],
-                );
-              },
-            ),
-      
-            Positioned(
-              top : screenHeight * 0.02,
-              right : (screenWidth * .06),
-              height : screenHeight,
-              child : GestureDetector(
-                onTap: (){
-                  rSettings.setFirstInstall = false;
-                  rSettings.setDefaultSettings();
 
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder : (context) => const AuthView()
+                    SizedBox( height : 16.h ), 
+                    MyPageViewIndicatorWidget(
+                      pageViewItemLength: _onboardItems.length, 
+                      pageViewCurrentPage: _currentPage
                     )
-                  ); 
-                },
-                child : Text(
-                  "skip",
-                  textAlign : TextAlign.left,
-                  style : GoogleFonts.poppins(
-                    color : ColorPalette.grey,
-                    fontSize : 18,
-                    fontWeight : FontWeight.w500
-                  )
-                )
-              )
-            ),
-        
-            Positioned(
-              bottom : 0,
-              child: Column(
-                children: [
-                  PocketPalButton(
-                    buttonWidth : screenWidth - (screenWidth * .12),
-                    buttonHeight : screenHeight * .075,
-                    buttonVerticalMargin: screenHeight * .04,
-                    buttonHorizontalMargin: 20,
-                    buttonColor: (_currentPage == 2) ? ColorPalette.rustic : ColorPalette.lightGrey,
-                    buttonBorderRadius: 10,
-                    buttonOnTap: (){
-                      if (_currentPage == 2){
-                        rSettings.setFirstInstall = false;
-                        rSettings.setDefaultSettings();
-                        
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder : (context) => const AuthView()
-                          )
-                        );
-                      }
-                  
-                      _pageController.animateToPage(
-                        _currentPage + 1, 
-                        duration: const Duration( milliseconds: 300 ), 
-                        curve: Curves.easeOutCubic
-                      );
-                    },
-                    buttonChild: Text(
-                      (_currentPage == 2) ? "Get Started!" : "Next",
-                      style : GoogleFonts.poppins(
-                        color : (_currentPage == 2) ? ColorPalette.white : ColorPalette.black,
-                        fontSize : 18,
-                        fontWeight: FontWeight.w600
-                      )
-                    ),
-                  ),
-                  
-                  SizedBox(
-                    width : 66,
-                    height : 12,
-                    child: MyPageViewIndicatorWidget(
-                      pageViewItemLength: _onboardItems.length,
-                      pageViewCurrentPage : _currentPage,
-                    ),
-                  ),
-                  SizedBox( height : screenHeight * .04)
-                ],
+                  ]
+                ),
               )
             )
-          ],
-        ),
+          ]
+        )
       )
-    );
+    );                  
   }
 
-
+  void _onPageChanged(int value) => setState((){
+    _currentPage = value;
+  }); 
 }

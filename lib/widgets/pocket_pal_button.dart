@@ -37,11 +37,6 @@ class PocketPalButton extends StatelessWidget {
         duration: const Duration( milliseconds:300 ),
         width : buttonWidth,
         height : buttonHeight,
-        margin : EdgeInsets.symmetric(
-          vertical: buttonVerticalMargin,
-          horizontal: buttonHorizontalMargin,
-        ),
-
         decoration: BoxDecoration(
           color : buttonColor,
           borderRadius: BorderRadius.circular(buttonBorderRadius),

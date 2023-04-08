@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:google_fonts/google_fonts.dart";
 
@@ -11,54 +12,44 @@ class MyPageViewTileWidget extends StatelessWidget {
   final String pageViewTileTitle;
   final String pageViewTileDescription;
 
-  final double screenWidth;
-  final double screenHeight;
-
   const MyPageViewTileWidget({
     super.key,
     required this.pageViewTileImage,
     required this.pageViewTileTitle,
     required this.pageViewTileDescription,
-
-    required this.screenHeight,
-    required this.screenWidth,
   });
 
   @override
   Widget build(BuildContext context){
-    return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children : [
-            SvgPicture.asset(
-              pageViewTileImage,
-              width: screenWidth - 100,
-            ),
-        
-            SizedBox( height : screenHeight * .06),
-            Text(
-              pageViewTileTitle,
-              textAlign: TextAlign.center,
-              style : GoogleFonts.poppins(
-                fontSize : 28,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-        
-            SizedBox( height : screenHeight * .04),
-            Text(
-              pageViewTileDescription,
-              textAlign: TextAlign.center,
-              style : GoogleFonts.poppins(
-                fontSize : 16,
-                color : ColorPalette.grey
-              ),
-            )
-          ]
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children : [
+        SvgPicture.asset(
+          pageViewTileImage,
+          width : 300.w,
+          height : 300.h
         ),
-      ),
+    
+        SizedBox( height : 30.h),
+        Text(
+          pageViewTileTitle,
+          textAlign: TextAlign.center,
+          style : GoogleFonts.poppins(
+            fontSize : 22.sp,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+    
+        SizedBox( height : 12.h),
+        Text(
+          pageViewTileDescription,
+          textAlign: TextAlign.center,
+          style : GoogleFonts.poppins(
+            fontSize : 14.sp,
+            color : ColorPalette.grey
+          ),
+        )
+      ]
     );
   }
 }

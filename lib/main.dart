@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:provider/provider.dart";
 import "package:firebase_core/firebase_core.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
 
 import "package:pocket_pal/screens/auth/auth.dart";
 import "package:pocket_pal/screens/onboard/onboard.dart";
@@ -17,6 +19,9 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await SystemChrome.setPreferredOrientations(
+    [DeviceOrientation.portraitUp]
+  );  
 
   runApp(
     MultiProvider(
@@ -32,7 +37,6 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create : (context) => MenuScreenProvider()
         ),
-
 
       ],
 
@@ -54,21 +58,23 @@ class PocketPalApp extends StatelessWidget{
     final bool firstInstall = wSettings.getFirstInstall;
     final bool isDark = wSettings.getIsDarkTheme;
     
-    return MaterialApp(
-      title : "Pocket Pal",
-      debugShowCheckedModeBanner: false,
+    return ScreenUtilInit(
+      designSize: const Size(360, 640),
+      builder : (context, child) => MaterialApp(
+        title : "Pocket Pal",
+        debugShowCheckedModeBanner: false,
+    
+        theme : lightTheme,
+        darkTheme: darkTheme,
 
-      theme : lightTheme,
-      darkTheme: darkTheme,
-      themeMode : (isDark) ? 
-        ThemeMode.dark : 
-        ThemeMode.light, 
-
-      home : (firstInstall) ? 
-        const OnboardView() : 
-        const AuthView()
-
-      
+        themeMode : (isDark) ? 
+          ThemeMode.dark : 
+          ThemeMode.light, 
+    
+        home : (firstInstall) ? 
+          const OnboardView() : 
+          const AuthView()
+      ),
     );
   }
 }

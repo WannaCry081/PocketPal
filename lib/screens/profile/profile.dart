@@ -1,8 +1,11 @@
+import "dart:io";
+
 import "package:flutter/material.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:image_picker/image_picker.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/screens/profile/widgets/overview_widget.dart";
@@ -32,7 +35,7 @@ class ProfileView extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           Positioned(
-            top: -20,
+            top: -50,
             left: 0,
             right: 0,
             child: SvgPicture.asset(
@@ -79,7 +82,13 @@ class ProfileView extends StatelessWidget {
           Positioned(
             bottom: (screenHeight / 2) - 250,
             child: GestureDetector(
-              onTap: (){},
+              onTap: () async {
+            
+                final pickedFile = await ImagePicker().pickImage(
+                  source: ImageSource.gallery,
+                );  
+
+              },
               child: Row(
                 children: [
                   Icon(

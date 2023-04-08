@@ -47,6 +47,8 @@ dependencies:
   flutter_zoom_drawer: ^3.0.4+1
   hidden_drawer_menu: ^3.0.1
   flutter_native_splash: ^2.2.19
+  image_picker: ^0.8.7
+  flutter_screenutil: ^5.7.0
 
 dev_dependencies:
   flutter_test:

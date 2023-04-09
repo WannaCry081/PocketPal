@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:pocket_pal/services/authentication_service.dart";
 import "package:provider/provider.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:google_sign_in/google_sign_in.dart";
@@ -42,11 +43,11 @@ class MenuView extends StatelessWidget {
             children: [
               SizedBox(height: screenHeight * 0.08),
               
-              MyProfileWidget(
-                imagePath: FirebaseAuth.instance.currentUser!.photoURL!, 
-                profileName: FirebaseAuth.instance.currentUser!.email!, 
-                nickname: FirebaseAuth.instance.currentUser!.displayName!, 
-              ),
+              // MyProfileWidget(
+              //   imagePath: FirebaseAuth.instance.currentUser!.photoURL!, 
+              //   profileName: FirebaseAuth.instance.currentUser!.email!, 
+              //   nickname: FirebaseAuth.instance.currentUser!.displayName!, 
+              // ),
             
               SizedBox(
                 height: screenHeight * 0.08,
@@ -60,9 +61,9 @@ class MenuView extends StatelessWidget {
 
               const Spacer(),
               GestureDetector(
-                onTap : () async {
-                  await GoogleSignIn().signOut();
-                  await FirebaseAuth.instance.signOut();
+                onTap : () {
+                  PocketPalAuthentication()
+                    .authenticationLogout(); 
                 },
                 child: const MyLogoutButtonWidget()
               ),

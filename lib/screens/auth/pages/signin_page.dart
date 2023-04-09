@@ -1,190 +1,311 @@
+import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:flutter_svg/flutter_svg.dart";
 import "package:google_fonts/google_fonts.dart";
-import "package:flutter_feather_icons/flutter_feather_icons.dart";
-import "package:provider/provider.dart"; 
+import "package:provider/provider.dart";
 
+import "package:pocket_pal/screens/auth/pages/forgot_password_page.dart";
+import "package:pocket_pal/screens/auth/widgets/dialog_box.dart";
 import "package:pocket_pal/const/color_palette.dart";
-
-import "package:pocket_pal/widgets/pocket_pal_formfield.dart";
+import "package:pocket_pal/screens/auth/widgets/bottom_hyperlink.dart";
 import "package:pocket_pal/widgets/pocket_pal_button.dart";
-
-import "package:pocket_pal/screens/auth/widgets/divider_widget.dart";
-import "package:pocket_pal/screens/auth/widgets/social_auth_widget.dart";
-import "package:pocket_pal/screens/auth/widgets/bottom_navigation_widget.dart";
-
-import "package:pocket_pal/services/auth_services.dart";
-
-import "package:pocket_pal/providers/auth_provider.dart";
+import "package:pocket_pal/widgets/pocket_pal_formfield.dart";
+import "package:pocket_pal/providers/settings_provider.dart";
+import "package:pocket_pal/services/authentication_service.dart";
+import "package:pocket_pal/utils/password_checker_util.dart";
 
 
-class SignInPage extends StatelessWidget{
+class SignInPage extends StatefulWidget {
 
-  final GlobalKey<FormState> formKey;
-  final void Function(int) changePage;
-
-  final double screenWidth;
-  final double screenHeight;
+  final void Function() ? changeStateIsFirstInstall;
 
   const SignInPage({ 
     super.key,
-    required this.formKey,
-    required this.changePage,
-    required this.screenHeight,
-    required this.screenWidth,
+    required this.changeStateIsFirstInstall 
   });
 
-  @override 
+  @override
+  State<SignInPage> createState() => _SignInPageState();
+}
+
+
+class _SignInPageState extends State<SignInPage>{
+
+  bool _isButtonEnable = false;
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _email = TextEditingController(text : "");
+  final TextEditingController _password = TextEditingController(text : "");
+
+  @override
+  void initState(){
+    super.initState();
+    _email.addListener(_textEditingControllerListener);
+    _password.addListener(_textEditingControllerListener);
+    return;
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    _email.dispose();
+    _password.dispose();
+    return;
+  }
+  
+  @override
   Widget build(BuildContext context){
-    
-    final rAuth = context.read<AuthProvider>();
-    final wAuth = context.watch<AuthProvider>();
+
+    final wSettings = context.watch<SettingsProvider>();
+    final rSettings = context.read<SettingsProvider>();
 
     return Scaffold(
-      body: SafeArea(
+      body : SafeArea(
         child: Center(
-          child: SingleChildScrollView(
-            child: Form(
-              key : formKey,
-
-              child: SizedBox(
-                width : screenWidth - (screenWidth * .12),
+          child : SingleChildScrollView(
+            child : Form(
+              key : _formKey, 
+              child : Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 20.h,
+                  horizontal: 14.w
+                ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children : [
-                      
-                    SizedBox(height : screenHeight * .04 ),
-                    RichText(
-                      text : TextSpan(
-                        children : [
-                          TextSpan(
-                            text : "Welcome Back\n",
-                            style : TextStyle(
-                              color : ColorPalette.black,
-                              fontSize: 34,
-                              fontWeight : FontWeight.w600
-                            )
-                          ),
-                          const TextSpan(text : "You've been missed!" )
-                        ],
-                        style : GoogleFonts.poppins(
-                          color : ColorPalette.grey,
-                          fontSize : 16,
-                        )
-                      ),
+                    _signInTitle(
+                      "Welcome Back!",
+                      "You've been missed!"
                     ),
-                  
-                    SizedBox( height : screenHeight * 0.06),
-                    PocketPalFormField(
-                      formHintText : "Email Address",
-                      formOnSaved: rAuth.setEmail,
-                      formValidator: (value){
-                        String pattern = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)";
-                        final regExp = RegExp(pattern);
-      
-                        if (value!.isEmpty) {
-                          return "Email Address Field must not be Empty";
-                        } else if (!regExp.hasMatch(value)) {
-                          return "Please Enter a Valid Email Address";
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
-                    
-                    SizedBox( height : screenHeight * 0.02 ),
-                    PocketPalFormField(
-                      formHintText : "Password",
-                      formIsObsecure: wAuth.getIsObsecure,
-                      formOnSaved: rAuth.setPassword,
-                      formValidator: (value){
-                        final fieldLength = value!.length;
-                        
-                        if (value.isEmpty){
-                          return "Password Field must not be Empty";
-                        } else if (fieldLength < 7) {
-                          return "Password must be at least 7 characters long";
-                        } else {
-                          return null;
-                        }
-                      },
-                      formSuffixIcon: IconButton(
-                        icon : Icon(
-                          (wAuth.getIsObsecure) ? 
-                            FeatherIcons.eye : FeatherIcons.eyeOff
-                        ), 
-                        onPressed: rAuth.changeObsecure,
-                      ),
-                    ),
-                    
-                    SizedBox( height : screenHeight * 0.02 ),
-                    Align(
-                      alignment : Alignment.centerRight,
-                      child: GestureDetector(
-                        onTap : () => changePage(0),
-                        child: Text(
-                          "Forgot Password?",
-                          style : GoogleFonts.poppins()
-                        ),
-                      ),
-                    ),
-                    
-                    SizedBox( height : screenHeight * 0.02 ),
-                    PocketPalButton(
-                      buttonHeight: 60, 
-                      buttonWidth : screenWidth,
-                      buttonVerticalMargin: screenHeight * .04,
-                      buttonBorderRadius: 10,
-                      buttonColor: ColorPalette.rustic,
-                      buttonOnTap: (){
-                        final isValid = formKey.currentState!.validate();
-      
-                        if (isValid){
-                          formKey.currentState!.save();
 
-                          AuthFirebaseService().signInUser(
-                            wAuth.getEmail.trim(),
-                            wAuth.getPassword.trim()
-                          );
+                    SizedBox( height : 40.h),
+                    PocketPalFormField(
+                      formController: _email,
+                      formHintText: "Email Address",
+                      formValidator: (value){
+                        if (value == null || value.isEmpty){
+                          return "Please enter an Email Address";
+                        } else if (!isEmailAddress(value)) {
+                          return "Please enter a valid Email Address";
+                        } else {
+                          return null;
                         }
                       },
-                      buttonChild: Text(
-                        "Log In",
+                    ),
+
+                    SizedBox( height : 16.h ),
+                    PocketPalFormField(
+                      formController: _password,
+                      formIsObsecure: true,
+                      formHintText: "Password",
+                      formValidator: (value){
+                        if (value == null || value.isEmpty){
+                          return "Please enter your password";
+                        } else if (value.length < 8){
+                          return "Password must be at least 8 characters long";
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+
+                    SizedBox( height : 10.h),
+                    GestureDetector(
+                      onTap : _navigateToForgotPassword,
+                      child: Text(
+                        "ForgotPassword?",
+                        textAlign: TextAlign.end,
                         style : GoogleFonts.poppins(
-                          fontSize : 18,
-                          fontWeight : FontWeight.w600,
-                          color : ColorPalette.white
+                          fontSize : 12.sp,
                         )
                       ),
                     ),
-                    
-                    SizedBox(height : screenHeight * .12 ),
-                    MyDividerWidget(
-                      dividerName: "or Login In with",
-                      dividerWidth: screenWidth,
+
+                    SizedBox( height : 40.h),
+                    PocketPalButton(
+                      buttonOnTap: (!_isButtonEnable) ? null : (){
+
+                        if (_formKey.currentState!.validate()){
+                          _formKey.currentState!.save();
+                          
+                          if (wSettings.getFirstInstall){
+                            wSettings.setFirstInstall = false;
+                          }
+                          _signInPageEmailAndPasswordAuth();
+                        }
+                      }, 
+                      buttonWidth: double.infinity, 
+                      buttonHeight: 55.h, 
+                      buttonColor: (!_isButtonEnable) ? 
+                        ColorPalette.lightGrey :
+                        ColorPalette.rustic,
+                      buttonChild: Text(
+                        "Sign In",
+                        style : GoogleFonts.poppins(
+                          fontSize : 16.sp,
+                          fontWeight : FontWeight.w500,
+                          color : (!_isButtonEnable) ? 
+                            ColorPalette.black :
+                            ColorPalette.white, 
+                        )
+                      )
                     ),
-              
-                    SizedBox(height : screenHeight * .04 ),
-                    const SocialAuthWidget(),
-                  
-                    SizedBox(height : screenHeight * .06 ),
-                    MyBottomNavigationWidget(
-                      bottomText: "Don't have an Account? ",
-                      bottomNavigationText: "Sign Up",
-                      bottomOnTap: () {
-                        changePage(-1);
-                        formKey.currentState!.reset();
-                        rAuth.reset();
-                      }
+
+                    SizedBox( height : 20.h ),
+                    _signInDivider(),
+
+                    SizedBox( height : 20.h ),
+                    PocketPalButton(
+                      buttonOnTap: (){
+                        if (wSettings.getFirstInstall){
+                          rSettings.setFirstInstall = false;
+                        }
+
+                        _signInPageGoogleAuth();
+                      }, 
+                      buttonWidth: double.infinity, 
+                      buttonHeight: 55.h, 
+                      buttonColor: ColorPalette.lightGrey, 
+                      buttonChild: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children :[
+                          SvgPicture.asset(
+                            "assets/icon/Google.svg"
+                          ),
+
+                          SizedBox( width : 10.w),
+                          Text(
+                            "Continue with Google",
+                            style : GoogleFonts.poppins(
+                              fontSize : 14.sp,
+                              color : ColorPalette.black,
+                              fontWeight: FontWeight.w500
+                            )
+                          )
+                        ]
+                      )
                     ),
-                    SizedBox(height : screenHeight * .04 ),
+
+                    SizedBox(height : 14.h),
+                    MyBottomHyperlinkWidget(
+                      hyperlinkOnTap: widget.changeStateIsFirstInstall, 
+                      hyperlinkText: "Don't have an account? ", 
+                      hyperlinkLink: "Sign Up"
+                    )
                   ]
                 ),
-              ),
-            ),
+              )
+            )
+          )
+        ),
+      )
+    );
+  }
+
+  Widget _signInTitle(String title, String description){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children : [
+        Text(
+          title,
+          style : GoogleFonts.poppins(
+            fontSize : 28.sp,
+            fontWeight : FontWeight.w600
+          )
+        ),
+
+        SizedBox( height : 2.h),
+        Text(
+          description,
+          style : GoogleFonts.poppins(
+            fontSize : 14.sp,
+          )
+        ),
+      ]
+    );
+  }
+
+  Widget _signInDivider(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children : [
+        Expanded(
+          child : Divider(
+            color : ColorPalette.grey
           ),
         ),
-      ),
+    
+        SizedBox( width : 10.w),
+        Text(
+          "or signin with",
+          style : GoogleFonts.poppins(
+            color : ColorPalette.grey,
+            fontSize : 12.sp,
+          )
+        ),  
+    
+        SizedBox( width : 10.w ),
+        Expanded(
+          child : Divider(
+            color : ColorPalette.grey
+          ),
+        ),
+      ]
     );
+  }
+
+  void _textEditingControllerListener(){
+    setState((){
+      _isButtonEnable = (_email.text.isNotEmpty && 
+                        _password.text.isNotEmpty);
+    });
+    return;
+  }
+
+  Future<void> _signInPageGoogleAuth() async {
+    await PocketPalAuthentication()
+            .authenticationGoogle();
+    return;
+  }
+
+  Future<void> _signInPageEmailAndPasswordAuth() async {
+    try {
+      await PocketPalAuthentication()
+              .authenticationSignInEmailAndPassword(
+                _email.text.trim(),
+                _password.text.trim()
+              );
+    } on FirebaseAuthException catch (e){
+      showDialog(
+        context : context,
+        builder :(context) {
+          return MyDialogBoxWidget(
+            dialogBoxTitle: (e.code == "user-not-found") ? 
+              "User Not Found" : 
+                (e.code == "wrong-password") ?
+                  "Wrong Password" : 
+                  "System Error",
+            dialogBoxDescription: (e.code == "user-not-found") ? 
+              "User doesn't Exists. Please check your email and try again." : 
+                (e.code == "wrong-password") ?
+                  "Invalid password. Please check your password and try again." : 
+                  "Please enter a valid Email Address and Password.",
+          );
+        },
+      );
+    }
+    return;
+  }
+
+  void _navigateToForgotPassword(){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder : (context) => const ForgotPasswordPage()
+      )
+    );
+    return;
   }
 }

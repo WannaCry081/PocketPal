@@ -4,11 +4,10 @@ import "package:provider/provider.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 
-import "package:pocket_pal/screens/auth/auth.dart";
+import "package:pocket_pal/screens/auth/auth_builder.dart";
 import "package:pocket_pal/screens/onboard/onboard.dart";
 
 import "package:pocket_pal/providers/settings_provider.dart";
-import "package:pocket_pal/providers/auth_provider.dart";
 import "package:pocket_pal/providers/menuscreen_provider.dart";
 
 import "package:pocket_pal/const/dark_theme.dart";
@@ -31,15 +30,10 @@ Future<void> main() async {
         ),
 
         ChangeNotifierProvider(
-          create : (context) => AuthProvider()
-        ),
-
-        ChangeNotifierProvider(
           create : (context) => MenuScreenProvider()
         ),
 
       ],
-
       child : const PocketPalApp()
     )
   );
@@ -73,7 +67,7 @@ class PocketPalApp extends StatelessWidget{
     
         home : (firstInstall) ? 
           const OnboardView() : 
-          const AuthView()
+          const AuthViewBuilder()
       ),
     );
   }

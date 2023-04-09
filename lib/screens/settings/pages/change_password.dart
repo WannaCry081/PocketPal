@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
-import 'package:pocket_pal/screens/auth/widgets/password_bottom_sheet_widget.dart';
+// import 'package:pocket_pal/screens/auth/widgets/password_bottom_sheet_widget.dart';
 import 'package:pocket_pal/widgets/pocket_pal_button.dart';
 import 'package:pocket_pal/widgets/pocket_pal_formfield.dart';
 

@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_widget.dart";
-import "package:pocket_pal/screens/dashboard/widgets/dialog_box_widget.dart";
 import "package:pocket_pal/screens/dashboard/widgets/folder_widget.dart";
 
 import "package:pocket_pal/screens/dashboard/widgets/search_bar_widget.dart";
@@ -11,7 +10,7 @@ import "package:pocket_pal/widgets/pocket_pal_menu_button.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
 
-import "package:pocket_pal/services/dashboard_services.dart";
+import "package:pocket_pal/services/dashboard_service.dart";
 
 class DashboardView extends StatefulWidget {
   const DashboardView({ super.key });
@@ -109,19 +108,19 @@ class _DashboardViewState extends State<DashboardView> {
                   ["Title", "Description"]
                 ], 
                 folderAdd: (){
-                  showDialog(
-                    context : context,
-                    builder : (context){
-                      return MyDialogBoxWidget(
-                        fieldName: "Personal",
-                        titleController : folderName,
-                        descriptionController : folderDescription,
-                        addFolderFunction: addFolder,
-                        screenHeight : screenHeight,  
-                        screenWidth : screenWidth
-                      );
-                    }
-                  );
+                  // showDialog(
+                  //   context : context,
+                  //   builder : (context){
+                  //     return MyDialogBoxWidget(
+                  //       fieldName: "Personal",
+                  //       titleController : folderName,
+                  //       descriptionController : folderDescription,
+                  //       addFolderFunction: addFolder,
+                  //       screenHeight : screenHeight,  
+                  //       screenWidth : screenWidth
+                  //     );
+                  //   }
+                  // );
 
                   
                 }, 
@@ -154,19 +153,19 @@ class _DashboardViewState extends State<DashboardView> {
                   ["Title", "Description"]
                 ], 
                 folderAdd: (){
-                  showDialog(
-                    context : context,
-                    builder : (context){
-                      return MyDialogBoxWidget(
-                        fieldName: "Group",
-                        addFolderFunction:  addFolder,
-                        titleController: folderName,
-                        descriptionController: folderDescription,
-                        screenHeight : screenHeight,
-                        screenWidth : screenWidth
-                      );
-                    }
-                  );
+                  // showDialog(
+                  //   context : context,
+                  //   builder : (context){
+                  //     return MyDialogBoxWidget(
+                  //       fieldName: "Group",
+                  //       addFolderFunction:  addFolder,
+                  //       titleController: folderName,
+                  //       descriptionController: folderDescription,
+                  //       screenHeight : screenHeight,
+                  //       screenWidth : screenWidth
+                  //     );
+                  //   }
+                  // );
                 }, 
                 folderEdit: (){
                   showModalBottomSheet(

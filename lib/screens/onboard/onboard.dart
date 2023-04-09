@@ -92,7 +92,6 @@ class _OnboardViewState extends State<OnboardView> {
                     PocketPalButton(
                       buttonOnTap: (){
                         if (_currentPage == 2){
-                          rSettings.setFirstInstall = false;
                           rSettings.setDefaultSettings();
                           
                           Navigator.of(context).pushReplacement(
@@ -114,8 +113,6 @@ class _OnboardViewState extends State<OnboardView> {
                       buttonColor: (_currentPage == 2) ? 
                         ColorPalette.rustic : 
                         ColorPalette.lightGrey, 
-
-                      buttonBorderRadius: 10, 
                       buttonChild: Text(
                         (_currentPage == 2) ? 
                           "Get Started!" : 

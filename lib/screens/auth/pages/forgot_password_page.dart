@@ -1,156 +1,142 @@
+import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
-import "package:flutter_svg/flutter_svg.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:flutter_svg/flutter_svg.dart";
 import "package:provider/provider.dart";
-
-import "package:pocket_pal/const/color_palette.dart";
 
 import "package:pocket_pal/widgets/pocket_pal_button.dart";
 import "package:pocket_pal/widgets/pocket_pal_formfield.dart";
 
-import "package:pocket_pal/services/auth_services.dart";
+import "package:pocket_pal/screens/auth/widgets/dialog_box.dart";
+import "package:pocket_pal/services/authentication_service.dart";
+import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/utils/password_checker_util.dart";
+import "package:pocket_pal/providers/settings_provider.dart";
 
-import "package:pocket_pal/providers/auth_provider.dart";
+class ForgotPasswordPage extends StatefulWidget { 
+  const ForgotPasswordPage({ super.key });
+
+  @override
+  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
+}
 
 
-class ForgotPasswordPage extends StatelessWidget{
+class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   
-  final GlobalKey<FormState> formKey;
-  final void Function(int) changePage;
-  
-  final double screenWidth;
-  final double screenHeight;
+  bool _isButtonEnable = false;
 
-  const ForgotPasswordPage({ 
-    super.key,
-    required this.formKey, 
-    required this.changePage,
-    required this.screenWidth,
-    required this.screenHeight,
-  });
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _email = TextEditingController( text : "");
 
-  @override 
+  @override
+  void initState(){
+    super.initState();
+    _email.addListener(_textEditingControllerListener);
+    return;
+  }
+  @override
+  void dispose(){
+    super.dispose();
+    _email.dispose();
+    return;
+  }
+  @override
   Widget build(BuildContext context){
-    
-    final rAuth = context.read<AuthProvider>();
-    final wAuth = context.watch<AuthProvider>();
+
+    final wSettings = context.watch<SettingsProvider>();
+    final rSettings = context.read<SettingsProvider>();
 
     return Scaffold(
-      appBar : PreferredSize(
-        preferredSize: Size.fromHeight(screenHeight * 0.08),
-        child : SafeArea(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children : [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.06
-                ),
-                child: GestureDetector(
-                  onTap : () {
-                    changePage(1);
-                    formKey.currentState!.reset(); 
-                  },
-                  child : Center(
-                    child : Icon(
-                      Icons.arrow_back_ios_new_rounded, 
-                      color : ColorPalette.black,
-                      size : 38
-                    )
-                  )
-                ),
-              )
-            ]
-          ),
-        )
-      ),
+      appBar : AppBar(),
 
       body : SafeArea(
         child: Center(
           child: SingleChildScrollView(
             child: Form(
-              key : formKey,
-              child: SizedBox(
-                width : screenWidth - (screenWidth * .12),
+              key : _formKey,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 14.h,
+                  vertical: 20.h
+                ),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children : [
-                    Center(
-                      child: SvgPicture.asset(
-                        "assets/svg/forgot_password.svg",
-                        width: screenWidth - (screenWidth * 0.08)
-                      )
+                    SvgPicture.asset(
+                      "assets/svg/forgot_password.svg",
+                      width : 260.w,
+                      height : 260.h
                     ),
-                    
-                    SizedBox( height : screenHeight * .04), 
-                    
-                    RichText(
-                      text : TextSpan(
-                        children : [
-                          TextSpan(
-                            text : "Forgot Password?\n",
-                            style : TextStyle(
-                              color : ColorPalette.black,
-                              fontSize: 34,
-                              fontWeight : FontWeight.w600
-                            )
-                          ),
-                          const TextSpan(text : "Enter your email below to receive instructions in retrieving your account" )
-                        ],
-                        style : GoogleFonts.poppins(
-                          color : ColorPalette.grey,
-                          fontSize : 16,
-                        )
+
+                    SizedBox( height : 20.h),
+                    Text(
+                      "Forgot Password?",
+                      style : GoogleFonts.poppins(
+                        fontSize : 28.sp,
+                        fontWeight : FontWeight.w600
                       ),
                     ),
-                    
-                    SizedBox( height : screenHeight * .03 ),
-                    PocketPalFormField( 
-                      formHintText : "Email Address",
-                      formOnSaved: rAuth.setEmail,
+
+                    SizedBox( height : 4.h),
+                    Text(
+                      "Enter your email below to receive instructions in retrieving your account.",
+                      style : GoogleFonts.montserrat(
+                        color : ColorPalette.grey,
+                        fontWeight : FontWeight.w500,
+                        fontSize : 14.sp
+                      )
+                    ),
+
+                    SizedBox( height : 10.h),
+                    PocketPalFormField(
+                      formController: _email,
+                      formHintText: "Email Address",
                       formValidator: (value){
-                        String pattern = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)";
-                        final regExp = RegExp(pattern);
-      
-                        if (value!.isEmpty) {
-                          return "Email Address Field is Empty";
-                        } else if (!regExp.hasMatch(value)) {
-                          return "Please Enter a Valid Email Address";
+                        if (value == null || value.isEmpty){
+                          return "Please enter an Email Address";
+                        } else if (!isEmailAddress(value)) {
+                          return "Please enter a valid Email Address";
                         } else {
                           return null;
                         }
                       },
+
                     ),
-                    
-                    SizedBox( height : screenHeight * 0.03),
+
+                    SizedBox( height : 20.h),
                     PocketPalButton(
-                      buttonHeight: 60, 
-                      buttonWidth: screenWidth, 
-                      buttonBorderRadius: 10,
-                      buttonColor: ColorPalette.rustic, 
-                      buttonOnTap: (){
-                        final isValid = formKey.currentState!.validate();
-      
-                        if (isValid){
-                          formKey.currentState!.save();
+                      buttonOnTap: (!_isButtonEnable)? null : (){
 
-                          AuthFirebaseService().forgotPassword(
-                            wAuth.getEmail.trim()
-                          );
+                        if (_formKey.currentState!.validate()){
+                          _formKey.currentState!.save();
 
-                          changePage(1);
+                          if (wSettings.getFirstInstall){
+                            rSettings.setFirstInstall = false;
+                          }
                         }
-                      },
+
+                        _forgotPasswordPageResetPassword();
+
+                        Navigator.of(context).pop();
+                      }, 
+                      buttonWidth: double.infinity, 
+                      buttonHeight: 55.h, 
+                      buttonColor: (!_isButtonEnable) ?
+                        ColorPalette.lightGrey :
+                        ColorPalette.rustic, 
                       buttonChild: Text(
-                        "Submit",
+                        "Okay",
                         style : GoogleFonts.poppins(
-                          fontSize : 18,
-                          fontWeight : FontWeight.w700,
-                          color : ColorPalette.white
+                          fontSize : 16.sp,
+                          fontWeight : FontWeight.w500,
+                          color : (!_isButtonEnable) ?
+                            ColorPalette.black :
+                            ColorPalette.white
                         )
-                      ),
-                    ),
-                    SizedBox( height : screenHeight * 0.04),
+                      )
+                    )
                   ]
                 ),
               ),
@@ -158,9 +144,32 @@ class ForgotPasswordPage extends StatelessWidget{
           ),
         ),
       )
-    ); 
+    );
   }
-}
 
+  void _textEditingControllerListener() => setState((){
+    _isButtonEnable = _email.text.isNotEmpty;
+  });
 
+  Future<void> _forgotPasswordPageResetPassword() async{
     
+    try {
+      await PocketPalAuthentication()
+              .authenticationResetPassword(
+                _email.text.trim()
+              );
+    } on FirebaseAuthException catch (e){
+      showDialog(
+        context : context,
+        builder: (context) {
+          return const MyDialogBoxWidget(
+            dialogBoxTitle: "User Not Found",
+            dialogBoxDescription: "User doesn't Exists. Please check your email and try again."
+          );
+        },
+      );
+    }
+    return;
+  }
+
+}

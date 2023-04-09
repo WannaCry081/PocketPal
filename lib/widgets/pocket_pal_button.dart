@@ -21,12 +21,12 @@ class PocketPalButton extends StatelessWidget {
     required this.buttonOnTap,
     required this.buttonWidth,
     required this.buttonHeight,
+    required this.buttonColor,
+    required this.buttonChild,
+    this.buttonBoxShadow,
+    this.buttonBorderRadius = 10,
     this.buttonHorizontalMargin = 0,
     this.buttonVerticalMargin = 0,
-    required this.buttonColor,
-    required this.buttonBorderRadius,
-    required this.buttonChild,
-    this.buttonBoxShadow
   });
 
   @override

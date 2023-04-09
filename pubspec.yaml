@@ -49,6 +49,7 @@ dependencies:
   flutter_native_splash: ^2.2.19
   image_picker: ^0.8.7
   flutter_screenutil: ^5.7.0
+  firebase_storage: ^11.1.0
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +80,7 @@ flutter:
     - assets/svg/screen_3.svg
     - assets/svg/forgot_password.svg
     - assets/svg/profile_page_bg.svg
+    - assets/svg/Error.svg
 
     - assets/icon/Facebook.svg
     - assets/icon/Github.svg

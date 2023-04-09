@@ -1,33 +1,50 @@
-import "package:flutter/material.dart"; 
-import "package:firebase_auth/firebase_auth.dart";
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
 
-import "package:pocket_pal/screens/auth/auth_builder.dart";
-import "package:pocket_pal/screens/auth/pages/loading_dart.dart";
-import "package:pocket_pal/screens/menu/menu_drawer.dart";
-import "package:pocket_pal/error/errorpage.dart";
+import "package:pocket_pal/providers/settings_provider.dart";
 
-class AuthView extends StatelessWidget {
+import "package:pocket_pal/screens/auth/pages/signin_page.dart";
+import "package:pocket_pal/screens/auth/pages/signup_page.dart";
+
+
+class AuthView extends StatefulWidget {
   const AuthView({ super.key });
+
+  @override
+  State<AuthView> createState() => _AuthViewState();
+}
+
+
+class _AuthViewState extends State<AuthView>{
+
+  bool _isFirstInstall = true;
+
+  @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    setState((){
+      _isFirstInstall = Provider.of<SettingsProvider>(
+      context, listen: true).getFirstInstall;
+    }); 
+    return;
+  }
+
 
   @override 
   Widget build(BuildContext context){
-    return Scaffold(
-      body : StreamBuilder<User?>(
-        stream : FirebaseAuth.instance.authStateChanges(),
-        builder : (context, snapshot){
-
-          if (snapshot.connectionState == ConnectionState.waiting){
-            return const LoadingPage();
-          } else if (snapshot.hasData){
-            return const MenuDrawerView();
-          } else if (snapshot.hasError){
-            return const ErrorPage();
-          } else {
-            return const AuthViewBuilder();
-          }
-          
-        }
-      )
-    );
+    
+    if (_isFirstInstall){
+      return SignUpPage(
+        changeStateIsFirstInstall : _changeStateIsFirstInstall
+      ); 
+    } else {
+      return SignInPage(
+        changeStateIsFirstInstall : _changeStateIsFirstInstall
+      );
+    }
   }
+
+  void _changeStateIsFirstInstall() => setState((){
+    _isFirstInstall = !_isFirstInstall;
+  }); 
 }

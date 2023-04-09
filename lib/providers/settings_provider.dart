@@ -3,33 +3,34 @@ import "package:shared_preferences/shared_preferences.dart";
 
 
 class SettingsProvider with ChangeNotifier {
-  SharedPreferences ? pref;
+  SharedPreferences ? _pref;
 
   SettingsProvider() {
     _initPref();
   }
 
   Future<void> _initPref() async{
-    pref = await SharedPreferences.getInstance();
+    _pref = await SharedPreferences.getInstance();
     notifyListeners();
     return;
   }
 
+  bool get getIsDarkTheme => _pref?.getBool("isDark") ?? false;
+  bool get getFirstInstall => _pref?.getBool("firstInstall") ?? true;
+
   set setFirstInstall(bool value) {
-    pref?.setBool("firstInstall", value);
+    _pref?.setBool("firstInstall", value);
     notifyListeners();
   }
 
   set setDarkTheme(bool value){
-    pref?.setBool("isDark", value);
+    _pref?.setBool("isDark", value);
     notifyListeners();
   }
 
-  bool get getIsDarkTheme => pref?.getBool("isDark") ?? false;
-  bool get getFirstInstall => pref?.getBool("firstInstall") ?? true;
 
   void setDefaultSettings() {
-    pref?.setBool("isDark", false);
+    _pref?.setBool("isDark", false);
     notifyListeners();
     return;
   }

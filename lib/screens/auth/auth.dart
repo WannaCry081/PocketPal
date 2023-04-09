@@ -2,7 +2,9 @@ import "package:flutter/material.dart";
 import "package:firebase_auth/firebase_auth.dart";
 
 import "package:pocket_pal/screens/auth/auth_builder.dart";
+import "package:pocket_pal/screens/auth/pages/loading_dart.dart";
 import "package:pocket_pal/screens/menu/menu_drawer.dart";
+import "package:pocket_pal/error/errorpage.dart";
 
 class AuthView extends StatelessWidget {
   const AuthView({ super.key });
@@ -15,11 +17,11 @@ class AuthView extends StatelessWidget {
         builder : (context, snapshot){
 
           if (snapshot.connectionState == ConnectionState.waiting){
-            return const Center(child: CircularProgressIndicator());
+            return const LoadingPage();
           } else if (snapshot.hasData){
-            // return const MenuDrawerView();
             return const MenuDrawerView();
-
+          } else if (snapshot.hasError){
+            return const ErrorPage();
           } else {
             return const AuthViewBuilder();
           }

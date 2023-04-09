@@ -71,11 +71,9 @@ class PocketPalApp extends StatelessWidget{
           ThemeMode.dark : 
           ThemeMode.light, 
     
-        // home : (firstInstall) ? 
-        //   const OnboardView() : 
-        //   const AuthView()
-
-        home : OnboardView()
+        home : (firstInstall) ? 
+          const OnboardView() : 
+          const AuthView()
       ),
     );
   }

@@ -1,9 +1,14 @@
 import "package:flutter/material.dart";
+import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 import "package:provider/provider.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:google_sign_in/google_sign_in.dart";
+
+import "package:pocket_pal/screens/dashboard/dashboard.dart";
+import "package:pocket_pal/screens/profile/profile.dart";
+import "package:pocket_pal/screens/settings/settings.dart";
 
 import "package:pocket_pal/screens/menu/widgets/logout_button_widget.dart";
 import "package:pocket_pal/screens/menu/widgets/profile_widget.dart";
@@ -13,6 +18,27 @@ import 'package:pocket_pal/utils/menu_item_util.dart';
 import "package:pocket_pal/providers/menuscreen_provider.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
+
+class MenuItems {
+  static const home = MenuItem(
+      "Dashboard", 
+      FeatherIcons.home
+  );
+  static const profile = MenuItem(
+      "Profile", 
+      FeatherIcons.user,
+  );
+  static const settings =  MenuItem(
+      "Settings",
+      FeatherIcons.settings,
+  );
+
+  static const all = <MenuItem>[
+    home, 
+    profile,
+    settings
+  ];
+}
 
 
 class MenuView extends StatelessWidget {
@@ -28,7 +54,7 @@ class MenuView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final menuItems = context.read<MenuScreenProvider>().getPocketPalMenuItems;
+    //final menuItems = context.read<MenuScreenProvider>().getPocketPalMenuItems;
 
     final size = MediaQuery.of(context).size;
     final screenHeight = size.height;
@@ -57,7 +83,7 @@ class MenuView extends StatelessWidget {
                 ),
               ),
             
-              ...menuItems.map(buildMenuItem).toList(),
+              ...MenuItems.all.map(buildMenuItem).toList(),
 
               const Spacer(),
               GestureDetector(

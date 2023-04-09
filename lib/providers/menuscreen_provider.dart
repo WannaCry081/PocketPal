@@ -12,26 +12,26 @@ class MenuScreenProvider with ChangeNotifier {
   MenuItem _currentPage = const MenuItem(
       "Dashboard", 
       FeatherIcons.home,
-      DashboardView()
+      //DashboardView()
     );
   
   final List<MenuItem> _pocketPalMenuItems = const [
     MenuItem(
       "Home", 
       FeatherIcons.home,
-      DashboardView()
+      //DashboardView()
     ),
 
     MenuItem(
       "Profile", 
       FeatherIcons.user,
-      ProfileView(),
+      //ProfileView(),
     ),
 
     MenuItem(
       "Settings",
       FeatherIcons.settings,
-      SettingsView()
+      //SettingsView()
     ),
   ];
 

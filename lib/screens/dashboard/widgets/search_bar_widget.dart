@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
@@ -11,6 +12,10 @@ class MySearchBarWidget extends StatelessWidget {
   @override 
   Widget build(BuildContext context){
     return Container(
+      margin: EdgeInsets.symmetric(
+        vertical : 10.h, 
+        horizontal: 14.w
+      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
         color : Colors.transparent,
@@ -25,9 +30,9 @@ class MySearchBarWidget extends StatelessWidget {
       ),
       child: TextField(
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 30,
-            vertical : 20
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 14.w,
+            vertical : 18.h
           ),
           prefixIcon: const Icon(
             FeatherIcons.search
@@ -36,7 +41,7 @@ class MySearchBarWidget extends StatelessWidget {
           fillColor: ColorPalette.white,
           hintText: "Search Group | Wall | Envelope",
           hintStyle: GoogleFonts.poppins(
-            fontSize : 16,
+            fontSize : 16.sp,
             fontWeight: FontWeight.w500
           ),
           enabledBorder: OutlineInputBorder(

@@ -97,16 +97,7 @@ class _ProfileViewState extends State<ProfileView> {
           Positioned(
             bottom: (screenHeight / 2) - 250,
             child: GestureDetector(
-<<<<<<< HEAD
-              onTap: () async {
-                final pickedFile = await ImagePicker().pickImage(
-                  source: ImageSource.gallery,
-                );  
-
-              },
-=======
               onTap: _profilePageUpdateProfilePicture,
->>>>>>> lirae-branch
               child: Row(
                 children: [
                   Icon(

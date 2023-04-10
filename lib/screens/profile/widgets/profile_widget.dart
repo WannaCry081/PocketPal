@@ -33,11 +33,7 @@ class MyProfileWidget extends StatelessWidget {
               TextSpan(
                 text: "$profileName\n",
                 style: GoogleFonts.poppins(
-<<<<<<< HEAD
-                  fontSize: 22.sp,
-=======
                   fontSize: 20.sp,
->>>>>>> lirae-branch
                   fontWeight: FontWeight.w600,
                   color: ColorPalette.black,
                 ),
@@ -45,11 +41,7 @@ class MyProfileWidget extends StatelessWidget {
               TextSpan(text: profileEmail)
             ],
             style: GoogleFonts.poppins(
-<<<<<<< HEAD
-              fontSize: 16,
-=======
               fontSize: 14.sp,
->>>>>>> lirae-branch
               fontWeight: FontWeight.w500,
               color: ColorPalette.grey,
               height: 1.5

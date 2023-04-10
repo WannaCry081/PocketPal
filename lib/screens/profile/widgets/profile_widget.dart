@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/const/color_palette.dart";
 
@@ -24,7 +25,7 @@ class MyProfileWidget extends StatelessWidget {
           backgroundColor: ColorPalette.murky,
           backgroundImage: _getImageProvider(),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: 20.h),
         RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
@@ -32,7 +33,7 @@ class MyProfileWidget extends StatelessWidget {
               TextSpan(
                 text: "$nickname\n",
                 style: GoogleFonts.poppins(
-                  fontSize: 22,
+                  fontSize: 22.sp,
                   fontWeight: FontWeight.w600,
                   color: ColorPalette.black,
                 ),
@@ -40,7 +41,7 @@ class MyProfileWidget extends StatelessWidget {
               TextSpan(text: profileName)
             ],
             style: GoogleFonts.poppins(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.w500,
               color: ColorPalette.grey,
               height: 1.5

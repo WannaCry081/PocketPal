@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pocket_pal/screens/profile/widgets/overview_count_widget.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 
@@ -18,7 +19,7 @@ class MyProfileOverview extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return SizedBox(
-      height: 60,
+      height: 60.h,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children:[
@@ -28,7 +29,7 @@ class MyProfileOverview extends StatelessWidget{
           ),
     
           VerticalDivider(
-            thickness: 1.5,
+            thickness: 2,
             color: ColorPalette.lightGrey,
             indent: 5,
             endIndent: 5,
@@ -41,7 +42,7 @@ class MyProfileOverview extends StatelessWidget{
           ),
 
           VerticalDivider(
-            thickness: 1.5,
+            thickness: 2,
             color: ColorPalette.lightGrey,
             indent: 5,
             endIndent: 5,

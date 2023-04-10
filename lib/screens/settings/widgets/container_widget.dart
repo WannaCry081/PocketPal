@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 
 class SettingsContainerWidget extends StatelessWidget {
@@ -18,7 +19,12 @@ class SettingsContainerWidget extends StatelessWidget {
       child: child,
       height: 500, 
       width: screenWidth - (screenWidth * 0.12),
-      margin: const EdgeInsets.only (top: 45.0),
+      padding: EdgeInsets.only(
+        top : 10.h,
+        left: 14.w,
+        right: 14.w
+      ),
+      //margin: const EdgeInsets.only (top: 45.0),
       decoration: BoxDecoration(
         color: ColorPalette.white,
         border: Border.all(

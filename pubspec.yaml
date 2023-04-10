@@ -50,6 +50,8 @@ dependencies:
   image_picker: ^0.8.7
   flutter_screenutil: ^5.7.0
   firebase_storage: ^11.1.0
+  glassmorphism: ^3.0.0
+  flutter_slidable: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -90,6 +92,8 @@ flutter:
 
     - assets/images/Splash.png
     - assets/images/Profile.png
+    - assets/images/envelope_bg.png
+
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

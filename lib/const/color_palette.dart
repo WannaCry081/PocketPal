@@ -8,6 +8,7 @@ class ColorPalette {
   static Color ? lightGrey = Colors.grey[200];
   static Color ? grey = Colors.grey[500];
 
+
   static MaterialColor rustic = const MaterialColor(
     0xFFD65A31, {
       50: Color(0xFFFFF3F0),

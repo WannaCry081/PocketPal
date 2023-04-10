@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:pocket_pal/screens/envelope/envelope.dart";
 import "package:provider/provider.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -65,9 +66,10 @@ class PocketPalApp extends StatelessWidget{
           ThemeMode.dark : 
           ThemeMode.light, 
     
-        home : (firstInstall) ? 
-          const OnboardView() : 
-          const AuthViewBuilder()
+        home : EnvelopeView()
+        // (firstInstall) ? 
+        //   const OnboardView() : 
+        //   const AuthViewBuilder()
       ),
     );
   }

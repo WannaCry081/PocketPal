@@ -41,7 +41,7 @@ class MySearchBarWidget extends StatelessWidget {
           fillColor: ColorPalette.white,
           hintText: "Search Group | Wall | Envelope",
           hintStyle: GoogleFonts.poppins(
-            fontSize : 16.sp,
+            fontSize : 14.sp,
             fontWeight: FontWeight.w500
           ),
           enabledBorder: OutlineInputBorder(

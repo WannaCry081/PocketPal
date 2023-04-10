@@ -21,8 +21,6 @@ class _MenuDrawerViewState extends State<MenuDrawerView> {
   
   @override
   Widget build(BuildContext context) {
-    // final rMenuItems = context.read<MenuScreenProvider>();
-    // final wMenuItems = context.watch<MenuScreenProvider>();
 
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -51,18 +49,6 @@ class _MenuDrawerViewState extends State<MenuDrawerView> {
       mainScreenScale: 0.2,
     );
   }
-
-  // Widget getScreen(List <MenuItem> menuItems, MenuItem currentItem) {
-  //   if (currentItem == menuItems[0]){
-  //     return menuItems[0].getPageView;
-  //   } else if (currentItem == menuItems[1]){
-  //     return menuItems[1].getPageView;
-  //   } else if (currentItem == menuItems[2]){
-  //     return menuItems[2].getPageView;
-  //   } else {
-  //     return menuItems[0].getPageView;
-  //   }
-  // }
 
    Widget getScreen(){
     switch (currentItem) {

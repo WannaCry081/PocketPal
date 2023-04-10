@@ -1,18 +1,19 @@
 import "package:flutter/material.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/const/color_palette.dart";
 
 class MyProfileWidget extends StatelessWidget {
-  final String imagePath;
-  final String nickname;
+  final String profilePicture;
   final String profileName;
+  final String profileEmail;
 
   const MyProfileWidget({
-    Key? key,
-    this.imagePath = "",
-    required this.nickname,
+    super.key,
+    required this.profilePicture,
     required this.profileName,
-  }) : super(key: key);
+    required this.profileEmail
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,39 +21,32 @@ class MyProfileWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CircleAvatar(
-          radius: 32,
+          radius: 32.r,
           backgroundColor: ColorPalette.rustic,
-          backgroundImage: _getImageProvider(),
+          backgroundImage: NetworkImage(profilePicture),
         ),
-        const SizedBox(height: 20),
+        
+        SizedBox(height: 20.h),
         RichText(
           text: TextSpan(
             children: [
               TextSpan(
-                text: "$nickname\n",
+                text: "$profileName\n",
                 style: GoogleFonts.poppins(
                   color: Colors.white,
-                  fontSize: 22,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              TextSpan(text: profileName)
+              TextSpan(text: profileEmail)
             ],
             style: GoogleFonts.poppins(
               color: ColorPalette.lightGrey,
-              fontSize: 15,
+              fontSize: 12.sp,
             ),
           ),
         ),
       ],
     );
-  }
-
-  ImageProvider _getImageProvider() {
-    if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
-      return NetworkImage(imagePath);
-    } else {
-      return AssetImage(imagePath);
-    }
   }
 }

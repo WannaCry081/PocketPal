@@ -17,17 +17,20 @@ class PocketPalStorage {
     return;
   }
 
-  Future<String> getImageUrl(bool ? isDefualt) async {
-    String fileName = "Profile.png";
-    
-    if (isDefualt != null) {
-      String userUid = PocketPalAuthentication().getUserUID;
-      fileName = "${userUid}_profile.png";
-    }
+  Future<String> getImageUrl() async {
+    String userUid = PocketPalAuthentication().getUserUID;
+    String fileName = "${userUid}_profile.png";
 
     Reference ref = _storage.ref().child("Profile/$fileName");
     String url = await ref.getDownloadURL();
     
+    return url;
+  }
+
+  Future<String> getDefaultImage() async {
+    String fileName = "Profile.png";
+    Reference ref = _storage.ref().child("Profile/$fileName");
+    String url = await ref.getDownloadURL();
     return url;
   }
 }

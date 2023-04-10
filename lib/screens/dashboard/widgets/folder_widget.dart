@@ -1,145 +1,91 @@
 import "package:flutter/material.dart";
-import "package:flutter_feather_icons/flutter_feather_icons.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:flutter_svg/flutter_svg.dart";
-
+import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:pocket_pal/const/color_palette.dart";
-
-// import "package:pocket_pal/util/folder_class.dart';
 
 
 class MyFolderWidget extends StatelessWidget {
-
-  final void Function() ? folderShowMore;
-  final void Function() ? folderAdd;
-  final void Function() ? folderEdit;
-  final void Function() ? folderOpen;
-  
-  final String folderName;
-
-  final double screenHeight;
-  final double screenWidth;
-
-  final List folderItem;
-  final int folderLength;
+  final int? folderLength;
+  final List? folderItems;
+  final void Function() ? folderAddOnTap;
+  final void Function() ? folderOnTap;
+  final void Function() ? folderOnLongPress;
 
   const MyFolderWidget({ 
-    super.key,
-    required this.folderName,
-    required this.screenHeight,
-    required this.screenWidth,
-    this.folderShowMore,
+    super.key, 
+    this.folderLength,
+    this.folderItems,
 
-    required this.folderLength,
-    required this.folderItem,
-
-    required this.folderAdd,
-    required this.folderEdit,
-    required this.folderOpen,
-    
-   });
+    this.folderOnLongPress,
+    this.folderOnTap,
+    this.folderAddOnTap
+  });
 
   @override
   Widget build(BuildContext context){
-    return Column(
-      children : [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              folderName,
-              style: GoogleFonts.poppins(
-                color : ColorPalette.grey
-              ),
-            ),
-        
-            GestureDetector(
-              onTap : folderShowMore,
-              child: Text(
-                "show more",
-                style: GoogleFonts.poppins(
-                  color : ColorPalette.rustic
-                ),
-              ),
-            ),
-          ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding : EdgeInsets.symmetric(
+          horizontal: 7.w
         ),
-        
-        const SizedBox( height : 10),
-        
-        SizedBox(
-          width : screenWidth,
-          height : screenHeight * 0.2,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal, 
-            itemCount: (folderLength==0) ? 1 : (folderLength >= 10) ? 11 : folderLength+1,
-                    
-            itemBuilder: (context, index){
-
-
-              if ( folderLength == index ){
-                return Stack(
-                  fit : StackFit.passthrough,
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.center,
-                  children : [
+        child: Row(
+          children: [
+            for (int i=0; i<folderLength!+1;i++)
+              GestureDetector(
+                onTap : (i == (folderLength!-1)) ? 
+                  folderOnTap :
+                  folderAddOnTap,
+                onLongPress: (i == (folderLength!-1)) ?
+                  folderOnLongPress : 
+                  null,
+                child: Stack(
+                  alignment : Alignment.center,
+                  children : [  
                     SvgPicture.asset(
                       "assets/icon/Folder.svg",
+                      width : 160.w,
+                      height : 160.h
                     ),
-
-                    GestureDetector(
-                      onTap: folderAdd,
-                      child : const Icon(
-                        FeatherIcons.plusCircle,
-                        size : 50
-                        ),
-                    )
-                  ]
-                );
-              } else {
-                return GestureDetector(
-                  onLongPress: folderEdit,
-                  onTap : folderOpen,
-                  child: Stack(
-                    fit : StackFit.passthrough,
-                    clipBehavior: Clip.none,
-                    alignment: Alignment.center,
-                    children : [
-                      SvgPicture.asset(
-                        "assets/icon/Folder.svg",
-                      ),
-                
-                      Positioned(
-                        bottom : 45,
-                        left : 25,
-                        child : Text(
-                          folderItem[index][0],
-                          style : GoogleFonts.montserrat(
-                            fontSize : 16,
-                            fontWeight: FontWeight.w600
-                          )
-                        )
-                      ),
-                
+                    
+                    (i == (folderLength!-1))?
                       Positioned(
                         bottom : 30,
                         left : 25,
-                        child : Text(
-                          folderItem[index][1],
-                          style : GoogleFonts.montserrat(
-                            color : ColorPalette.grey,
-                          )
+                        child : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children : [
+                            Text(
+                              "Title", 
+                              style : GoogleFonts.montserrat(
+                                fontSize : 14.sp,
+                                fontWeight: FontWeight.w600
+                              )
+                            ),
+                            Text(
+                              "Description", 
+                              style : GoogleFonts.montserrat(
+                                fontSize : 12.sp,
+                                fontWeight: FontWeight.w600,
+                                color : ColorPalette.grey
+                              )
+                            ),
+                          ]
                         )
-                      ),
-              
-                    ]
-                  ),
-                );
-              }
-            },
-          ),
-        )
-      ]
+                      )
+                    : const Icon(
+                      FeatherIcons.plusCircle,
+                      size : 50
+                    )
+                    
+                  ]
+                ),
+              )
+          ]
+        ),
+      ),
     );
   }
 }

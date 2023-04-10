@@ -27,13 +27,11 @@ class PocketPalAuthentication {
       password: userPassword
     );
 
-    final currentUser = newUser.user;
-    if (currentUser != null){
-      currentUser.updateDisplayName(userName);
-      currentUser.updatePhotoURL(
-        await PocketPalStorage().getImageUrl(null)
-      );
-    }
+    final currentUser = newUser.user!;
+    await currentUser.updateDisplayName(userName);
+    await currentUser.updatePhotoURL(
+      await PocketPalStorage().getDefaultImage()
+    );
     return;
   }
 
@@ -65,10 +63,16 @@ class PocketPalAuthentication {
     return;
   }
 
+  Future<void> authenticationUpdateProfile(String newPicture) async {  
+    final currentUser = _auth.currentUser!;
+    await currentUser.updatePhotoURL(newPicture);
+    return;
+  }
 
-  String get getUserDisplayName => _auth.currentUser!.displayName ?? "";
-  String get getUserEmail => _auth.currentUser!.email ?? "";
-  String get getUserPhotoUrl => _auth.currentUser!.photoURL ?? "";
+
+  String get getUserDisplayName => _auth.currentUser?.displayName ?? "";
+  String get getUserEmail => _auth.currentUser?.email ?? "";
+  String get getUserPhotoUrl => _auth.currentUser?.photoURL ?? "";
   String get getUserUID => _auth.currentUser!.uid;
 }
 

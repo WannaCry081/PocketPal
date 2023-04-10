@@ -1,7 +1,6 @@
 import "dart:io";
 
 import "package:flutter/material.dart";
-import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:google_fonts/google_fonts.dart";
@@ -10,6 +9,8 @@ import "package:image_picker/image_picker.dart";
 import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/screens/profile/widgets/overview_widget.dart";
 import "package:pocket_pal/screens/profile/widgets/profile_widget.dart";
+import "package:pocket_pal/services/authentication_service.dart";
+import "package:pocket_pal/services/storage_service.dart";
 import "package:pocket_pal/widgets/pocket_pal_menu_button.dart";
 
 
@@ -21,6 +22,8 @@ class ProfileView extends StatelessWidget {
 
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+
+    final auth = PocketPalAuthentication();
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -63,9 +66,9 @@ class ProfileView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     MyProfileWidget(
-                      imagePath: FirebaseAuth.instance.currentUser!.photoURL!, 
-                      profileName: FirebaseAuth.instance.currentUser!.email!, 
-                      nickname: FirebaseAuth.instance.currentUser!.displayName!, 
+                      profilePicture: auth.getUserPhotoUrl, 
+                      profileName: auth.getUserDisplayName, 
+                      profileEmail: auth.getUserEmail, 
                     ),
 
                     SizedBox(height: screenHeight * 0.03),
@@ -82,13 +85,7 @@ class ProfileView extends StatelessWidget {
           Positioned(
             bottom: (screenHeight / 2) - 250,
             child: GestureDetector(
-              onTap: () async {
-            
-                final pickedFile = await ImagePicker().pickImage(
-                  source: ImageSource.gallery,
-                );  
-
-              },
+              onTap: _profilePageUpdateProfilePicture,
               child: Row(
                 children: [
                   Icon(
@@ -110,5 +107,24 @@ class ProfileView extends StatelessWidget {
         ],
       )
     );
+  }
+
+  Future<void> _profilePageUpdateProfilePicture() async {
+    final newPicture = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );  
+
+    if (newPicture != null){
+      final storage = PocketPalStorage();
+
+      await storage.addImageToStorage(
+        File(newPicture.path)
+      );
+      
+      await PocketPalAuthentication().authenticationUpdateProfile(
+        await storage.getImageUrl()
+      );
+    }      
+    return;
   }
 }

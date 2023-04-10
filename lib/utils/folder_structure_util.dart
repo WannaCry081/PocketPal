@@ -1,47 +1,44 @@
 class Folder {
+  String folderId;
   String ? folderName;
-  String ? folderDescription;
 
   late DateTime folderDate;
 
   late int folderNumberOfMembers;
   late int folderNumberOfFolder;
-  late int folderNumberOfEnvelope;
-  late List folderData;
+  late int folderNumberOfEnvelopes;
 
-  bool ? folderIsShared;
+  bool folderIsShared;
 
   Folder({
+    this.folderId = "",
     required this.folderName,
-    required this.folderDescription,
-    this.folderIsShared = false,
+    this.folderIsShared = false
   }){
     folderDate = DateTime.now();
   
-    folderNumberOfEnvelope = 0;
+    folderNumberOfEnvelopes = 0;
     folderNumberOfMembers = 0;
-    folderNumberOfFolder = 0;
-
-    folderData = [];
+    folderNumberOfFolder = 0; 
   }
 
   Map<String, dynamic> toMap(){
     return {
+      "id" : folderId,
       "folderName" : folderName,
-      "folderDescription" : folderDescription,
       "folderDate" : folderDate,
       "folderNumberOfMembers" : folderNumberOfMembers,
       "folderNumberOfFolder" : folderNumberOfFolder,
-      "folderNumberOfEnvelope" : folderNumberOfEnvelope,
+      "folderNumberOfEnvelopes" : folderNumberOfEnvelopes,
       "folderIsShared" : folderIsShared,
-      "folderData" : folderData 
     };
   }
 
   factory Folder.fromMap(Map<String, dynamic> map){
     return Folder(
+      folderId: map["id"],
       folderName: map["folderName"], 
-      folderDescription: map["folderDescription"]
+      folderIsShared: map["folderIsShared"]
     );
   }
 

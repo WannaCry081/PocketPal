@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 
@@ -45,30 +46,28 @@ class MenuView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    //final menuItems = context.read<MenuScreenProvider>().getPocketPalMenuItems;
-
-    final size = MediaQuery.of(context).size;
-    final screenHeight = size.height;
+    final auth = PocketPalAuthentication();
 
     return Scaffold(
       backgroundColor: ColorPalette.black,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          padding: EdgeInsets.symmetric(
+            horizontal: 14.w
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: screenHeight * 0.08),
+              SizedBox(height: 60.h),
               
-              // MyProfileWidget(
-              //   imagePath: FirebaseAuth.instance.currentUser!.photoURL!, 
-              //   profileName: FirebaseAuth.instance.currentUser!.email!, 
-              //   nickname: FirebaseAuth.instance.currentUser!.displayName!, 
-              // ),
+              MyProfileWidget(
+                profilePicture: auth.getUserPhotoUrl,
+                profileName: auth.getUserDisplayName,
+                profileEmail: auth.getUserEmail,
+              ),
             
               SizedBox(
-                height: screenHeight * 0.08,
+                height: 40.h,
                 child: Divider(
                   color: ColorPalette.lightGrey,
                   thickness: 0.8,
@@ -82,7 +81,7 @@ class MenuView extends StatelessWidget {
                 onTap : _userLogout,
                 child: const MyLogoutButtonWidget()
               ),
-              SizedBox(height: screenHeight * 0.05,),
+              SizedBox(height: 30.h),
             ],
           ),
         ),  
@@ -100,10 +99,11 @@ class MenuView extends StatelessWidget {
     child: ListTile(
       leading: Icon(item.icon,
           color: ColorPalette.white,
-          size: 26),
+          size: 20.w
+        ),
       title: Text(item.title,
         style: GoogleFonts.poppins(
-            fontSize: 18,
+            fontSize: 14.sp,
             color: ColorPalette.white,
             fontWeight: FontWeight.w600
           ),),
@@ -112,7 +112,7 @@ class MenuView extends StatelessWidget {
       ),
 
       selectedTileColor: ColorPalette.rustic,
-      minLeadingWidth: 35,
+      minLeadingWidth: 10.w,
       selected: currentItem == item,
       onTap: () => onSelectedItem(item),
     ),

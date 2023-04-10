@@ -50,8 +50,12 @@ dependencies:
   image_picker: ^0.8.7
   flutter_screenutil: ^5.7.0
   firebase_storage: ^11.1.0
+<<<<<<< HEAD
   glassmorphism: ^3.0.0
   flutter_slidable: ^2.0.0
+=======
+  firebase_messaging: ^14.4.0
+>>>>>>> lirae-branch
 
 dev_dependencies:
   flutter_test:

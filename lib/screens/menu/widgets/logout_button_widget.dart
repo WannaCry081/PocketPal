@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
@@ -17,13 +18,13 @@ class MyLogoutButtonWidget extends StatelessWidget {
         children: [
           Icon(FeatherIcons.logOut,
             color: ColorPalette.white,
-            size: 26
-            ),
+            size: 20.w
+          ),
 
-          const SizedBox( width: 24),
+          SizedBox( width: 10.w),
           Text("Logout",
             style: GoogleFonts.poppins(
-              fontSize: 18,
+              fontSize: 14.sp,
               color: ColorPalette.white,
               fontWeight: FontWeight.w600
             ))

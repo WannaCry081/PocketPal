@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:flutter_zoom_drawer/flutter_zoom_drawer.dart";
 
@@ -7,11 +8,15 @@ class PocketPalMenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        ZoomDrawer.of(context)!.toggle();
-      },
-      icon: SvgPicture.asset("assets/icon/Menu.svg")
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 14.w),
+      child: IconButton(
+        onPressed: () {
+          ZoomDrawer.of(context)!.toggle();
+        },
+        icon: SvgPicture.asset("assets/icon/Menu.svg")
+      ),
     );
   }
 }

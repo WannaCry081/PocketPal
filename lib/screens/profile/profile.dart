@@ -3,6 +3,7 @@ import "dart:io";
 import "package:flutter/material.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:image_picker/image_picker.dart";
@@ -29,7 +30,13 @@ class ProfileView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: const PocketPalMenuButton(),
-        title: const Text("Profile")
+        title:  Text(
+          "Profile",
+          style: GoogleFonts.poppins(
+            fontSize : 18.sp,
+            color: ColorPalette.black,
+          ),
+        )
       ),
       body: Stack(
         alignment: Alignment.center,
@@ -83,7 +90,6 @@ class ProfileView extends StatelessWidget {
             bottom: (screenHeight / 2) - 250,
             child: GestureDetector(
               onTap: () async {
-            
                 final pickedFile = await ImagePicker().pickImage(
                   source: ImageSource.gallery,
                 );  
@@ -94,11 +100,11 @@ class ProfileView extends StatelessWidget {
                   Icon(
                     FeatherIcons.edit3,
                     color: ColorPalette.rustic ),
-                  const SizedBox (width: 10),
+                  SizedBox (width: 10.w),
                   Text(
                     "Edit profile avatar",
                     style: GoogleFonts.poppins(
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       color: ColorPalette.rustic,
                       fontWeight: FontWeight.w600
                     )

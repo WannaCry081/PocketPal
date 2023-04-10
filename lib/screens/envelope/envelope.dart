@@ -74,7 +74,7 @@ class _EnvelopeViewState extends State<EnvelopeView> {
                           color: ColorPalette.white,),
                         SizedBox( width: 10.h,),
                         Text(
-                          "Enevelope Name",
+                          "Envelope Name",
                           style: GoogleFonts.poppins(
                             fontSize : 18.sp,
                             color: ColorPalette.white,

@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:pocket_pal/screens/dashboard/pages/show_folder.dart";
+import "package:pocket_pal/screens/dashboard/pages/show_more_page.dart";
 
 import "package:pocket_pal/screens/dashboard/widgets/card_widget.dart";
 import "package:pocket_pal/screens/dashboard/widgets/dialog_box.dart";
@@ -53,7 +55,9 @@ class _DashboardViewState extends State<DashboardView> {
               MyFolderTitleWidget(
                 folderTitleTopSize: 28.h,
                 folderTitleText: "Personal Folder",
-                folderTitleOnTap: _dashboardNavigateToPersonal,
+                folderTitleOnTap: () => 
+                  _dashboardNavigateToFolders(false),
+
               ),
 
               _dashboardFolderView(db, false), 
@@ -61,7 +65,8 @@ class _DashboardViewState extends State<DashboardView> {
               MyFolderTitleWidget(
                 folderTitleTopSize : 16.h, 
                 folderTitleText: "Group Folder",
-                folderTitleOnTap: _dashboardNavigateToGroup,
+                folderTitleOnTap: () => 
+                  _dashboardNavigateToFolders(true),
               ),
 
               _dashboardFolderView(db, true), 
@@ -86,7 +91,8 @@ class _DashboardViewState extends State<DashboardView> {
       context: context,
       builder: (context) {
         return MyDialogBoxWidget(
-          folderName: _folderName,
+          controllerName: _folderName,
+          dialogBoxHintText: "Folder Name",
           dialogBoxTitle: "Add Folder",
           dialogBoxOnTap: (){
             Folder folder = Folder(
@@ -107,30 +113,34 @@ class _DashboardViewState extends State<DashboardView> {
     return;
   }
 
-  void _dashboardNavigateSpecificPersonalFolder(){
-    
-    return;
-  }
-
-  void _dashboardEditGroupFolder() {
-
-    return;
-  }
 
   void _dashboardNavigateSpecificGroupFolder(){
     
     return;
   }
 
-  void _dashboardNavigateToPersonal(){
-
+  void _dashboardNavigateToFolder(Folder folder){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder : (context) => ShowFolderPage(
+          folder : folder
+        )
+      )
+    );
     return;
   }
 
-  void _dashboardNavigateToGroup(){
-
+  void _dashboardNavigateToFolders(bool isShared){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder : (create) => ShowMorePage(
+          isShared : isShared,
+        )
+      )
+    );
     return;
   }
+
 
   Widget _dashboardFolderView(PocketPalDatabase db, bool isShared){
     return SingleChildScrollView(
@@ -156,7 +166,8 @@ class _DashboardViewState extends State<DashboardView> {
                 (e) => MyFolderWidget(
                   folder: e,
                   folderOnLongPress: _dashboardEditPersonalFolder,
-                  folderOnTap : _dashboardNavigateSpecificPersonalFolder
+                  folderOnTap : () =>
+                    _dashboardNavigateToFolder(e)
                 )
               ).toList();
                     

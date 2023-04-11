@@ -8,11 +8,17 @@ import "package:pocket_pal/utils/folder_structure_util.dart";
 
 class MyFolderWidget extends StatelessWidget {
   final Folder folder;
+  final double folderSize;
+  final double folderTitleSize;
+  final double folderDescriptionSize;
   final void Function() ? folderOnTap;
   final void Function() ? folderOnLongPress;
 
   const MyFolderWidget({ 
     super.key, 
+    this.folderSize = 160, 
+    this.folderTitleSize = 14,
+    this.folderDescriptionSize = 12,
     required this.folder,
     this.folderOnLongPress,
     this.folderOnTap,
@@ -28,8 +34,8 @@ class MyFolderWidget extends StatelessWidget {
         children : [  
           SvgPicture.asset(
             "assets/icon/Folder.svg",
-            width : 160.w,
-            height : 160.h
+            width : folderSize.w, 
+            height : folderSize.h
           ),
           
           Positioned(
@@ -41,14 +47,14 @@ class MyFolderWidget extends StatelessWidget {
                 Text(
                   folder.folderName!, 
                   style : GoogleFonts.montserrat(
-                    fontSize : 14.sp,
+                    fontSize : folderTitleSize.sp,
                     fontWeight: FontWeight.w600
                   )
                 ),
                 Text(
                   "${folder.folderIsShared}", 
                   style : GoogleFonts.montserrat(
-                    fontSize : 12.sp,
+                    fontSize : folderDescriptionSize.sp,
                     fontWeight: FontWeight.w600,
                     color : ColorPalette.grey
                   )

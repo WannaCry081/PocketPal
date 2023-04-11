@@ -8,13 +8,15 @@ import "package:pocket_pal/widgets/pocket_pal_formfield.dart";
 
 class MyDialogBoxWidget extends StatelessWidget {
 
-  final TextEditingController folderName;
+  final TextEditingController controllerName;
+  final String dialogBoxHintText;
   final String dialogBoxTitle;
   final void Function() dialogBoxOnTap;
   
   const MyDialogBoxWidget({ 
     super.key,
-    required this.folderName,
+    required this.dialogBoxHintText,
+    required this.controllerName,
     required this.dialogBoxTitle,
     required this.dialogBoxOnTap,
   });
@@ -36,8 +38,8 @@ class MyDialogBoxWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children :[
             PocketPalFormField(
-              formController: folderName,
-              formHintText: "Folder Name",
+              formController: controllerName,
+              formHintText: dialogBoxHintText,
             ),
       
             PocketPalButton(
@@ -47,7 +49,7 @@ class MyDialogBoxWidget extends StatelessWidget {
               buttonBorderRadius: 100,
               buttonColor: ColorPalette.rustic, 
               buttonChild: Text(
-                "Okay",
+                "Submit",
                 style : GoogleFonts.poppins(
                   fontSize : 16.sp,
                   fontWeight : FontWeight.w500,

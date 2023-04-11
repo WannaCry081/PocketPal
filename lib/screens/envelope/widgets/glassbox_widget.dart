@@ -5,7 +5,7 @@ class Glassbox extends StatelessWidget {
   final double height;
   final double width;
   final double borderRadius;
-  final child;
+  final Widget child;
 
   const Glassbox({
     Key? key,

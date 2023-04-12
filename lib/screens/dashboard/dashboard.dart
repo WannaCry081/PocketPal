@@ -1,8 +1,10 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:pocket_pal/const/color_palette.dart";
 
 import "package:pocket_pal/screens/dashboard/pages/folder_content.dart";
 import "package:pocket_pal/screens/dashboard/pages/folder_grid.dart";
+import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_sheet.dart";
 
 import "package:pocket_pal/screens/dashboard/widgets/card_widget.dart";
 import "package:pocket_pal/screens/dashboard/widgets/dialog_box.dart";
@@ -83,8 +85,13 @@ class _DashboardViewState extends State<DashboardView> {
 
 
 
-  void _dashboardEditPersonalFolder() {
-    
+  void _dashboardEditFolder() {
+    showModalBottomSheet(
+      context: context, 
+      builder: (context){
+        return MyBottomEditSheetWidget();
+      }
+    );
     return;
   }
 
@@ -163,7 +170,7 @@ class _DashboardViewState extends State<DashboardView> {
               ).map(
                 (e) => MyFolderWidget(
                   folder: e,
-                  folderOnLongPress: _dashboardEditPersonalFolder,
+                  folderOnLongPress: _dashboardEditFolder,
                   folderOnTap : () =>
                     _dashboardNavigateToFolder(e)
                 )

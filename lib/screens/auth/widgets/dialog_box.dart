@@ -20,6 +20,7 @@ class MyDialogBoxWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return AlertDialog(
+      backgroundColor: ColorPalette.white,
       content : SizedBox(
         height : 240.h,
         child: Column(

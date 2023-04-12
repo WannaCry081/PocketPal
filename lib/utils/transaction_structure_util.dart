@@ -5,11 +5,14 @@ class Transaction {
   String transactionName;
   late String transactionType;
   late double transactionAmount;
-  late DateTime transactionDate;
   late String transactionUsername;
+  late DateTime transactionDate;
 
   Transaction({
     required this.transactionName,
+    required this.transactionUsername,
+    required this.transactionType,
+    required this.transactionAmount,
     this.transactionId = "",
   }){
     transactionDate = DateTime.now();
@@ -30,6 +33,9 @@ class Transaction {
     return Transaction(
       transactionId: map["id"],
       transactionName: map["transactionName"],
+      transactionType: map["transactionType"], 
+      transactionAmount: map["transactionAmount"], 
+      transactionUsername: map["transactionUsername"]
     );
   }
 

@@ -7,9 +7,21 @@ import "package:pocket_pal/widgets/pocket_pal_formfield.dart";
 
 class MyNewTransactionDialogWidget extends StatelessWidget {
    
-    bool isIncome;
+  final GlobalKey<FormState> formKey;
+  final String fieldName; //envelopeName
+  final TextEditingController transactionTypeController;
+  final TextEditingController transactionNameController;
+  final TextEditingController transactionAmountController;
+  final Function(String) addTransactionFunction;
+  bool isIncome;
 
   MyNewTransactionDialogWidget({
+    required this.fieldName,
+    required this.formKey,
+    required this.transactionTypeController,
+    required this.transactionNameController,
+    required this.transactionAmountController,
+    required this.addTransactionFunction,
     this.isIncome = false,
     super.key});
     
@@ -24,6 +36,7 @@ class MyNewTransactionDialogWidget extends StatelessWidget {
               contentPadding: EdgeInsets.all(25),
               content: SingleChildScrollView(
               child: Form(
+                key: formKey,
                 child: Column(
                 children: [
                   Text(
@@ -54,8 +67,8 @@ class MyNewTransactionDialogWidget extends StatelessWidget {
                       inactiveTrackColor: Colors.red[100],
                       onChanged: (value){
                       setState(() {
-                          isIncome = value;
-                         //transactionTypeController.text = isIncome ? "Income" : "Expense";
+                        isIncome = value;
+                        transactionTypeController.text = isIncome ? "Income" : "Expense";
                       });
                     }
                     ),
@@ -75,15 +88,16 @@ class MyNewTransactionDialogWidget extends StatelessWidget {
                     Expanded(
                       child: PocketPalFormField(
                         formHintText: "Amount",
-                        formValidator: (value){
-                            if (value!.isEmpty) {
-                              return 'Please enter a value.';
-                            }
-                            if (int.tryParse(value) == null) {
-                              return 'Please enter a valid amount.';
-                            }
-                            return null;
-                          },
+                        formController: transactionAmountController,
+                        // formValidator: (value){
+                        //   if(value!.isEmpty){
+                        //     return "Please enter a transaction amount.";
+                        //   }
+                        //   if(double.tryParse(value) == null){
+                        //     return "Please enter a valid amount.";
+                        //   }
+                        //   return null;
+                        // },
                       )
                     )
                   ],
@@ -94,6 +108,7 @@ class MyNewTransactionDialogWidget extends StatelessWidget {
                   Expanded(
                     child: PocketPalFormField(
                       formHintText: "Transaction Name",
+                      formController: transactionNameController,
                       formValidator: (value){
                         if(value!.isEmpty){
                           return "Please enter a transaction name.";
@@ -136,7 +151,21 @@ class MyNewTransactionDialogWidget extends StatelessWidget {
                 fontSize: 14.sp
               )
             ),
-            onPressed: (){},
+            onPressed: (){
+               if (formKey.currentState!.validate()){
+                addTransactionFunction(fieldName);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Transaction added!"),
+                    duration: Duration(seconds: 1),));
+              //   Navigator.push(
+              //     context,
+              //   MaterialPageRoute(builder: (context) => 
+              //       const EnvelopeView()
+              //       )
+              // );
+              }
+            }
           ),
         ],
 

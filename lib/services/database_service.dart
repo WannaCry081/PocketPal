@@ -33,7 +33,7 @@ class PocketPalDatabase {
     final userUid = PocketPalAuthentication().getUserUID;
 
     final collection = _db.collection(userUid).doc(
-      docName).collection("$userUid+Envelope").doc();
+      docName).collection("$docName+Envelope").doc();
 
     data["envelopeId"] = collection.id;
     await collection.set(data);
@@ -44,7 +44,7 @@ class PocketPalDatabase {
   Stream<List<Envelope>> getEnvelope(String docName){
     final userUid = PocketPalAuthentication().getUserUID;
 
-    final collection = _db.collection(userUid).doc(docName).collection("$userUid+Envelope");
+    final collection = _db.collection(userUid).doc(docName).collection("$docName+Envelope");
 
     return collection.snapshots().map(
       (snapshot) => snapshot.docs.map(

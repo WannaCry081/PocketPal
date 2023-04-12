@@ -22,7 +22,7 @@ class MySearchBarWidget extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color : ColorPalette.black!.withOpacity(.2),
-            blurRadius: 4,
+            blurRadius: 2,
             offset: const Offset(0, 2), 
 
           )
@@ -32,10 +32,13 @@ class MySearchBarWidget extends StatelessWidget {
         decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
             horizontal: 14.w,
-            vertical : 18.h
+            vertical : 16.h
           ),
-          prefixIcon: const Icon(
-            FeatherIcons.search
+          prefixIcon: Padding(
+            padding:  EdgeInsets.only( left : 12.w),
+            child: const Icon(
+              FeatherIcons.search
+            ),
           ),
           filled: true,
           fillColor: ColorPalette.white,
@@ -45,12 +48,12 @@ class MySearchBarWidget extends StatelessWidget {
             fontWeight: FontWeight.w500
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(50),
             borderSide: const BorderSide(color: Colors.transparent)
           ),
     
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(50),
             borderSide: const BorderSide(color: Colors.transparent)
           )
         ),

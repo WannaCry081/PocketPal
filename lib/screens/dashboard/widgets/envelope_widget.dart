@@ -1,7 +1,8 @@
 import "package:flutter/material.dart";
-import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:flutter_svg/flutter_svg.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
+
 import "package:pocket_pal/utils/envelope_structure_util.dart";
 
 
@@ -14,9 +15,9 @@ class MyEnvelopeWidget extends StatelessWidget {
 
   const MyEnvelopeWidget({ 
     super.key, 
-    this.envelopeSize = 160, 
-    this.envelopeTitleSize = 14,
     required this.envelope,
+    this.envelopeSize = 60, 
+    this.envelopeTitleSize = 14,
     this.envelopeOnLongPress,
     this.envelopeOnTap,
   });
@@ -31,14 +32,16 @@ class MyEnvelopeWidget extends StatelessWidget {
         children : [  
           SvgPicture.asset(
             "assets/icon/Envelope.svg",
-            width : envelopeSize.w, 
-            height : envelopeSize.h
+            width : envelopeSize.w + envelopeSize.h, 
+            height : envelopeSize.h + envelopeSize.w
           ),
           
           Positioned(
             bottom : 0,
             child : Text(
-              envelope.envelopeName, 
+              (envelope.envelopeName.length > 14) ? 
+                "${envelope.envelopeName.substring(0, 14)}..." : 
+                envelope.envelopeName,
               style : GoogleFonts.montserrat(
                 fontSize : envelopeTitleSize.sp,
                 fontWeight: FontWeight.w600

@@ -1,14 +1,16 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:pocket_pal/screens/dashboard/pages/show_folder.dart";
-import "package:pocket_pal/screens/dashboard/pages/show_more_page.dart";
+
+import "package:pocket_pal/screens/dashboard/pages/folder_content.dart";
+import "package:pocket_pal/screens/dashboard/pages/folder_grid.dart";
 
 import "package:pocket_pal/screens/dashboard/widgets/card_widget.dart";
 import "package:pocket_pal/screens/dashboard/widgets/dialog_box.dart";
 import "package:pocket_pal/screens/dashboard/widgets/folder_add_widget.dart";
-import "package:pocket_pal/screens/dashboard/widgets/folder_title_widget.dart";
+import 'package:pocket_pal/screens/dashboard/widgets/title_option.dart';
 import "package:pocket_pal/screens/dashboard/widgets/folder_widget.dart";
 import "package:pocket_pal/screens/dashboard/widgets/search_bar_widget.dart";
+
 import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/utils/folder_structure_util.dart";
 import "package:pocket_pal/widgets/pocket_pal_menu_button.dart";
@@ -52,9 +54,9 @@ class _DashboardViewState extends State<DashboardView> {
               const MySearchBarWidget(),
               const MyCardWidget(),
 
-              MyFolderTitleWidget(
-                folderTitleTopSize: 28.h,
-                folderTitleText: "Personal Folder",
+              MyTitleOptionWidget(
+                folderTitleTopSize: 22.h,
+                folderTitleText: "Personal Wall",
                 folderTitleOnTap: () => 
                   _dashboardNavigateToFolders(false),
 
@@ -62,9 +64,9 @@ class _DashboardViewState extends State<DashboardView> {
 
               _dashboardFolderView(db, false), 
 
-              MyFolderTitleWidget(
+              MyTitleOptionWidget(
                 folderTitleTopSize : 16.h, 
-                folderTitleText: "Group Folder",
+                folderTitleText: "Group Wall",
                 folderTitleOnTap: () => 
                   _dashboardNavigateToFolders(true),
               ),
@@ -92,9 +94,11 @@ class _DashboardViewState extends State<DashboardView> {
       builder: (context) {
         return MyDialogBoxWidget(
           controllerName: _folderName,
-          dialogBoxHintText: "Folder Name",
-          dialogBoxTitle: "Add Folder",
+          dialogBoxHintText: "Untitled Wall",
+          dialogBoxTitle: "Add Wall",
+          dialogBoxErrorMessage: "Please enter a name for your Wall",
           dialogBoxOnTap: (){
+ 
             Folder folder = Folder(
               folderName: _folderName.text.trim(),
               folderIsShared: isShared
@@ -113,16 +117,10 @@ class _DashboardViewState extends State<DashboardView> {
     return;
   }
 
-
-  void _dashboardNavigateSpecificGroupFolder(){
-    
-    return;
-  }
-
   void _dashboardNavigateToFolder(Folder folder){
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder : (context) => ShowFolderPage(
+        builder : (context) => FolderContentPage(
           folder : folder
         )
       )
@@ -133,7 +131,7 @@ class _DashboardViewState extends State<DashboardView> {
   void _dashboardNavigateToFolders(bool isShared){
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder : (create) => ShowMorePage(
+        builder : (create) => FolderGridPage(
           isShared : isShared,
         )
       )

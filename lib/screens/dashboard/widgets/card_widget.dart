@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:google_fonts/google_fonts.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
 
@@ -30,20 +29,20 @@ class MyCardWidget extends StatelessWidget {
             Positioned(
               bottom : (-i * 10),
               child: Container(
-                height : 180.h,
+                height : 140.h + 20.w,
                 width : (screenWidth - ((screenWidth * 0.06)*2))- (30*i),
                 decoration: BoxDecoration(
                   color: ColorPalette.rustic[300 - (i*100)],
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
             ),
           
           Container(
-            height : 180.h,
+            height : 140.h + 20.w,
             decoration: BoxDecoration(
               color: ColorPalette.rustic,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
             ),
           ),
         ]

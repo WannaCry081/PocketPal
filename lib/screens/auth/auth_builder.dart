@@ -19,14 +19,17 @@ class AuthViewBuilder extends StatelessWidget {
 
           if (snapshot.connectionState == ConnectionState.waiting){
             return const LoadingPage();
-          } else if (snapshot.hasData){
-            return const MenuDrawerView();
-          } else if (snapshot.hasError){
-            return const ErrorPage();
-          } else {
-            return const AuthView();
-          }
+          } 
           
+          if (snapshot.hasData){
+            return const MenuDrawerView();
+          } 
+          
+          if (snapshot.hasError){
+            return const ErrorPage();
+          }
+
+          return const AuthView();          
         }
       )
     );

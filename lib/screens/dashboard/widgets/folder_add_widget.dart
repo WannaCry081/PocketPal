@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/flutter_svg.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 
 
@@ -21,8 +21,8 @@ class MyFolderAddWidget extends StatelessWidget {
         children : [  
           SvgPicture.asset(
             "assets/icon/Folder.svg",
-            width : 160.w,
-            height : 160.h
+            width : 70.w + 70.h,
+            height : 70.h + 70.w
           ),
           
           Icon(

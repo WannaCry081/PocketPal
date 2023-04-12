@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:google_fonts/google_fonts.dart";
+
 import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/widgets/pocket_pal_button.dart";
 
@@ -37,12 +38,12 @@ class ErrorPage extends StatelessWidget {
                     buttonOnTap: () {
                       Navigator.of(context).pop();
                     },
-                    buttonHeight: 55.h,
+                    buttonHeight: 50.h,
                     buttonWidth: double.infinity,
                     buttonColor: ColorPalette.rustic,
                     buttonChild: Text("Go back",
                         style: GoogleFonts.poppins(
-                          fontSize: 16.sp,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                           color: ColorPalette.white,
                         )),

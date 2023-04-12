@@ -1,6 +1,6 @@
 class Folder {
   String folderId;
-  String ? folderName;
+  String folderName;
 
   late DateTime folderDate;
 

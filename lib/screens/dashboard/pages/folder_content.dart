@@ -10,19 +10,19 @@ import "package:pocket_pal/utils/folder_structure_util.dart";
 import "package:pocket_pal/screens/dashboard/widgets/dialog_box.dart";
 
 
-class ShowFolderPage extends StatefulWidget {
+class FolderContentPage extends StatefulWidget {
   final Folder folder;
 
-  const ShowFolderPage({ 
+  const FolderContentPage({ 
     super.key,
     required this.folder
   });
 
   @override
-  State<ShowFolderPage> createState() => _ShowFolderPageState();
+  State<FolderContentPage> createState() => _FolderContentPageState();
 }
 
-class _ShowFolderPageState extends State<ShowFolderPage> {
+class _FolderContentPageState extends State<FolderContentPage> {
 
   final TextEditingController _envelopeName = TextEditingController(text : "");
 
@@ -41,7 +41,7 @@ class _ShowFolderPageState extends State<ShowFolderPage> {
     return Scaffold(
       appBar : AppBar(
         title : Text(
-          widget.folder.folderName!,
+          widget.folder.folderName,
           style : GoogleFonts.poppins(
             fontSize : 16.sp
           )
@@ -60,8 +60,6 @@ class _ShowFolderPageState extends State<ShowFolderPage> {
       body : _dashboardEnvelopeView(
         db
       )
-      
-
     );
   }
 
@@ -71,20 +69,23 @@ class _ShowFolderPageState extends State<ShowFolderPage> {
       builder: (context) {
         return MyDialogBoxWidget(
           controllerName: _envelopeName,
-          dialogBoxHintText: "Envelope Name",
+          dialogBoxHintText: "Untitled Envelope",
           dialogBoxTitle: "Add Envelope",
+          dialogBoxErrorMessage: "Please enter a name for your Envelope",
           dialogBoxOnTap: (){
-            Envelope envelope = Envelope(
-              envelopeName: _envelopeName.text.trim()
-            );
+            if (_envelopeName.text.isNotEmpty){
+              Envelope envelope = Envelope(
+                envelopeName: _envelopeName.text.trim()
+              );
 
-            PocketPalDatabase().createEnvelope(
-              widget.folder.folderId, 
-              envelope.toMap()  
-            );
+              PocketPalDatabase().createEnvelope(
+                widget.folder.folderId, 
+                envelope.toMap()  
+              );
 
-            Navigator.of(context).pop();
-
+              _envelopeName.clear();
+              Navigator.of(context).pop();
+              }
           },
         );
       }
@@ -133,6 +134,4 @@ class _ShowFolderPageState extends State<ShowFolderPage> {
       },
     );
   }
-
-  
 }

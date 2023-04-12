@@ -2,27 +2,27 @@ import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/const/color_palette.dart";
-import "package:pocket_pal/screens/dashboard/pages/show_folder.dart";
+import 'package:pocket_pal/screens/dashboard/pages/folder_content.dart';
 import "package:pocket_pal/screens/dashboard/widgets/folder_widget.dart";
 import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/screens/dashboard/widgets/dialog_box.dart";
 import "package:pocket_pal/utils/folder_structure_util.dart";
 
 
-class ShowMorePage extends StatefulWidget {
+class FolderGridPage extends StatefulWidget {
 
   final bool isShared;
 
-  const ShowMorePage({ 
+  const FolderGridPage({ 
     super.key,
     required this.isShared,
   });
 
   @override
-  State<ShowMorePage> createState() => _ShowMorePageState();
+  State<FolderGridPage> createState() => _FolderGridPageState();
 }
 
-class _ShowMorePageState extends State<ShowMorePage> {
+class _FolderGridPageState extends State<FolderGridPage> {
 
   final TextEditingController _folderName = TextEditingController(text : "");
   @override
@@ -86,9 +86,11 @@ class _ShowMorePageState extends State<ShowMorePage> {
           ).map(
             (e) => MyFolderWidget(
               folder: e,
-              folderSize: 200,
-              folderTitleSize: 16,
-              folderDescriptionSize: 14,
+              folderPositionBottom: 18.h + 20.w,
+              folderPositionLeft: 18.w + 16.h,
+              folderSize: 74,
+              folderTitleSize: 14,
+              folderDescriptionSize: 12,
               folderOnLongPress: (){},
               folderOnTap : () =>   
                 _dashboardNavigateToFolder(e)
@@ -125,20 +127,24 @@ class _ShowMorePageState extends State<ShowMorePage> {
       builder: (context) {
         return MyDialogBoxWidget(
           controllerName: _folderName,
-          dialogBoxHintText: "Folder Name",
+          dialogBoxHintText: "Untitled Wall",
           dialogBoxTitle: "Add Folder",
+          dialogBoxErrorMessage: "Please enter a name for your Wall",
           dialogBoxOnTap: (){
-            Folder folder = Folder(
-              folderName: _folderName.text.trim(),
-              folderIsShared: widget.isShared
-            );
 
-            PocketPalDatabase().addFolder(
-              folder.toMap()
-            );
+            if (_folderName.text.isNotEmpty){
+              Folder folder = Folder(
+                folderName: _folderName.text.trim(),
+                folderIsShared: widget.isShared
+              );
 
-            _folderName.clear();
-            Navigator.of(context).pop();
+              PocketPalDatabase().addFolder(
+                folder.toMap()
+              );
+
+              _folderName.clear();
+              Navigator.of(context).pop();
+            }
           },
         );
       }
@@ -149,7 +155,7 @@ class _ShowMorePageState extends State<ShowMorePage> {
   void _dashboardNavigateToFolder(Folder folder){
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder : (context) => ShowFolderPage(
+        builder : (context) => FolderContentPage(
           folder : folder
         )
       )

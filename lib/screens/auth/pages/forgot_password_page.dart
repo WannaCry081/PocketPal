@@ -3,12 +3,12 @@ import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:flutter_svg/flutter_svg.dart";
-import "package:pocket_pal/screens/auth/widgets/auth_title.dart";
 import "package:provider/provider.dart";
 
 import "package:pocket_pal/widgets/pocket_pal_button.dart";
 import "package:pocket_pal/widgets/pocket_pal_formfield.dart";
 
+import "package:pocket_pal/screens/auth/widgets/auth_title.dart";
 import "package:pocket_pal/screens/auth/widgets/dialog_box.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 import "package:pocket_pal/const/color_palette.dart";

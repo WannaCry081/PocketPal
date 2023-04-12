@@ -2,6 +2,8 @@ import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/services/database_service.dart";
+import "package:pocket_pal/utils/envelope_structure_util.dart";
 import "package:pocket_pal/utils/folder_structure_util.dart";
 
 import "package:pocket_pal/screens/dashboard/widgets/dialog_box.dart";
@@ -44,17 +46,19 @@ class _ShowFolderPageState extends State<ShowFolderPage> {
 
       floatingActionButton: FloatingActionButton(
         backgroundColor: ColorPalette.rustic,
-        onPressed: _dashboardAddFolder,
+        onPressed: _dashboardAddEnvelope,
         child : Icon(
           Icons.add_rounded, 
           color: ColorPalette.white,
         ),
       ),
 
+      
+
     );
   }
 
-  void _dashboardAddFolder(){
+  void _dashboardAddEnvelope(){
     showDialog(
       context: context,
       builder: (context) {
@@ -63,11 +67,24 @@ class _ShowFolderPageState extends State<ShowFolderPage> {
           dialogBoxHintText: "Envelope Name",
           dialogBoxTitle: "Add Envelope",
           dialogBoxOnTap: (){
-            
+            Envelope envelope = Envelope(
+              envelopeName: _envelopeName.text.trim()
+            );
+
+            PocketPalDatabase().createEnvelope(
+              widget.folder.folderId,
+              _envelopeName.text.trim(),
+              envelope.toMap()  
+            );
+
+            Navigator.of(context).pop();
+
           },
         );
       }
     );
     return;
   }
+
+  
 }

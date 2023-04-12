@@ -24,7 +24,7 @@ class Folder {
 
   Map<String, dynamic> toMap(){
     return {
-      "id" : folderId,
+      "folderId" : folderId,
       "folderName" : folderName,
       "folderDate" : folderDate,
       "folderNumberOfMembers" : folderNumberOfMembers,
@@ -36,7 +36,7 @@ class Folder {
 
   factory Folder.fromMap(Map<String, dynamic> map){
     return Folder(
-      folderId: map["id"],
+      folderId: map["folderId"],
       folderName: map["folderName"], 
       folderIsShared: map["folderIsShared"]
     );

@@ -212,7 +212,7 @@ class _SignInPageState extends State<SignInPage>{
         Text(
           title,
           style : GoogleFonts.poppins(
-            fontSize : 28.sp,
+            fontSize : 34.sp,
             fontWeight : FontWeight.w600
           )
         ),
@@ -221,7 +221,7 @@ class _SignInPageState extends State<SignInPage>{
         Text(
           description,
           style : GoogleFonts.poppins(
-            fontSize : 14.sp,
+            fontSize : 16.sp,
           )
         ),
       ]

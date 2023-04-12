@@ -90,6 +90,7 @@ flutter:
     - assets/icon/Google.svg
     - assets/icon/Menu.svg
     - assets/icon/Folder.svg
+    - assets/icon/Envelope.svg
 
     - assets/images/Splash.png
     - assets/images/Profile.png

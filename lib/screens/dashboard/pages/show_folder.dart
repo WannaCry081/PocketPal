@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/screens/dashboard/widgets/envelope_widget.dart";
 import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/utils/envelope_structure_util.dart";
 import "package:pocket_pal/utils/folder_structure_util.dart";
@@ -34,6 +35,9 @@ class _ShowFolderPageState extends State<ShowFolderPage> {
 
   @override 
   Widget build(BuildContext context){
+
+    final db = PocketPalDatabase();
+
     return Scaffold(
       appBar : AppBar(
         title : Text(
@@ -53,6 +57,9 @@ class _ShowFolderPageState extends State<ShowFolderPage> {
         ),
       ),
 
+      body : _dashboardEnvelopeView(
+        db
+      )
       
 
     );
@@ -72,8 +79,7 @@ class _ShowFolderPageState extends State<ShowFolderPage> {
             );
 
             PocketPalDatabase().createEnvelope(
-              widget.folder.folderId,
-              _envelopeName.text.trim(),
+              widget.folder.folderId, 
               envelope.toMap()  
             );
 
@@ -84,6 +90,48 @@ class _ShowFolderPageState extends State<ShowFolderPage> {
       }
     );
     return;
+  }
+
+  Widget _dashboardEnvelopeView(PocketPalDatabase db){
+    return StreamBuilder(
+      stream : db.getEnvelope(widget.folder.folderId),
+      builder: (context, snapshot){
+        if (snapshot.connectionState == ConnectionState.waiting){
+          return const Center(
+            child : CircularProgressIndicator()
+          );
+        } else if (snapshot.hasData){
+          
+          final data = snapshot.data!;
+          final itemList = data.map(
+            (e) => MyEnvelopeWidget(
+              envelope: e,
+
+            )
+          ).toList();
+              
+          return GridView.builder(
+            itemCount: itemList.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+            ),
+            itemBuilder: (context, index){
+              return itemList[index];
+            },
+          );
+                
+        } else {
+          return Center(
+            child: Text(
+              "No Available Envelope",
+              style : GoogleFonts.poppins(
+                fontSize : 14.sp
+              )
+            ),
+          );
+        }
+      },
+    );
   }
 
   

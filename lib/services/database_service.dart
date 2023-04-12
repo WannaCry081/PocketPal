@@ -1,7 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:pocket_pal/services/authentication_service.dart";
-import "package:pocket_pal/utils/folder_structure_util.dart";
 import "package:pocket_pal/utils/envelope_structure_util.dart";
+import "package:pocket_pal/utils/folder_structure_util.dart";
 
 
 class PocketPalDatabase {
@@ -29,11 +29,11 @@ class PocketPalDatabase {
     );
   }
 
-  Future<void> createEnvelope(String docName, String collectionName, Map<String, dynamic> data) async {  
+  Future<void> createEnvelope(String docName, Map<String, dynamic> data) async {  
     final userUid = PocketPalAuthentication().getUserUID;
 
     final collection = _db.collection(userUid).doc(
-      docName).collection(collectionName).doc();
+      docName).collection("$userUid+Envelope").doc();
 
     data["envelopeId"] = collection.id;
     await collection.set(data);
@@ -41,13 +41,15 @@ class PocketPalDatabase {
     return;
   }
 
-  Stream<List<String>> getSubCollectionList(String docName) {
+  Stream<List<Envelope>> getEnvelope(String docName){
     final userUid = PocketPalAuthentication().getUserUID;
-    final docRef = _db.collection(userUid).doc(docName);
-    
-    return docRef.snapshots().map((doc) {
-      return doc.data()!.keys.toList();
-    });
-  }
 
+    final collection = _db.collection(userUid).doc(docName).collection("$userUid+Envelope");
+
+    return collection.snapshots().map(
+      (snapshot) => snapshot.docs.map(
+        (doc) => Envelope.fromMap(doc.data())
+      ).toList()
+    );
+  }
 }

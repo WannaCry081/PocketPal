@@ -41,6 +41,25 @@ class PocketPalDatabase {
     return;
   }
 
+   
+  Future<void> createEnvelopeTransaction(
+    String docName,
+    String envelopeName,
+    Map<String, dynamic> data) async { 
+
+    final userUid = PocketPalAuthentication().getUserUID;
+
+    final collection = _db.collection(userUid).doc(
+      docName).collection("$docName+Envelope").doc(envelopeName);
+
+    collection.set({
+        "envelopTransaction" : FieldValue.arrayUnion([data])
+      }, SetOptions(
+        merge: true
+      ));
+    return;
+  }
+
   Stream<List<Envelope>> getEnvelope(String docName){
     final userUid = PocketPalAuthentication().getUserUID;
 
@@ -52,4 +71,8 @@ class PocketPalDatabase {
       ).toList()
     );
   }
+
+  
+
+
 }

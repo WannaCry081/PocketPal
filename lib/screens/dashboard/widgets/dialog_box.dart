@@ -27,6 +27,7 @@ class MyDialogBoxWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return AlertDialog(
+      backgroundColor: ColorPalette.white,
       title: Text(
         dialogBoxTitle,
         style : GoogleFonts.poppins(

@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/screens/dashboard/pages/envelope_content.dart";
 import "package:pocket_pal/screens/dashboard/widgets/envelope_widget.dart";
 import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/utils/envelope_structure_util.dart";
@@ -107,6 +108,8 @@ class _FolderContentPageState extends State<FolderContentPage> {
           final itemList = data.map(
             (e) => MyEnvelopeWidget(
               envelope: e,
+              envelopeOnTap: () => 
+                _dashboardNavigateToEnvelope(e),
 
             )
           ).toList();
@@ -133,5 +136,16 @@ class _FolderContentPageState extends State<FolderContentPage> {
         }
       },
     );
+  }
+
+  void _dashboardNavigateToEnvelope(Envelope envelope){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder : (context) => EnvelopeContentPage(
+          envelope : envelope
+        )
+      )
+    );
+    return;
   }
 }

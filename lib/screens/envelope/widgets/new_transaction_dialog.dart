@@ -13,7 +13,7 @@ class MyNewTransactionDialogWidget extends StatelessWidget {
   final TextEditingController transactionNameController;
   final TextEditingController transactionAmountController;
   final Function(String) addTransactionFunction;
-  bool isIncome;
+  bool isIncome = false;
 
   MyNewTransactionDialogWidget({
     required this.fieldName,
@@ -89,15 +89,15 @@ class MyNewTransactionDialogWidget extends StatelessWidget {
                       child: PocketPalFormField(
                         formHintText: "Amount",
                         formController: transactionAmountController,
-                        // formValidator: (value){
-                        //   if(value!.isEmpty){
-                        //     return "Please enter a transaction amount.";
-                        //   }
-                        //   if(double.tryParse(value) == null){
-                        //     return "Please enter a valid amount.";
-                        //   }
-                        //   return null;
-                        // },
+                        formValidator: (value){
+                          if(value!.isEmpty){
+                            return "Please enter a transaction amount.";
+                          }
+                          if(int.tryParse(value) == null){
+                            return "Please enter a valid amount.";
+                          }
+                          return null;
+                        },
                       )
                     )
                   ],
@@ -158,12 +158,7 @@ class MyNewTransactionDialogWidget extends StatelessWidget {
                   const SnackBar(
                     content: Text("Transaction added!"),
                     duration: Duration(seconds: 1),));
-              //   Navigator.push(
-              //     context,
-              //   MaterialPageRoute(builder: (context) => 
-              //       const EnvelopeView()
-              //       )
-              // );
+                Navigator.of(context).pop;
               }
             }
           ),

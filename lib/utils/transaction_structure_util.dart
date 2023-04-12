@@ -1,14 +1,15 @@
-class Transaction {
+import "package:cloud_firestore/cloud_firestore.dart";
 
+class EnvelopeTransaction {
   String transactionId;
 
   String transactionName;
-  late String transactionType;
-  late double transactionAmount;
   late String transactionUsername;
+  late String transactionType;
+  late int transactionAmount;
   late DateTime transactionDate;
 
-  Transaction({
+  EnvelopeTransaction({
     required this.transactionName,
     required this.transactionUsername,
     required this.transactionType,
@@ -29,8 +30,8 @@ class Transaction {
     };
   }
 
-  factory Transaction.fromMap(Map<String, dynamic> map){
-    return Transaction(
+  factory EnvelopeTransaction.fromMap(Map<String, dynamic> map){
+    return EnvelopeTransaction(
       transactionId: map["id"],
       transactionName: map["transactionName"],
       transactionType: map["transactionType"], 

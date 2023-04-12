@@ -72,6 +72,34 @@ class PocketPalDatabase {
     );
   }
 
+ Future<List<Envelope>> fetchAllEnvelopes(String userUid, String docName) async {
+  List<Envelope> allEnvelopes = [];
+
+  QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection(userUid)
+      .doc(docName)
+      .collection("$docName+Envelope")
+      .get();
+
+  for (QueryDocumentSnapshot envelopeSnapshot in querySnapshot.docs) {
+    QuerySnapshot itemsSnapshot = await FirebaseFirestore.instance
+        .collection(userUid)
+        .doc(docName)
+        .collection("$docName+Envelope")
+        .doc(envelopeSnapshot.id)
+        .collection("items")
+        .get();
+
+    // for (QueryDocumentSnapshot itemSnapshot in itemsSnapshot.docs) {
+    //   Envelope envelope = Envelope(name: itemSnapshot.data()['name'], color: itemSnapshot.data()['color']);
+    //   allEnvelopes.add(envelope);
+    // }
+  }
+
+  return allEnvelopes;
+}
+
+
   
 
 

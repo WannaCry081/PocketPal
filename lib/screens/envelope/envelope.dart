@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,6 +14,8 @@ import 'package:pocket_pal/services/database_service.dart';
 import 'package:pocket_pal/utils/envelope_structure_util.dart';
 import 'package:pocket_pal/utils/folder_structure_util.dart';
 import 'package:pocket_pal/utils/transaction_structure_util.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 
 class EnvelopeContentPage extends StatefulWidget {
@@ -31,12 +34,12 @@ class EnvelopeContentPage extends StatefulWidget {
 class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
 
   bool isIncome = false;
-  double expenseTotal = 0;
+  int expenseTotal = 0;
   double incomeTotal = 0;
   double totalBalance = 0;
 
   final auth = PocketPalAuthentication();
-  //profileName: auth.getUserDisplayName,
+  final userUid = PocketPalAuthentication().getUserUID;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final DateFormat formatter = DateFormat('MMM dd');
@@ -46,18 +49,58 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
   late final TextEditingController transactionName;
 
   List<dynamic> transactions = [];
+  List<dynamic> expenseTransactions = [];
+
 
   @override
   void initState(){
     super.initState();
+    print(auth.getUserDisplayName);
     //fetchTransactions();
-    //getEnvelopeData("folderName", "envelopeName");
+    fetchData(
+      widget.folder.folderId,
+      widget.envelope.envelopeId
+    );
     //getEnvelopeData();
     transactionType = TextEditingController(text : "Expense");
     transactionAmount = TextEditingController(text : "");
     transactionName = TextEditingController(text : "");
     return; 
   }
+
+  Future<void> fetchTransactions(
+    String docName,
+    String envelopeName
+  ) async {
+    final QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.
+        collection(userUid)
+        .doc(docName)
+        .collection('$docName+Envelope')
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final List<dynamic> allData = [];
+
+      for (final QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        //String id = docSnapshot.id;
+        //print('Document ID: $id');
+        //allData.add(id);
+        final Map<String, dynamic> data =
+            docSnapshot.data() as Map<String, dynamic>;
+        final List<dynamic>? envelopeData = data['envelopTransaction'] as List<dynamic>?;
+        if (envelopeData != null){
+          for (final Map<String, dynamic> transactionData in envelopeData) {
+          //allData.add(transactionData);
+          allData.add(transactionData);
+        }
+      }
+      }
+      transactions = allData;
+      print(transactions);
+      setState(() {});
+  }
+}
 
   @override
   void dispose(){
@@ -68,12 +111,12 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
     return; 
   } 
 
-  void addTransaction (String envelopeId) {
-    final data = Transaction(
+  void addTransaction (String envelopeId) async {
+    final data = EnvelopeTransaction(
+      transactionName: transactionName.text.trim(), 
       transactionUsername: auth.getUserDisplayName,
       transactionType: transactionType.text.trim(), 
-      transactionName: transactionName.text.trim(), 
-      transactionAmount: double.parse(transactionAmount.text.trim()),
+      transactionAmount: int.parse(transactionAmount.text.trim()),
       ).toMap();
 
       PocketPalDatabase().createEnvelopeTransaction(
@@ -86,19 +129,20 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
       clearController();
   }
 
+
   void newTransaction(){
     showDialog(
       barrierDismissible: false,
       context: context, 
       builder: (BuildContext context){
         return MyNewTransactionDialogWidget(
-          formKey: formKey,
-          isIncome: false,
           fieldName: widget.envelope.envelopeId,
-          transactionAmountController: transactionAmount,
-          transactionNameController: transactionName,
+          formKey: formKey,
           transactionTypeController: transactionType,
+          transactionNameController: transactionName,
+          transactionAmountController: transactionAmount,
           addTransactionFunction: addTransaction,
+          isIncome: false,
         );
       });
   }
@@ -109,6 +153,93 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
     transactionName.clear();
     return;
   }
+
+  Future<void> fetchData(String docName, String envelopeName) async {
+  final userUid = PocketPalAuthentication().getUserUID;
+  FirebaseFirestore.instance
+      .collection(userUid)
+      .doc(docName)
+      .collection("$docName+Envelope")
+      .snapshots()
+      .listen((QuerySnapshot querySnapshot) {
+
+    if (querySnapshot.docs.isNotEmpty) {
+      List<int> expenseList = [];
+      List<dynamic> envelopTransactionList = [];
+      querySnapshot.docs.forEach((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        if (data.containsKey('envelopTransaction')) {
+          List<dynamic> getTransactions = data['envelopTransaction'];
+          envelopTransactionList.addAll(data['envelopTransaction']);
+          transactions = envelopTransactionList;
+          //print(transactions);
+
+          for (var transaction in getTransactions){
+            final transactionType = transaction['transactionType'] as String?;
+             final transactionAmount = transaction['transactionAmount'] as int?;
+             if (transactionType == 'expense' && transactionAmount != null) {
+              expenseList.add(transactionAmount);
+              print(expenseList);
+            }
+          }
+
+        }
+      });
+     //print('envelopTransaction list: $envelopTransactionList');
+    } else {
+      print('Collection does not exist or is empty');
+    }
+  });
+}
+
+
+  
+
+
+
+
+Future<Map<String, dynamic>> getEnvelopeData(
+    String docName, 
+    String envelopeName
+    ) async {
+  final envelopeRef = FirebaseFirestore.instance
+      .collection(userUid)
+      .doc(docName)
+      .collection("$docName+Envelope")
+      .doc(envelopeName);
+
+  final List<dynamic> allData = [];
+  final List<double> expenseNumbers = [];
+  final List<double> incomeNumbers = [];
+
+  final envelopeDoc = await envelopeRef.get();
+  final envelopeData = (await envelopeRef.get()).data() as Map<String, dynamic>?;
+
+  if (envelopeDoc.exists && envelopeData != null) {
+    
+    allData.add(envelopeData);
+    transactions = allData;
+    print(transactions);
+    // final envelopeTransactions = envelopeData['Envelope Name'] as List<dynamic>;
+    // for (final transaction in envelopeTransactions) {
+    //   if (transaction['transactionType'] == 'Expense') {
+    //     expenseNumbers.add(transaction['transactionAmount']);
+    //   }
+    //   if (transaction['transactionType'] == 'Income'){
+    //     incomeNumbers.add(transaction['transactionAmount']);
+    //   }
+    // }
+    // expenseTotal = expenseNumbers.fold(0, (sum, amount) => sum + amount);
+    // incomeTotal = incomeNumbers.fold(0, (sum, amount) => sum + amount);
+    // expenseData = expenseNumbers;
+    //print(expenseData);
+
+    return envelopeData;
+  } else {
+    throw Exception('Envelope document does not exist');
+  }
+}
+
 
   
 
@@ -240,18 +371,35 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                           ),
                           SizedBox( height: screenHeight * 0.02,),
                           Expanded(
-                            child: ListView.builder(
-                              itemCount: 0,
+                            child: transactions.isEmpty
+                            ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                            :ListView.builder(
+                              itemCount: transactions.length,
                               itemBuilder: (context, index){
+                                final transaction = transactions[index];
+                                final transactionName =
+                                    transaction['transactionName'] as String;
+                                final transactionUsername =
+                                    transaction['transactionUserName'] as String?;
+                                final transactionType =
+                                    transaction['transactionType'] as String;
+                                final transactionAmount =
+                                    transaction['transactionAmount'] as int;
+                                final transactionDate =
+                                    transaction['transactionDate'] as Timestamp;
+                                final formattedDate = formatter.format(transactionDate.toDate());
+                    
                                 return  
-                                  TransactionCard(
-                                    width: screenWidth,
-                                    dateCreated: "null",
-                                    transactionAmount: null.toString(),
-                                    transactionName: "null",
-                                    transactionType: "null",
-                                    username: "null",
-                                    );
+                                    TransactionCard(
+                                      width: screenWidth - 30,
+                                      dateCreated: formattedDate,
+                                      transactionAmount: transactionAmount.toDouble().toString(),
+                                      transactionName: transactionName,
+                                      transactionType: transactionType,
+                                      transactionUsername: transactionUsername.toString()
+                                      );
                                   
                               }),
                           ),

@@ -14,12 +14,12 @@ class TransactionCard extends StatelessWidget {
   final String transactionAmount;
   final String transactionType;
 
-  final String username;
+  final String transactionUsername;
   final String dateCreated;
 
   const TransactionCard({
     super.key,
-    required this.username,
+    required this.transactionUsername,
     required this.dateCreated,
     required this.transactionName,
     required this.transactionAmount,
@@ -90,7 +90,7 @@ class TransactionCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              username,
+              transactionUsername,
               style: GoogleFonts.poppins(
                 color: ColorPalette.grey,
                 fontWeight: FontWeight.w500,

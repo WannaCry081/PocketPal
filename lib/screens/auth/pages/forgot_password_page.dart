@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:flutter_svg/flutter_svg.dart";
+import "package:pocket_pal/screens/auth/widgets/auth_title.dart";
 import "package:provider/provider.dart";
 
 import "package:pocket_pal/widgets/pocket_pal_button.dart";
@@ -66,27 +67,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   children : [
                     SvgPicture.asset(
                       "assets/svg/forgot_password.svg",
-                      width : 260.w,
-                      height : 260.h
+                      width : 280.w,
+                      height : 280.h
                     ),
 
-                    SizedBox( height : 20.h),
-                    Text(
-                      "Forgot Password?",
-                      style : GoogleFonts.poppins(
-                        fontSize : 28.sp,
-                        fontWeight : FontWeight.w600
-                      ),
-                    ),
+                    SizedBox(height : 20.h),
 
-                    SizedBox( height : 4.h),
-                    Text(
-                      "Enter your email below to receive instructions in retrieving your account.",
-                      style : GoogleFonts.montserrat(
-                        color : ColorPalette.grey,
-                        fontWeight : FontWeight.w500,
-                        fontSize : 14.sp
-                      )
+                    MyAuthTitleWidget(
+                      authTitleTitle: "Forgot Password?", 
+                      authTitleMessage: "Enter your email below to receive instructions in retrieving your account.",
+                      authTitleTitleSize: 28.sp,
+                      authTitleTitleMessageSize: 16.sp,
                     ),
 
                     SizedBox( height : 10.h),
@@ -122,18 +113,16 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         Navigator.of(context).pop();
                       }, 
                       buttonWidth: double.infinity, 
-                      buttonHeight: 55.h, 
+                      buttonHeight: 50.h, 
                       buttonColor: (!_isButtonEnable) ?
-                        ColorPalette.lightGrey :
+                        ColorPalette.murky :
                         ColorPalette.rustic, 
                       buttonChild: Text(
-                        "Okay",
+                        "Submit",
                         style : GoogleFonts.poppins(
-                          fontSize : 16.sp,
+                          fontSize : 14.sp,
                           fontWeight : FontWeight.w500,
-                          color : (!_isButtonEnable) ?
-                            ColorPalette.black :
-                            ColorPalette.white
+                          color : ColorPalette.white
                         )
                       )
                     )

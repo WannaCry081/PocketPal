@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:pocket_pal/screens/auth/widgets/auth_title.dart";
 import "package:provider/provider.dart";
 
 import "package:pocket_pal/screens/auth/pages/forgot_password_page.dart";
@@ -76,9 +77,11 @@ class _SignInPageState extends State<SignInPage>{
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children : [
-                    _signInTitle(
-                      "Welcome Back!",
-                      "You've been missed!"
+                    MyAuthTitleWidget(
+                      authTitleTitle: "Welcome Back!",
+                      authTitleMessage: "You've been missed!",
+                      authTitleTitleSize: 28.sp,
+                      authTitleTitleMessageSize: 16.sp,
                     ),
 
                     SizedBox( height : 40.h),
@@ -96,7 +99,7 @@ class _SignInPageState extends State<SignInPage>{
                       },
                     ),
 
-                    SizedBox( height : 16.h ),
+                    SizedBox( height : 20.h ),
                     PocketPalFormField(
                       formController: _password,
                       formIsObsecure: true,
@@ -112,7 +115,7 @@ class _SignInPageState extends State<SignInPage>{
                       },
                     ),
 
-                    SizedBox( height : 10.h),
+                    SizedBox( height : 14.h),
                     GestureDetector(
                       onTap : _navigateToForgotPassword,
                       child: Text(
@@ -124,7 +127,7 @@ class _SignInPageState extends State<SignInPage>{
                       ),
                     ),
 
-                    SizedBox( height : 40.h),
+                    SizedBox( height : 36.h),
                     PocketPalButton(
                       buttonOnTap: (!_isButtonEnable) ? null : (){
 
@@ -138,18 +141,16 @@ class _SignInPageState extends State<SignInPage>{
                         }
                       }, 
                       buttonWidth: double.infinity, 
-                      buttonHeight: 55.h, 
+                      buttonHeight: 50.h, 
                       buttonColor: (!_isButtonEnable) ? 
-                        ColorPalette.lightGrey :
+                        ColorPalette.murky :
                         ColorPalette.rustic,
                       buttonChild: Text(
                         "Sign In",
                         style : GoogleFonts.poppins(
-                          fontSize : 16.sp,
+                          fontSize : 14.sp,
                           fontWeight : FontWeight.w500,
-                          color : (!_isButtonEnable) ? 
-                            ColorPalette.black :
-                            ColorPalette.white, 
+                          color : ColorPalette.white, 
                         )
                       )
                     ),
@@ -163,11 +164,10 @@ class _SignInPageState extends State<SignInPage>{
                         if (wSettings.getFirstInstall){
                           rSettings.setFirstInstall = false;
                         }
-
                         _signInPageGoogleAuth();
                       }, 
                       buttonWidth: double.infinity, 
-                      buttonHeight: 55.h, 
+                      buttonHeight: 50.h, 
                       buttonColor: ColorPalette.lightGrey, 
                       buttonChild: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -202,29 +202,6 @@ class _SignInPageState extends State<SignInPage>{
           )
         ),
       )
-    );
-  }
-
-  Widget _signInTitle(String title, String description){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children : [
-        Text(
-          title,
-          style : GoogleFonts.poppins(
-            fontSize : 34.sp,
-            fontWeight : FontWeight.w600
-          )
-        ),
-
-        SizedBox( height : 2.h),
-        Text(
-          description,
-          style : GoogleFonts.poppins(
-            fontSize : 16.sp,
-          )
-        ),
-      ]
     );
   }
 
@@ -306,6 +283,8 @@ class _SignInPageState extends State<SignInPage>{
         builder : (context) => const ForgotPasswordPage()
       )
     );
+    _email.clear();
+    _password.clear();
     return;
   }
 }

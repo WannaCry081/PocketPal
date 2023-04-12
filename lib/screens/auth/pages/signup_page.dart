@@ -2,6 +2,7 @@ import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:pocket_pal/screens/auth/widgets/auth_title.dart";
 import "package:provider/provider.dart";
 
 import "package:pocket_pal/screens/auth/widgets/dialog_box.dart";
@@ -80,9 +81,11 @@ class _SignUpPageState extends State<SignUpPage>{
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children : [
-                    _signInTitle(
-                      "Create Account",
-                      "Sign up to get Started!"
+                    MyAuthTitleWidget(
+                      authTitleTitle: "Create Account",
+                      authTitleMessage: "Sign up to get Started!",
+                      authTitleTitleSize: 28.sp,
+                      authTitleTitleMessageSize: 16.sp,
                     ),
 
                     SizedBox( height : 40.h),
@@ -100,7 +103,7 @@ class _SignUpPageState extends State<SignUpPage>{
                       },
                     ),
 
-                    SizedBox( height : 16.h ),
+                    SizedBox( height : 20.h ),
                     PocketPalFormField(
                       formController: _email,
                       formHintText: "Email Address",
@@ -115,7 +118,7 @@ class _SignUpPageState extends State<SignUpPage>{
                       },
                     ),
 
-                    SizedBox( height : 16.h ),
+                    SizedBox( height : 20.h ),
                     PocketPalFormField(
                       formController: _password,
                       formIsObsecure: true,
@@ -131,7 +134,7 @@ class _SignUpPageState extends State<SignUpPage>{
                       },
                     ),
 
-                    SizedBox( height : 16.h ),
+                    SizedBox( height : 20.h ),
                     PocketPalFormField(
                       formController: _confirmPassword,
                       formIsObsecure: true,
@@ -147,7 +150,7 @@ class _SignUpPageState extends State<SignUpPage>{
                       },
                     ),
 
-                    SizedBox( height : 40.h),
+                    SizedBox( height : 36.h),
                     PocketPalButton(
                       buttonOnTap: (!_isButtonEnable) ? null : (){
                         if (_formKey.currentState!.validate()){
@@ -161,18 +164,16 @@ class _SignUpPageState extends State<SignUpPage>{
                         }
                       }, 
                       buttonWidth: double.infinity, 
-                      buttonHeight: 55.h, 
+                      buttonHeight: 50.h, 
                       buttonColor: (!_isButtonEnable) ? 
                         ColorPalette.lightGrey :
                         ColorPalette.rustic,
                       buttonChild: Text(
                         "Sign Up",
                         style : GoogleFonts.poppins(
-                          fontSize : 16.sp,
+                          fontSize : 14.sp,
                           fontWeight : FontWeight.w500,
-                          color : (!_isButtonEnable) ?
-                            ColorPalette.black :
-                            ColorPalette.white
+                          color : ColorPalette.white
                         )
                       )
                     ),
@@ -190,29 +191,6 @@ class _SignUpPageState extends State<SignUpPage>{
           )
         ),
       )
-    );
-  }
-
-  Widget _signInTitle(String title, String description){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children : [
-        Text(
-          title,
-          style : GoogleFonts.poppins(
-            fontSize : 34.sp,
-            fontWeight : FontWeight.w600
-          )
-        ),
-
-        SizedBox( height : 2.h),
-        Text(
-          description,
-          style : GoogleFonts.poppins(
-            fontSize : 16.sp,
-          )
-        ),
-      ]
     );
   }
 

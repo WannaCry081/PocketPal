@@ -46,7 +46,7 @@ class PocketPalFormField extends StatelessWidget {
         hintText: formHintText, 
   
         hintStyle: GoogleFonts.poppins(
-          fontSize : 16.sp,
+          fontSize : 14.sp,
           color : ColorPalette.grey
         ),
 

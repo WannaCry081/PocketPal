@@ -35,7 +35,7 @@ class SettingsView extends StatelessWidget {
         title:  Text(
           "Settings",
           style: GoogleFonts.poppins(
-            fontSize : 18.sp,
+            fontSize : 16.sp,
             color: ColorPalette.black,
           ),
         )
@@ -96,7 +96,7 @@ class SettingsView extends StatelessWidget {
                             Text(
                               "Dark Mode",
                               style: GoogleFonts.poppins(
-                                fontSize: 16,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.w500
                               )
                             ),

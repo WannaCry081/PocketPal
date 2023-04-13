@@ -4,9 +4,12 @@ class Envelope {
   String envelopeName;
   late DateTime envelopeDate;
 
+  double envelopeStartingAmount;
+
   Envelope({
     this.envelopeId = "",
     required this.envelopeName,
+    required this.envelopeStartingAmount,
   }){
     envelopeDate = DateTime.now();
   }
@@ -16,6 +19,7 @@ class Envelope {
       "envelopeId" : envelopeId,
       "envelopeName" : envelopeName,
       "envelopeDate" : envelopeDate,
+      "envelopeStartingAmount" : envelopeStartingAmount
     };
   }
 
@@ -23,6 +27,7 @@ class Envelope {
     return Envelope(
       envelopeId: map["envelopeId"],
       envelopeName: map["envelopeName"],
+      envelopeStartingAmount: map["envelopeStartingAmount"],
     );
   }
 }

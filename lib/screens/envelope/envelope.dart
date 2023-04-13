@@ -35,8 +35,8 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
 
   bool isIncome = false;
   int expenseTotal = 0;
-  double incomeTotal = 0;
-  double totalBalance = 0;
+  int incomeTotal = 0;
+  int totalBalance = 0;
 
   final auth = PocketPalAuthentication();
   final userUid = PocketPalAuthentication().getUserUID;
@@ -93,6 +93,17 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
           for (final Map<String, dynamic> transactionData in envelopeData) {
           //allData.add(transactionData);
           allData.add(transactionData);
+          for (final transaction in envelopeData){
+            if (transaction['transactionType'] == 'Expense') {
+               final int expense = transactionData['transactionAmount'];
+                expenseTotal += expense;
+            }   
+            if (transaction['transactionType'] == 'Income') {
+               final int income = transactionData['transactionAmount'];
+                incomeTotal += income;
+            } 
+            totalBalance = incomeTotal - expenseTotal;  
+          }
         }
       }
       }

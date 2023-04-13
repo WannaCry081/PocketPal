@@ -26,6 +26,7 @@ class FolderContentPage extends StatefulWidget {
 class _FolderContentPageState extends State<FolderContentPage> {
 
   final TextEditingController _envelopeName = TextEditingController(text : "");
+  final TextEditingController _envelopeStartingAmount = TextEditingController(text : "");
 
   @override
   void dispose(){
@@ -73,10 +74,13 @@ class _FolderContentPageState extends State<FolderContentPage> {
           dialogBoxHintText: "Untitled Envelope",
           dialogBoxTitle: "Add Envelope",
           dialogBoxErrorMessage: "Please enter a name for your Envelope",
+          envelopeAmountHintText: "Enter starting amount",
+          envelopeAmountcontrollerName: _envelopeStartingAmount,
           dialogBoxOnTap: (){
             if (_envelopeName.text.isNotEmpty){
               Envelope envelope = Envelope(
-                envelopeName: _envelopeName.text.trim()
+                envelopeName: _envelopeName.text.trim(),
+                envelopeStartingAmount: double.parse(_envelopeStartingAmount.text.trim())
               );
 
               PocketPalDatabase().createEnvelope(

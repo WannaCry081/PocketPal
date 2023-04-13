@@ -62,7 +62,7 @@ class MyDialogBoxWidget extends StatelessWidget {
                 if(value!.isEmpty){
                   return "Please enter a starting amount.";
                 }
-                if(int.tryParse(value) == null){
+                if(double.tryParse(value) == null){
                   return "Please enter a valid amount.";
                 }
                 return null;

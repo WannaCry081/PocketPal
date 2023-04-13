@@ -83,8 +83,6 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-
-
   void _dashboardEditFolder() {
     showModalBottomSheet(
       context: context, 

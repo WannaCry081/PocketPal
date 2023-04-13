@@ -21,10 +21,6 @@ class MenuItems {
       "Profile", 
       FeatherIcons.user,
   );
-  static const settings =  MenuItem(
-      "Settings",
-      FeatherIcons.settings,
-  );
   static const ewallet =  MenuItem(
       "E-Wallet",
       FeatherIcons.pocket,
@@ -33,13 +29,17 @@ class MenuItems {
       "Notifications",
       FeatherIcons.bell,
   );
+  static const settings =  MenuItem(
+      "Settings",
+      FeatherIcons.settings,
+  );
 
   static const all = <MenuItem>[
     home, 
     profile,
-    settings,
     ewallet,
-    notifications
+    notifications,
+    settings,
   ];
 }
 

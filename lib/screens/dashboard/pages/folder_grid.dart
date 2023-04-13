@@ -3,6 +3,7 @@ import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/const/color_palette.dart";
 import 'package:pocket_pal/screens/dashboard/pages/folder_content.dart';
+import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_sheet.dart";
 import "package:pocket_pal/screens/dashboard/widgets/folder_widget.dart";
 import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/screens/dashboard/widgets/dialog_box.dart";
@@ -91,7 +92,7 @@ class _FolderGridPageState extends State<FolderGridPage> {
               folderSize: 74,
               folderTitleSize: 14,
               folderDescriptionSize: 12,
-              folderOnLongPress: (){},
+              folderOnLongPress: _dashboardEditFolder,
               folderOnTap : () =>   
                 _dashboardNavigateToFolder(e)
             )
@@ -159,6 +160,16 @@ class _FolderGridPageState extends State<FolderGridPage> {
           folder : folder
         )
       )
+    );
+    return;
+  }
+
+  void _dashboardEditFolder() {
+    showModalBottomSheet(
+      context: context, 
+      builder: (context){
+        return MyBottomEditSheetWidget();
+      }
     );
     return;
   }

@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_sheet.dart";
 import "package:pocket_pal/screens/dashboard/widgets/envelope_widget.dart";
 import "package:pocket_pal/screens/envelope/envelope.dart";
 import "package:pocket_pal/services/database_service.dart";
@@ -110,6 +111,7 @@ class _FolderContentPageState extends State<FolderContentPage> {
               envelope: e,
               envelopeOnTap: () => 
                 _dashboardNavigateToEnvelope(e),
+              envelopeOnLongPress: _dashboardEditEnvelope,
 
             )
           ).toList();
@@ -146,6 +148,16 @@ class _FolderContentPageState extends State<FolderContentPage> {
           envelope : envelope
         )
       )
+    );
+    return;
+  }
+
+  void _dashboardEditEnvelope() {
+    showModalBottomSheet(
+      context: context, 
+      builder: (context){
+        return MyBottomEditSheetWidget();
+      }
     );
     return;
   }

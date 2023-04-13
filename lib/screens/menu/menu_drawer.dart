@@ -58,12 +58,12 @@ class _MenuDrawerViewState extends State<MenuDrawerView> {
         return const DashboardView();
       case MenuItems.profile:
         return const ProfileView();
-      case MenuItems.settings:
-        return const SettingsView();
       case MenuItems.ewallet:
         return const EWalletView();
       case MenuItems.notifications:
         return const NotificationsView();
+      case MenuItems.settings:
+        return const SettingsView();
       default: 
         return const DashboardView();
     }

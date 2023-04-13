@@ -53,6 +53,7 @@ dependencies:
   glassmorphism: ^3.0.0
   flutter_slidable: ^2.0.0
   firebase_messaging: ^14.4.0
+  # flutter_local_notifications: ^8.2.0
 
 dev_dependencies:
   flutter_test:

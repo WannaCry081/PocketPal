@@ -6,7 +6,7 @@ class EnvelopeTransaction {
   String transactionName;
   late String transactionUsername;
   late String transactionType;
-  late int transactionAmount;
+  late double transactionAmount;
   late DateTime transactionDate;
 
   EnvelopeTransaction({

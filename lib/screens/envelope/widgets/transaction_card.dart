@@ -3,8 +3,8 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:pocket_pal/const/color_palette.dart';  
+import 'package:intl/intl.dart';
 
 class TransactionCard extends StatelessWidget {
 
@@ -14,8 +14,11 @@ class TransactionCard extends StatelessWidget {
   final String transactionAmount;
   final String transactionType;
 
+
   final String transactionUsername;
   final String dateCreated;
+
+  final Function(BuildContext)? onPressed;
 
   const TransactionCard({
     super.key,
@@ -25,6 +28,7 @@ class TransactionCard extends StatelessWidget {
     required this.transactionAmount,
     required this.transactionType,
     required this.width,
+    required this.onPressed,
     });
 
   @override
@@ -43,9 +47,9 @@ class TransactionCard extends StatelessWidget {
             backgroundColor: ColorPalette.murky,
             foregroundColor: ColorPalette.white,
             ),
-          const SlidableAction(
-            onPressed: null,
-            icon:FeatherIcons.delete,
+          SlidableAction(
+            onPressed: onPressed,
+            icon:FeatherIcons.trash,
             backgroundColor: Colors.red,
             ),
 

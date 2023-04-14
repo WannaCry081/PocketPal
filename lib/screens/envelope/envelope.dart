@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -9,6 +11,7 @@ import 'package:pocket_pal/screens/envelope/widgets/new_transaction_dialog.dart'
 import 'package:pocket_pal/screens/envelope/widgets/total_balance_card.dart';
 import 'package:pocket_pal/screens/envelope/widgets/transaction_card.dart';
 import 'package:intl/intl.dart';
+import 'package:pocket_pal/screens/notes/envelope_notes.dart';
 import 'package:pocket_pal/services/authentication_service.dart';
 import 'package:pocket_pal/services/database_service.dart';
 import 'package:pocket_pal/utils/envelope_structure_util.dart';
@@ -34,9 +37,10 @@ class EnvelopeContentPage extends StatefulWidget {
 class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
 
   bool isIncome = false;
-  int expenseTotal = 0;
-  int incomeTotal = 0;
-  int totalBalance = 0;
+  double expenseTotal = 0;
+  double incomeTotal = 0;
+  double totalBalance = 0;
+  late double startingBalance;
 
   final auth = PocketPalAuthentication();
   final userUid = PocketPalAuthentication().getUserUID;
@@ -50,13 +54,15 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
 
   List<dynamic> transactions = [];
   List<dynamic> expenseTransactions = [];
+  List<dynamic> incomeTransactions = [];
+
+  final _balanceController = StreamController<double>.broadcast();
 
 
   @override
   void initState(){
-    super.initState();
     print(auth.getUserDisplayName);
-    //fetchTransactions();
+    print(widget.envelope.envelopeId);
     fetchData(
       widget.folder.folderId,
       widget.envelope.envelopeId
@@ -65,53 +71,13 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
     transactionType = TextEditingController(text : "Expense");
     transactionAmount = TextEditingController(text : "");
     transactionName = TextEditingController(text : "");
+    totalBalance = widget.envelope.envelopeStartingAmount;
+    startingBalance = widget.envelope.envelopeStartingAmount;
+    _balanceController.add(totalBalance);
+    super.initState();
     return; 
   }
 
-  Future<void> fetchTransactions(
-    String docName,
-    String envelopeName
-  ) async {
-    final QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.
-        collection(userUid)
-        .doc(docName)
-        .collection('$docName+Envelope')
-        .get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      final List<dynamic> allData = [];
-
-      for (final QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
-        //String id = docSnapshot.id;
-        //print('Document ID: $id');
-        //allData.add(id);
-        final Map<String, dynamic> data =
-            docSnapshot.data() as Map<String, dynamic>;
-        final List<dynamic>? envelopeData = data['envelopTransaction'] as List<dynamic>?;
-        if (envelopeData != null){
-          for (final Map<String, dynamic> transactionData in envelopeData) {
-          //allData.add(transactionData);
-          allData.add(transactionData);
-          for (final transaction in envelopeData){
-            if (transaction['transactionType'] == 'Expense') {
-               final int expense = transactionData['transactionAmount'];
-                expenseTotal += expense;
-            }   
-            if (transaction['transactionType'] == 'Income') {
-               final int income = transactionData['transactionAmount'];
-                incomeTotal += income;
-            } 
-            totalBalance = incomeTotal - expenseTotal;  
-          }
-        }
-      }
-      }
-      transactions = allData;
-      print(transactions);
-      setState(() {});
-  }
-}
 
   @override
   void dispose(){
@@ -119,6 +85,8 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
     transactionType.dispose();
     transactionAmount.dispose();
     transactionName.dispose();
+    fetchData( widget.folder.folderId,
+      widget.envelope.envelopeId);
     return; 
   } 
 
@@ -127,7 +95,7 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
       transactionName: transactionName.text.trim(), 
       transactionUsername: auth.getUserDisplayName,
       transactionType: transactionType.text.trim(), 
-      transactionAmount: int.parse(transactionAmount.text.trim()),
+      transactionAmount: double.parse(transactionAmount.text.trim()),
       ).toMap();
 
       PocketPalDatabase().createEnvelopeTransaction(
@@ -165,94 +133,73 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
     return;
   }
 
-  Future<void> fetchData(String docName, String envelopeName) async {
+  void _dashboardNavigateToEnvelopeNotes(){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder : (context) => EnvelopeNotesPage(
+          folder: widget.folder,
+          envelope: widget.envelope,
+        )
+      )
+    );
+    return;
+  }
+
+
+Future<void> fetchData(String docName, String envelopeName) async {
   final userUid = PocketPalAuthentication().getUserUID;
+  double expenseTotal = 0;
+  double incomeTotal = 0;
+
   FirebaseFirestore.instance
       .collection(userUid)
       .doc(docName)
       .collection("$docName+Envelope")
+      .doc(envelopeName)
       .snapshots()
-      .listen((QuerySnapshot querySnapshot) {
+      .listen((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          final data = documentSnapshot.data() as Map<String, dynamic>;
+          List<double> expenseList = [];
+          List<double> incomeList = [];
+          List<dynamic> allData = [];
 
-    if (querySnapshot.docs.isNotEmpty) {
-      List<int> expenseList = [];
-      List<dynamic> envelopTransactionList = [];
-      querySnapshot.docs.forEach((doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        if (data.containsKey('envelopTransaction')) {
-          List<dynamic> getTransactions = data['envelopTransaction'];
-          envelopTransactionList.addAll(data['envelopTransaction']);
-          transactions = envelopTransactionList;
-          //print(transactions);
+          double _expenses = 0;
+          double _income = 0;
 
-          for (var transaction in getTransactions){
-            final transactionType = transaction['transactionType'] as String?;
-             final transactionAmount = transaction['transactionAmount'] as int?;
-             if (transactionType == 'expense' && transactionAmount != null) {
-              expenseList.add(transactionAmount);
-              print(expenseList);
+          if (data.containsKey('envelopeTransaction')) {
+            final List<dynamic>? envelopeData = data['envelopeTransaction'] as List<dynamic>?;
+            if (envelopeData != null) {
+              for (final Map<String, dynamic> transactionData in envelopeData){
+                allData.add(transactionData);
+                if (transactionData['transactionType'] == "Expense") {
+                  final double expense = transactionData['transactionAmount'];
+                  expenseList.add(expense);
+                  _expenses += expense;
+                  expenseTotal = _expenses;
+                }
+                if (transactionData['transactionType'] == "Income") {
+                  final double income = transactionData['transactionAmount'];
+                  _income += income;
+                  incomeTotal = _income;
+                }
+              }
+              totalBalance = startingBalance - expenseTotal + incomeTotal;
             }
           }
+          transactions = allData;
+          expenseTransactions =  expenseList;
+          incomeTransactions = incomeList;
 
+          print("Expense List Total: $expenseTotal");
+          print("Income List Total: $incomeTotal");
+          print(transactions);
+          setState(() {});
+        } else {
+          print('Document does not exist');
         }
       });
-     //print('envelopTransaction list: $envelopTransactionList');
-    } else {
-      print('Collection does not exist or is empty');
-    }
-  });
 }
-
-
-  
-
-
-
-
-Future<Map<String, dynamic>> getEnvelopeData(
-    String docName, 
-    String envelopeName
-    ) async {
-  final envelopeRef = FirebaseFirestore.instance
-      .collection(userUid)
-      .doc(docName)
-      .collection("$docName+Envelope")
-      .doc(envelopeName);
-
-  final List<dynamic> allData = [];
-  final List<double> expenseNumbers = [];
-  final List<double> incomeNumbers = [];
-
-  final envelopeDoc = await envelopeRef.get();
-  final envelopeData = (await envelopeRef.get()).data() as Map<String, dynamic>?;
-
-  if (envelopeDoc.exists && envelopeData != null) {
-    
-    allData.add(envelopeData);
-    transactions = allData;
-    print(transactions);
-    // final envelopeTransactions = envelopeData['Envelope Name'] as List<dynamic>;
-    // for (final transaction in envelopeTransactions) {
-    //   if (transaction['transactionType'] == 'Expense') {
-    //     expenseNumbers.add(transaction['transactionAmount']);
-    //   }
-    //   if (transaction['transactionType'] == 'Income'){
-    //     incomeNumbers.add(transaction['transactionAmount']);
-    //   }
-    // }
-    // expenseTotal = expenseNumbers.fold(0, (sum, amount) => sum + amount);
-    // incomeTotal = incomeNumbers.fold(0, (sum, amount) => sum + amount);
-    // expenseData = expenseNumbers;
-    //print(expenseData);
-
-    return envelopeData;
-  } else {
-    throw Exception('Envelope document does not exist');
-  }
-}
-
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -271,7 +218,7 @@ Future<Map<String, dynamic>> getEnvelopeData(
       ),
       extendBodyBehindAppBar: true,
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
               "assets/images/envelope_bg.png",
@@ -289,23 +236,42 @@ Future<Map<String, dynamic>> getEnvelopeData(
                     vertical: 12.h),
                   child: Container(
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        GestureDetector(
-                          onTap: (){
-                            Navigator.of(context).pop();
-                          },
-                          child: Icon(FeatherIcons.arrowLeft,
-                            size: 28,
-                            color: ColorPalette.white,),
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: (){
+                                Navigator.of(context).pop();
+                              },
+                              child: Icon(FeatherIcons.arrowLeft,
+                                size: 28,
+                                color: ColorPalette.white,),
+                            ),
+                            SizedBox( width: 10.h,),
+                            Text(
+                              widget.envelope.envelopeName,
+                              style: GoogleFonts.poppins(
+                                fontSize : 18.sp,
+                                color: ColorPalette.white,
+                              ),
+                            )
+                          ],
                         ),
-                        SizedBox( width: 10.h,),
-                        Text(
-                          "Envelope Name",
+
+                      GestureDetector(
+                        onTap: _dashboardNavigateToEnvelopeNotes,
+                        child: Text(
+                          "Add Note",
                           style: GoogleFonts.poppins(
-                            fontSize : 18.sp,
+                            fontSize : 16.sp,
                             color: ColorPalette.white,
+                            fontWeight: FontWeight.w600
                           ),
-                        )
+                        ),
+                      )
+                      
+                        
                       ],
                     ),
                   ),
@@ -313,9 +279,18 @@ Future<Map<String, dynamic>> getEnvelopeData(
                 Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 14.w ),
-                  child: TotalBalanceCard(
-                    width: screenWidth, 
-                    balance: totalBalance.toStringAsFixed(2),),
+                  child: StreamBuilder<double>(
+                    stream: _balanceController.stream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                          totalBalance = snapshot.data!;
+                        } 
+                        return TotalBalanceCard(
+                          width: screenWidth,
+                          balance: totalBalance.toStringAsFixed(2),
+                        );
+                    }
+                  ),
                 ),
                 SizedBox( height: 12.h,),
                 // Padding(
@@ -384,9 +359,14 @@ Future<Map<String, dynamic>> getEnvelopeData(
                           Expanded(
                             child: transactions.isEmpty
                             ? Center(
-                              child: CircularProgressIndicator(),
+                              child: Text(
+                                "No Transactions Yet",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14.sp
+                                ),
+                                ),
                             )
-                            :ListView.builder(
+                            : ListView.builder(
                               itemCount: transactions.length,
                               itemBuilder: (context, index){
                                 final transaction = transactions[index];
@@ -396,10 +376,8 @@ Future<Map<String, dynamic>> getEnvelopeData(
                                     transaction['transactionUserName'] as String?;
                                 final transactionType =
                                     transaction['transactionType'] as String;
-                                final transactionAmount =
-                                    transaction['transactionAmount'] as int;
-                                final transactionDate =
-                                    transaction['transactionDate'] as Timestamp;
+                               final transactionAmount = (transaction['transactionAmount'] as num).toDouble();
+                                final transactionDate = transaction['transactionDate'] as Timestamp;
                                 final formattedDate = formatter.format(transactionDate.toDate());
                     
                                 return  
@@ -409,7 +387,14 @@ Future<Map<String, dynamic>> getEnvelopeData(
                                       transactionAmount: transactionAmount.toDouble().toString(),
                                       transactionName: transactionName,
                                       transactionType: transactionType,
-                                      transactionUsername: transactionUsername.toString()
+                                      transactionUsername: transactionUsername ?? "",
+                                      onPressed: (BuildContext context) async{
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              const SnackBar(
+                                                content: Text("Successfully Deleted!"),
+                                                duration: Duration(seconds: 1),));
+                                            startingBalance = 0;
+                                      },
                                       );
                                   
                               }),

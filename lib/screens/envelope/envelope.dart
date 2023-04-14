@@ -61,8 +61,6 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
 
   @override
   void initState(){
-    print(auth.getUserDisplayName);
-    print(widget.envelope.envelopeId);
     fetchData(
       widget.folder.folderId,
       widget.envelope.envelopeId
@@ -145,6 +143,38 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
     return;
   }
 
+void deleteValueFromEnvelopeTransaction(
+  String docName, 
+  String envelopeName, 
+  int indexToRemove, 
+  List<dynamic> envelopeTransactionList, 
+  Function setStateCallback) async {
+
+  final documentReference = FirebaseFirestore.instance
+    .collection(userUid)
+    .doc(docName)
+    .collection("$docName+Envelope")
+    .doc(envelopeName);
+  final documentSnapshot = await documentReference.get();
+  final data = documentSnapshot.data() as Map<String, dynamic>?;
+  if (data != null && data.containsKey('envelopeTransaction')) {
+    List<dynamic> envelopeTransaction = data['envelopeTransaction'];
+    if (envelopeTransaction.length > indexToRemove) {
+      envelopeTransaction.removeAt(indexToRemove);
+      await documentReference.update({
+        'envelopeTransaction': FieldValue.delete(),
+      });
+      await documentReference.update({
+        'envelopeTransaction': FieldValue.arrayUnion(envelopeTransaction),
+      });
+      envelopeTransactionList.removeAt(indexToRemove); // remove from UI list
+      setStateCallback(); // call setState to update the UI
+    }
+  }
+}
+
+
+
 
 Future<void> fetchData(String docName, String envelopeName) async {
   final userUid = PocketPalAuthentication().getUserUID;
@@ -191,9 +221,9 @@ Future<void> fetchData(String docName, String envelopeName) async {
           expenseTransactions =  expenseList;
           incomeTransactions = incomeList;
 
-          print("Expense List Total: $expenseTotal");
-          print("Income List Total: $incomeTotal");
-          print(transactions);
+          // print("Expense List Total: $expenseTotal");
+          // print("Income List Total: $incomeTotal");
+          // print(transactions);
           setState(() {});
         } else {
           print('Document does not exist');
@@ -373,7 +403,7 @@ Future<void> fetchData(String docName, String envelopeName) async {
                                 final transactionName =
                                     transaction['transactionName'] as String;
                                 final transactionUsername =
-                                    transaction['transactionUserName'] as String?;
+                                    transaction['transactionUsername'] as String;
                                 final transactionType =
                                     transaction['transactionType'] as String;
                                final transactionAmount = (transaction['transactionAmount'] as num).toDouble();
@@ -387,13 +417,23 @@ Future<void> fetchData(String docName, String envelopeName) async {
                                       transactionAmount: transactionAmount.toDouble().toString(),
                                       transactionName: transactionName,
                                       transactionType: transactionType,
-                                      transactionUsername: transactionUsername ?? "",
+                                      transactionUsername: transactionUsername ,
                                       onPressed: (BuildContext context) async{
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(
-                                                content: Text("Successfully Deleted!"),
-                                                duration: Duration(seconds: 1),));
-                                            startingBalance = 0;
+                                        deleteValueFromEnvelopeTransaction(
+                                          widget.folder.folderId, 
+                                          widget.envelope.envelopeId, 
+                                          index, 
+                                          transactions, 
+                                          (){
+                                            setState(() { });
+                                          }
+                                      );
+
+                                        // ScaffoldMessenger.of(context).showSnackBar(
+                                        //   const SnackBar(
+                                        //     content: Text("Successfully Deleted!"),
+                                        //     duration: Duration(seconds: 1),));
+                                        // startingBalance = 0;
                                       },
                                       );
                                   

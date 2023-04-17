@@ -26,14 +26,14 @@ class NotesCard extends StatelessWidget {
       padding:  EdgeInsets.symmetric(vertical: 5.0.h),
       child: Container(
         decoration: BoxDecoration(
-          color: ColorPalette.lightGrey,
+          color: Colors.grey[50],
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.shade500,
+              color: Colors.grey.shade400,
               offset: Offset(4,4),
               blurRadius: 15.0,
-              spreadRadius: 1
+              spreadRadius: 0.6
             ),
             const BoxShadow(
               color: Colors.white,

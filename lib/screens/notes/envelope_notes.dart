@@ -128,12 +128,9 @@ Future<void> fetchData(String docName, String envelopeName) async {
 
   @override
   Widget build(BuildContext context) {
-
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     
     return Scaffold(
-      backgroundColor: ColorPalette.lightGrey,
+      backgroundColor: Colors.grey[50],
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
       backgroundColor: ColorPalette.rustic,

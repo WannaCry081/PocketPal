@@ -12,6 +12,7 @@ import 'package:pocket_pal/screens/envelope/widgets/new_transaction_dialog.dart'
 import 'package:pocket_pal/screens/envelope/widgets/total_balance_card.dart';
 import 'package:pocket_pal/screens/envelope/widgets/transaction_card.dart';
 import 'package:intl/intl.dart';
+import 'package:pocket_pal/screens/graph/envelope_graph.dart';
 import 'package:pocket_pal/screens/notes/envelope_notes.dart';
 import 'package:pocket_pal/services/authentication_service.dart';
 import 'package:pocket_pal/services/database_service.dart';
@@ -135,7 +136,7 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
     );
     return;
   }
-
+  
   @override
   Widget build(BuildContext context) {
 
@@ -237,6 +238,43 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                       ),
                     ),
                     SizedBox( height: 12.h,),
+                    Padding(
+                      padding: EdgeInsets.only( right: 14.w),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                          onTap: (){
+                            Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder : (context) => EnvelopeSummaryPieChart(
+                                pageName: widget.envelope.envelopeName,
+                                incomeTotal: incomeTotal,
+                                expenseTotal: expenseTotal,
+                                width: screenWidth,
+                                
+                              )
+                            )
+                          );
+                          },
+                          child: Text(
+                            "View Summary",
+                            style: GoogleFonts.poppins(
+                              shadows: [
+                                const Shadow(
+                                  offset: Offset(0, -5), 
+                                  color: Colors.white
+                                  )],
+                              decoration: TextDecoration.underline,
+                              decorationColor: Colors.white,
+                              decorationThickness: 2,
+                              fontSize: 14.sp,
+                              color: Colors.transparent,
+                              fontWeight: FontWeight.bold,
+                            )
+                          ),
+                        ),
+                      ),
+                    ),
                     
                 // Padding(
                 //   padding: EdgeInsets.symmetric(

@@ -53,7 +53,7 @@ class PocketPalDatabase {
       docName).collection("$docName+Envelope").doc(envelopeName);
 
     collection.set({
-        "envelopTransaction" : FieldValue.arrayUnion([data])
+        "envelopeTransaction" : FieldValue.arrayUnion([data])
       }, SetOptions(
         merge: true
       ));
@@ -91,35 +91,91 @@ class PocketPalDatabase {
     );
   }
 
- Future<List<Envelope>> fetchAllEnvelopes(String userUid, String docName) async {
-  List<Envelope> allEnvelopes = [];
-
-  QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-      .collection(userUid)
-      .doc(docName)
-      .collection("$docName+Envelope")
-      .get();
-
-  for (QueryDocumentSnapshot envelopeSnapshot in querySnapshot.docs) {
-    QuerySnapshot itemsSnapshot = await FirebaseFirestore.instance
+  Stream<Map<String, dynamic>> getEnvelopeTransactions(
+      String docName, 
+      String envelopeName,
+  ) {
+      final userUid = PocketPalAuthentication().getUserUID;
+      final documentRef = FirebaseFirestore.instance
         .collection(userUid)
         .doc(docName)
         .collection("$docName+Envelope")
-        .doc(envelopeSnapshot.id)
-        .collection("items")
-        .get();
+        .doc(envelopeName);
 
-    // for (QueryDocumentSnapshot itemSnapshot in itemsSnapshot.docs) {
-    //   Envelope envelope = Envelope(name: itemSnapshot.data()['name'], color: itemSnapshot.data()['color']);
-    //   allEnvelopes.add(envelope);
-    // }
+      return documentRef.snapshots().map((snapshot) {
+        final data = snapshot.data() as Map<String, dynamic>;
+
+        final transactions = <Map<String, dynamic>>[];
+        double expenseTotal = 0;
+        double incomeTotal = 0;
+
+        if (data.containsKey('envelopeTransaction')) {
+          final List<dynamic>? envelopeData = data['envelopeTransaction'] as List<dynamic>?;
+          if (envelopeData != null) {
+            for (final Map<String, dynamic> transactionData in envelopeData){
+              transactions.add(transactionData);
+
+              if (transactionData['transactionType'] == "Expense") {
+                final expenseAmount = (transactionData['transactionAmount'] as num).toDouble();
+                expenseTotal += expenseAmount;
+              }
+              if (transactionData['transactionType'] == "Income") {
+                final incomeAmount = (transactionData['transactionAmount'] as num).toDouble();
+                incomeTotal += incomeAmount;
+              }
+            }
+          }
+        }
+        return {
+          'transactions': transactions,
+          'expenseTotal': expenseTotal,
+          'incomeTotal': incomeTotal,
+          };
+      });
+    }
+    
+  Stream<Map<String, dynamic>> getEnvelopeNotes(
+      String docName, 
+      String envelopeName,
+    ){
+      final userUid = PocketPalAuthentication().getUserUID;
+      final documentRef = FirebaseFirestore.instance
+        .collection(userUid)
+        .doc(docName)
+        .collection("$docName+Envelope")
+        .doc(envelopeName);
+
+      return documentRef.snapshots().map((snapshot) {
+        final data = snapshot.data() as Map<String, dynamic>;
+
+        final notes = <Map<String, dynamic>>[];
+
+        if (data.containsKey('envelopeNotes')) {
+          final List<dynamic>? envelopeData = data['envelopeNotes'] as List<dynamic>?;
+          if (envelopeData != null) {
+            for (final Map<String, dynamic> notesData in envelopeData){
+              notes.add(notesData);
+            }
+          }
+        }
+        return {
+          'notesData': notes,
+          };
+      });
   }
 
-  return allEnvelopes;
+  void deleteEnvelopeTransaction(
+    String docName, 
+    String envelopeName, 
+    int index) {
+      final userUid = PocketPalAuthentication().getUserUID;
+      FirebaseFirestore.instance
+          .collection(userUid)
+          .doc(docName)
+          .collection("$docName+Envelope")
+          .doc(envelopeName)
+          .update({
+            'envelopeTransaction.${index}': FieldValue.delete(),
+      });
 }
-
-
-  
-
-
 }

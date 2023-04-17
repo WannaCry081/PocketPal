@@ -18,7 +18,7 @@ class TransactionCard extends StatelessWidget {
   final String transactionUsername;
   final String dateCreated;
 
-  final Function(BuildContext)? onPressed;
+  final Function(BuildContext)? onPressedDelete;
 
   const TransactionCard({
     super.key,
@@ -28,7 +28,7 @@ class TransactionCard extends StatelessWidget {
     required this.transactionAmount,
     required this.transactionType,
     required this.width,
-    required this.onPressed,
+    required this.onPressedDelete,
     });
 
   @override
@@ -48,7 +48,7 @@ class TransactionCard extends StatelessWidget {
             foregroundColor: ColorPalette.white,
             ),
           SlidableAction(
-            onPressed: onPressed,
+            onPressed: onPressedDelete,
             icon:FeatherIcons.trash,
             backgroundColor: Colors.red,
             ),

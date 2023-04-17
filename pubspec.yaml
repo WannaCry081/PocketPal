@@ -54,6 +54,8 @@ dependencies:
   flutter_slidable: ^2.0.0
   firebase_messaging: ^14.4.0
 
+  pie_chart: ^5.3.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

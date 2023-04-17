@@ -29,11 +29,11 @@ class EnvelopeNotesPage extends StatefulWidget {
 class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
 
   final auth = PocketPalAuthentication();
-   final userUid = PocketPalAuthentication().getUserUID;
+  final userUid = PocketPalAuthentication().getUserUID;
+  final db = PocketPalDatabase();
 
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final DateFormat formatter = DateFormat('MMM dd');
-
 
   late final TextEditingController envelopeNoteName;
   late final TextEditingController envelopeNoteContent;
@@ -42,11 +42,6 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
 
   @override
   void initState(){
-    //getEnvelopeData();
-    fetchData(
-      widget.folder.folderId,
-      widget.envelope.envelopeId
-    );
     envelopeNoteName = TextEditingController(text : "");
     envelopeNoteContent = TextEditingController(text : "");
     super.initState();
@@ -67,11 +62,11 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
     return; 
   } 
 
-   void addNotes (String envelopeId) async {
+  void addNotes (String envelopeId) async {
     final data = EnvelopeNotes(
       envelopeNoteContent: envelopeNoteContent.text.trim(),
       envelopeNoteName: envelopeNoteName.text.trim(), 
-      userName: auth.getUserDisplayName,
+      envelopeNoteUsername: auth.getUserDisplayName,
       ).toMap();
 
       PocketPalDatabase().createEnvelopeNotes(
@@ -131,53 +126,12 @@ Future<void> fetchData(String docName, String envelopeName) async {
       });
 }
 
-
-
-
-
-Future<void> fetch(String docName, String envelopeName) async {
-  final userUid = PocketPalAuthentication().getUserUID;
-
-  FirebaseFirestore.instance
-      .collection(userUid)
-      .doc(docName)
-      .collection("$docName+Envelope")
-      .snapshots()
-      .listen((QuerySnapshot querySnapshot) {
-
-    if (querySnapshot.docs.isNotEmpty) {
-      List<dynamic> allNotes = [];
-
-      querySnapshot.docs.forEach((doc) {
-
-      final data = doc.data() as Map<String, dynamic>;
-        if (data.containsKey('envelopeNotes')) {
-         final List<dynamic>? envelopeData = data['envelopeNotes'] as List<dynamic>?;
-       
-         if (envelopeData != null) {
-          for (final Map<String, dynamic> notesData in envelopeData){
-            allNotes.add(notesData);
-          }
-         }
-
-        }
-      });
-        notes = allNotes;
-        print(allNotes);
-        setState(() {});
-    } else {
-      print('Collection does not exist or is empty');
-    }
-    
-  }
-
-  );
-}
   @override
   Widget build(BuildContext context) {
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    
     return Scaffold(
       backgroundColor: ColorPalette.lightGrey,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -219,37 +173,51 @@ Future<void> fetch(String docName, String envelopeName) async {
                 ],
               ),
               SizedBox( height: 15.h,),
-               Expanded(
-                child: notes.isEmpty
-                ? Center(
-                  child: Text(
-                    "No Notes Yet",
-                    style: GoogleFonts.poppins(
-                      fontSize: 14.sp
-                    ),
-                    ),
-                )
-                : ListView.builder(
-                  itemCount: notes.length,
-                  itemBuilder: (context, index){
-                    final noteItem = notes[index];
-                    final envelopeNoteContent =
-                        noteItem['envelopeNoteContent'] as String;
-                    final envelopeNoteName =
-                        noteItem['envelopeNoteName'] as String;
-                    final envelopeNoteDate = noteItem['envelopeNoteDate'] as Timestamp;
-                    final formattedDate = formatter.format(envelopeNoteDate.toDate());
-                    
-                    return  
-                        NotesCard(
-                          width: 50,
-                          title: envelopeNoteName,
-                          content: envelopeNoteContent,
-                          dateCreated: formattedDate,
-                          userName: auth.getUserDisplayName,
-                        );
-                  }),
-              ),
+               StreamBuilder<Map<String, dynamic>>(
+                 stream: db.getEnvelopeNotes(
+                    widget.folder.folderId, 
+                    widget.envelope.envelopeId
+                  ),
+                 builder: (context, snapshot) {
+                if (!snapshot.hasData || snapshot.data == null) {
+                  return CircularProgressIndicator();
+                }
+                final notes = snapshot.data!['notesData'];
+                return Expanded(
+                    child: notes.isEmpty
+                    ? Center(
+                      child: Text(
+                        "No Notes Yet",
+                        style: GoogleFonts.poppins(
+                          fontSize: 14.sp
+                        ),
+                        ),
+                    )
+                    : ListView.builder(
+                      itemCount: notes.length,
+                      itemBuilder: (context, index){
+                        final noteItem = notes[index];
+                        final envelopeNoteContent =
+                            noteItem['envelopeNoteContent'] as String;
+                        final envelopeNoteName =
+                            noteItem['envelopeNoteName'] as String;
+                        final envelopeNoteUsername = 
+                            noteItem['envelopeNoteUsername'] as String;
+                        final envelopeNoteDate = noteItem['envelopeNoteDate'] as Timestamp;
+                        final formattedDate = formatter.format(envelopeNoteDate.toDate());
+                        
+                        return  
+                            NotesCard(
+                              width: 50,
+                              title: envelopeNoteName,
+                              content: envelopeNoteContent,
+                              dateCreated: formattedDate,
+                              userName: envelopeNoteUsername
+                            );
+                      }),
+                    );
+                 }
+               ),
               
               
             ]

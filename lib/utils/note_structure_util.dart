@@ -4,10 +4,10 @@ class EnvelopeNotes {
   String envelopeNoteName;
   late String envelopeNoteContent;
   late DateTime envelopeNoteDate;
-  late String userName;
+  late String envelopeNoteUsername;
 
   EnvelopeNotes({
-    required this.userName,
+    required this.envelopeNoteUsername,
     required this.envelopeNoteName,
     required this.envelopeNoteContent,
     this.envelopeId = "",
@@ -21,7 +21,7 @@ class EnvelopeNotes {
       "envelopeNoteName" : envelopeNoteName,
       "envelopeNoteContent" : envelopeNoteContent,
       "envelopeNoteDate" : envelopeNoteDate,
-      "userName" : userName,
+      "envelopeNoteUsername" : envelopeNoteUsername,
     };
   }
 
@@ -30,7 +30,7 @@ class EnvelopeNotes {
       envelopeId: map["id"],
       envelopeNoteContent: map["envelopeNoteContent"], 
       envelopeNoteName: map["envelopeNoteName"],
-      userName: map["userName"],
+      envelopeNoteUsername: map["envelopeNoteUsername"],
     );
   }
 

@@ -42,3 +42,28 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+<!-- 
+
+In Progress
+16. In-app Notification
+17. Push Notification
+22. Notification Page 
+
+19. Picture Gallery
+20. Stamping [DELETE]
+25. Discussion Wall/Chat Box
+
+
+15. Sharing of wall
+18. Authorization Level Tag for Group Directory/Wall
+
+
+
+
+23. Calculator
+24. Calendar
+
+
+
+-->

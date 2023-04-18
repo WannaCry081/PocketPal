@@ -164,18 +164,36 @@ class PocketPalDatabase {
       });
   }
 
-  void deleteEnvelopeTransaction(
-    String docName, 
-    String envelopeName, 
-    int index) {
-      final userUid = PocketPalAuthentication().getUserUID;
-      FirebaseFirestore.instance
-          .collection(userUid)
-          .doc(docName)
-          .collection("$docName+Envelope")
-          .doc(envelopeName)
-          .update({
-            'envelopeTransaction.${index}': FieldValue.delete(),
-      });
-}
+  Future<void> deleteEnvelopeTransaction(
+      String docName,
+      String envelopeName,
+      int index) async { 
+
+    final userUid = PocketPalAuthentication().getUserUID;
+
+    final collection = _db.collection(userUid)
+                          .doc(docName)
+                          .collection("$docName+Envelope")
+                          .doc(envelopeName);
+
+    final snapshot = await collection.get();
+    if (!snapshot.exists) {
+      return;
+    }
+    final envelopeData = snapshot.data();
+    final transactions = envelopeData?["envelopeTransaction"] as List<dynamic>;
+
+    if (transactions == null || transactions.length <= index) {
+      return;
+    }
+
+    final valueToRemove = transactions[index];
+    collection.update({
+        "envelopeTransaction": FieldValue.arrayRemove([valueToRemove])
+    });
+    return;
+  }
+
+
+
 }

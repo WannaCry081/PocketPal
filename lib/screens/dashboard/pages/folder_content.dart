@@ -4,6 +4,7 @@ import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/screens/dashboard/widgets/envelope_widget.dart";
 import "package:pocket_pal/screens/envelope/envelope.dart";
+import "package:pocket_pal/screens/envelope/widgets/envelope_dialog_box.dart";
 import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/utils/envelope_structure_util.dart";
 import "package:pocket_pal/utils/folder_structure_util.dart";
@@ -69,7 +70,7 @@ class _FolderContentPageState extends State<FolderContentPage> {
     showDialog(
       context: context,
       builder: (context) {
-        return MyDialogBoxWidget(
+        return MyEnvelopeDialogBoxWidget(
           controllerName: _envelopeName,
           dialogBoxHintText: "Untitled Envelope",
           dialogBoxTitle: "Add Envelope",

@@ -13,7 +13,7 @@ import 'package:pocket_pal/screens/envelope/widgets/total_balance_card.dart';
 import 'package:pocket_pal/screens/envelope/widgets/transaction_card.dart';
 import 'package:intl/intl.dart';
 import 'package:pocket_pal/screens/graph/envelope_graph.dart';
-import 'package:pocket_pal/screens/notes/envelope_notes.dart';
+import 'package:pocket_pal/screens/envelope%20notes/envelope_notes.dart';
 import 'package:pocket_pal/services/authentication_service.dart';
 import 'package:pocket_pal/services/database_service.dart';
 import 'package:pocket_pal/utils/envelope_structure_util.dart';
@@ -275,30 +275,6 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                         ),
                       ),
                     ),
-                    
-                // Padding(
-                //   padding: EdgeInsets.symmetric(
-                //     horizontal: 14.w),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       MoneyFlowCard(
-                //         name: "Income",
-                //         width: (screenWidth / 2) - 20,
-                //         amount: incomeTotal.toStringAsFixed(2), 
-                //         iconColor: Colors.green.shade700,
-                //         icon: FeatherIcons.arrowDown,
-                //        ),
-                //       MoneyFlowCard(
-                //         name: "Expense",
-                //         width: (screenWidth / 2) - 20,
-                //         amount: expenseTotal.toStringAsFixed(2), 
-                //         iconColor: Colors.red.shade700,
-                //         icon: FeatherIcons.arrowUp,
-                //         ),
-                //     ],
-                //   ),
-                // ),
                 SizedBox( height: 15.h,),
                 Expanded(
                   child: Container(
@@ -383,13 +359,12 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                                                 const SnackBar(
                                                   content: Text("Successfully Deleted!"),
                                                   duration: Duration(seconds: 1),));
-                                              startingBalance = 0;
                                         },
                                         );
                                     }),
                                   )
                                   :
-                                  Center(
+                                  const Center(
                                       child: CircularProgressIndicator(),
                                     )
                                 )

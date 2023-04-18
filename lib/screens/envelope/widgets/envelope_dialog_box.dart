@@ -1,31 +1,33 @@
-import "package:flutter/material.dart";
-import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:google_fonts/google_fonts.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:pocket_pal/const/color_palette.dart';
+import 'package:pocket_pal/widgets/pocket_pal_formfield.dart';
 
-import "package:pocket_pal/const/color_palette.dart";
-import "package:pocket_pal/widgets/pocket_pal_formfield.dart";
-
-
-class MyDialogBoxWidget extends StatelessWidget {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class MyEnvelopeDialogBoxWidget extends StatelessWidget {
+   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController controllerName;
   final String dialogBoxHintText;
   final String dialogBoxTitle;
   final String dialogBoxErrorMessage;
+  final TextEditingController envelopeAmountcontrollerName;
+  final String  envelopeAmountHintText;
   final void Function() dialogBoxOnTap;
-  
-  MyDialogBoxWidget({ 
-    super.key,
+
+  MyEnvelopeDialogBoxWidget({
     required this.dialogBoxErrorMessage,
     required this.dialogBoxHintText,
     required this.controllerName,
     required this.dialogBoxTitle,
     required this.dialogBoxOnTap,
+    required this.envelopeAmountHintText,
+    required this.envelopeAmountcontrollerName,
+    super.key
   });
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: ColorPalette.white,
       title: Text(
@@ -49,6 +51,19 @@ class MyDialogBoxWidget extends StatelessWidget {
                 } else {
                   return null;
                 }
+              },
+            ),
+            PocketPalFormField(
+              formController: envelopeAmountcontrollerName,
+              formHintText: envelopeAmountHintText,
+              formValidator: (value){
+                if(value!.isEmpty){
+                  return "Please enter a starting amount.";
+                }
+                if(double.tryParse(value) == null){
+                  return "Please enter a valid amount.";
+                }
+                return null;
               },
             ),
           ],

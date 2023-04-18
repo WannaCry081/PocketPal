@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/screens/envelope/widgets/glassbox_widget.dart';
 
 class MoneyFlowCard extends StatelessWidget {
@@ -22,10 +23,14 @@ class MoneyFlowCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Glassbox(
+    return Container(
       width: width,
-      height: 100,
-      borderRadius: 20,
+      height: 150,
+      decoration: BoxDecoration(
+        color: ColorPalette.lightGrey,
+        borderRadius: BorderRadius.circular(20)
+        
+      ),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -45,12 +50,12 @@ class MoneyFlowCard extends StatelessWidget {
                     shape: BoxShape.circle
                   ),
                 ),
-                const SizedBox ( width: 5),
+                const SizedBox ( width: 10),
                 Text(
                   "$name",
                   style: GoogleFonts.poppins(
                     fontSize: 18,
-                    color: Colors.grey[200],
+                    color: Colors.grey[800],
                     fontWeight: FontWeight.w600,
                   )
                 ),
@@ -60,8 +65,8 @@ class MoneyFlowCard extends StatelessWidget {
             Text(
               "Php $amount",
               style: GoogleFonts.poppins(
-                fontSize: 25,
-                color: Colors.white,
+                fontSize: 30,
+                color: ColorPalette.rustic.shade400,
                 fontWeight: FontWeight.bold,
                 height: 1.3
               )

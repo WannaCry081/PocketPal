@@ -3,8 +3,8 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:pocket_pal/const/color_palette.dart';  
+import 'package:intl/intl.dart';
 
 class TransactionCard extends StatelessWidget {
 
@@ -14,17 +14,21 @@ class TransactionCard extends StatelessWidget {
   final String transactionAmount;
   final String transactionType;
 
-  final String username;
+
+  final String transactionUsername;
   final String dateCreated;
+
+  final Function(BuildContext)? onPressedDelete;
 
   const TransactionCard({
     super.key,
-    required this.username,
+    required this.transactionUsername,
     required this.dateCreated,
     required this.transactionName,
     required this.transactionAmount,
     required this.transactionType,
     required this.width,
+    required this.onPressedDelete,
     });
 
   @override
@@ -43,9 +47,9 @@ class TransactionCard extends StatelessWidget {
             backgroundColor: ColorPalette.murky,
             foregroundColor: ColorPalette.white,
             ),
-          const SlidableAction(
-            onPressed: null,
-            icon:FeatherIcons.delete,
+          SlidableAction(
+            onPressed: onPressedDelete,
+            icon:FeatherIcons.trash,
             backgroundColor: Colors.red,
             ),
 
@@ -90,7 +94,7 @@ class TransactionCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              username,
+              transactionUsername,
               style: GoogleFonts.poppins(
                 color: ColorPalette.grey,
                 fontWeight: FontWeight.w500,

@@ -35,7 +35,7 @@ class Glassbox extends StatelessWidget {
                   end: Alignment.bottomRight,
                   colors: [
                       Colors.white.withOpacity(0.1),
-                      Colors.white.withOpacity(0.05),
+                      Colors.white.withOpacity(0.1),
                     ],
                   ),
                 border: 1, 

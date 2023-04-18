@@ -172,9 +172,9 @@ class PocketPalDatabase {
     final userUid = PocketPalAuthentication().getUserUID;
 
     final collection = _db.collection(userUid)
-                          .doc(docName)
-                          .collection("$docName+Envelope")
-                          .doc(envelopeName);
+      .doc(docName)
+      .collection("$docName+Envelope")
+      .doc(envelopeName);
 
     final snapshot = await collection.get();
     if (!snapshot.exists) {
@@ -190,6 +190,36 @@ class PocketPalDatabase {
     final valueToRemove = transactions[index];
     collection.update({
         "envelopeTransaction": FieldValue.arrayRemove([valueToRemove])
+    });
+    return;
+  }
+
+  Future<void> deleteEnvelopeNote(
+      String docName,
+      String envelopeName,
+      int index) async { 
+
+    final userUid = PocketPalAuthentication().getUserUID;
+
+    final collection = _db.collection(userUid)
+      .doc(docName)
+      .collection("$docName+Envelope")
+      .doc(envelopeName);
+
+    final snapshot = await collection.get();
+    if (!snapshot.exists) {
+      return;
+    }
+    final envelopeData = snapshot.data();
+    final notesData = envelopeData?["envelopeNotes"] as List<dynamic>;
+
+    if (notesData == null || notesData.length <= index) {
+      return;
+    }
+
+    final valueToRemove = notesData[index];
+    collection.update({
+        "envelopeNotes": FieldValue.arrayRemove([valueToRemove])
     });
     return;
   }

@@ -27,34 +27,28 @@ class MyProfileOverview extends StatelessWidget{
             count: folderNumber,
             countTitle: "folders",
           ),
-    
           VerticalDivider(
-            thickness: 2,
+            thickness: 2.5,
             color: ColorPalette.lightGrey,
             indent: 5,
             endIndent: 5,
             width: 45,
            ),
-
           OverviewCountWidget(
             count: envelopeNumber,
             countTitle: "envelopes",
           ),
-
           VerticalDivider(
-            thickness: 2,
+            thickness: 2.5,
             color: ColorPalette.lightGrey,
             indent: 5,
             endIndent: 5,
             width: 45,
           ),
-
           OverviewCountWidget(
             count: envelopeNumber,
             countTitle: "groups",
           ),
-          
-         
         ]
       ),
     );

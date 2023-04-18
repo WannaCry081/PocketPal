@@ -115,7 +115,7 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
         title: Text(
             widget.envelope.envelopeName + " Notes",
             style: GoogleFonts.poppins(
-              fontSize : 20.sp,
+              fontSize : 18.sp,
               color: ColorPalette.black,
             ),
           ),

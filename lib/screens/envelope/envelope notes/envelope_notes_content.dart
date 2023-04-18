@@ -97,7 +97,7 @@ class EnvelopeContentsPage extends StatelessWidget {
                 child: Text(
                  envelopeNoteContent,
                   style: GoogleFonts.poppins(
-                    fontSize: 16.sp,
+                    fontSize: 14.sp,
                   )
                 ),
               ),

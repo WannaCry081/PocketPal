@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
+import 'package:pocket_pal/services/authentication_service.dart';
 import 'package:pocket_pal/widgets/pocket_pal_button.dart';
 import 'package:pocket_pal/widgets/pocket_pal_formfield.dart';
 
@@ -15,6 +17,8 @@ class ChangeDisplayNameView extends StatefulWidget {
 
 class _ChangeDisplayNameViewState extends State<ChangeDisplayNameView> {
 
+  final auth = PocketPalAuthentication();
+
   @override
   Widget build(BuildContext context) {
     
@@ -22,44 +26,20 @@ class _ChangeDisplayNameViewState extends State<ChangeDisplayNameView> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(screenHeight * 0.08),
-        child: SafeArea(
-          child: Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.04
-                ),
-                child: GestureDetector(
-                  onTap : (){ },
-                  child : Center(
-                    child : Icon(
-                      Icons.arrow_back_ios_new_rounded, 
-                      color : ColorPalette.rustic,
-                      size : 30
-                    )
-                  )
-                ),
-              ),
-
-              Text(
-                "Change display name",
-                style: GoogleFonts.poppins(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500
-                )
-              )
-            ],
-          )
-        ),
+      appBar : AppBar(
+        title: Text(
+          "Change Display Name",
+            style: GoogleFonts.poppins(
+              fontSize : 18.sp,
+              color: ColorPalette.black,
+            ),
+          ),
       ),
-
       body: SafeArea(
         child: Center(
           child: Form(
             child: SizedBox(
-              width: screenWidth - (screenWidth * 0.16),
+              width: screenWidth - (screenWidth * 0.10),
               child: Column(
                 children: [
                   SizedBox (height: screenHeight * 0.03),
@@ -68,28 +48,24 @@ class _ChangeDisplayNameViewState extends State<ChangeDisplayNameView> {
                       decoration: InputDecoration(
                         labelText: "Current",
                         labelStyle: GoogleFonts.poppins(
-                          fontSize: 17,
+                          fontSize: 17.sp,
                           color: ColorPalette.grey,
                           fontWeight: FontWeight.w600,
                         ),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        hintText: "shielamae_",
+                        hintText: auth.getUserDisplayName,
                         hintStyle: GoogleFonts.poppins(
-                          fontSize: 16,
+                          fontSize: 16.sp,
                           color: ColorPalette.grey,
                         ),
                         
                       )
                     ),
-
                   SizedBox (height: screenHeight * 0.025),
-                  
-                  PocketPalFormField(
+                  const PocketPalFormField(
                     formHintText: "Enter new display name",
                   ),
-                  
-                  const Spacer(),
-
+                  SizedBox (height: screenHeight * 0.03),
                   PocketPalButton(
                     buttonOnTap: (){},
                      buttonWidth: screenWidth, 
@@ -98,15 +74,12 @@ class _ChangeDisplayNameViewState extends State<ChangeDisplayNameView> {
                      buttonBorderRadius: 10, 
                      buttonChild: Text(
                         "Save Changes",
-                        style : GoogleFonts.poppins(
-                          fontSize : 18,
-                          fontWeight : FontWeight.w700,
-                          color : ColorPalette.white
-                        )
-                      ),),
-
-                   SizedBox (height: screenHeight * 0.04),
-                  
+                      style : GoogleFonts.poppins(
+                        fontSize : 16.sp,
+                        fontWeight : FontWeight.w700,
+                        color : ColorPalette.white
+                      )
+                    ),),
                 ],
               ) 
             )

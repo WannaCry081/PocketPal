@@ -53,7 +53,9 @@ dependencies:
   glassmorphism: ^3.0.0
   flutter_slidable: ^2.0.0
   firebase_messaging: ^14.4.0
+  
 
+  syncfusion_flutter_calendar: ^21.1.41
   pie_chart: ^5.3.2
 
 dev_dependencies:
@@ -86,6 +88,7 @@ flutter:
     - assets/svg/forgot_password.svg
     - assets/svg/profile_page_bg.svg
     - assets/svg/Error.svg
+    - assets/svg/dashboard_card.svg
 
     - assets/icon/Facebook.svg
     - assets/icon/Github.svg

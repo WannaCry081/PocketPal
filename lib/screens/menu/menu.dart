@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:flutter_svg/svg.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 
@@ -19,26 +20,31 @@ class MenuItems {
   );
   static const profile = MenuItem(
       "Profile", 
-      FeatherIcons.user,
+      FeatherIcons.user
+  );
+  static const calendar =  MenuItem(
+      "Calendar",
+      FeatherIcons.calendar
+  );
+  static const calculator =  MenuItem(
+    "Calculator",
+    FeatherIcons.plusSquare,
   );
   static const settings =  MenuItem(
       "Settings",
-      FeatherIcons.settings,
-  );
-  static const ewallet =  MenuItem(
-      "E-Wallet",
-      FeatherIcons.pocket,
+      FeatherIcons.settings
   );
   static const notifications =  MenuItem(
       "Notifications",
-      FeatherIcons.bell,
+      FeatherIcons.bell
   );
 
   static const all = <MenuItem>[
     home, 
     profile,
+    calendar,
+    calculator,
     settings,
-    ewallet,
     notifications
   ];
 }

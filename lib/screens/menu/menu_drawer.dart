@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_zoom_drawer/flutter_zoom_drawer.dart";
-import "package:pocket_pal/screens/ewallet/ewallet.dart";
+import "package:pocket_pal/screens/calculator/calculator.dart";
+import 'package:pocket_pal/screens/calendar/calendar.dart';
 import "package:pocket_pal/screens/notifications/notification.dart";
 import "package:pocket_pal/utils/menu_item_util.dart";
 
@@ -60,8 +61,10 @@ class _MenuDrawerViewState extends State<MenuDrawerView> {
         return const ProfileView();
       case MenuItems.settings:
         return const SettingsView();
-      case MenuItems.ewallet:
-        return const EWalletView();
+      case MenuItems.calendar:
+        return const CalendarView();
+      case MenuItems.calculator:
+        return const CalculatorView();
       case MenuItems.notifications:
         return const NotificationsView();
       default: 

@@ -1,5 +1,7 @@
+import "dart:async";
 import "dart:io";
 
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -11,18 +13,25 @@ import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/screens/profile/widgets/overview_widget.dart";
 import "package:pocket_pal/screens/profile/widgets/profile_widget.dart";
 import "package:pocket_pal/services/authentication_service.dart";
+import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/services/storage_service.dart";
+import "package:pocket_pal/utils/folder_structure_util.dart";
 import "package:pocket_pal/widgets/pocket_pal_menu_button.dart";
 
 
 class ProfileView extends StatefulWidget {
-  const ProfileView({ super.key });
+
+  const ProfileView({ 
+    super.key });
 
   @override
   State<ProfileView> createState() => _ProfileViewState();
 }
 
 class _ProfileViewState extends State<ProfileView> {
+
+  
+  
   @override
   Widget build(BuildContext context){
 
@@ -83,10 +92,10 @@ class _ProfileViewState extends State<ProfileView> {
                       profileEmail: auth.getUserEmail, 
                     ),
                     SizedBox(height: screenHeight * 0.03),
-                    const MyProfileOverview(
+                     MyProfileOverview(
                       folderNumber: 0, 
                       envelopeNumber: 0, 
-                      groupNumber: 0),
+                      groupNumber: 0)
                   ]
                 )
             ),
@@ -137,4 +146,12 @@ class _ProfileViewState extends State<ProfileView> {
     }      
     return;
   }
+  
+
+
+
+
+
 }
+
+ 

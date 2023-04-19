@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:flutter_svg/svg.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 
@@ -29,10 +28,6 @@ class MenuItems {
   static const calculator =  MenuItem(
     "Calculator",
     FeatherIcons.plusSquare,
-  );
-  static const settings =  MenuItem(
-      "Settings",
-      FeatherIcons.settings,
   );
   static const ewallet =  MenuItem(
       "E-Wallet",

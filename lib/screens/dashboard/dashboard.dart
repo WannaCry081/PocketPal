@@ -1,17 +1,15 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:google_fonts/google_fonts.dart";
-import "package:pocket_pal/const/color_palette.dart";
 
 import "package:pocket_pal/screens/dashboard/pages/folder_content.dart";
 import "package:pocket_pal/screens/dashboard/pages/folder_grid.dart";
+import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_sheet.dart";
 import "package:pocket_pal/screens/dashboard/widgets/dialog_box.dart";
 import "package:pocket_pal/screens/dashboard/widgets/card_widget.dart";
 import "package:pocket_pal/screens/dashboard/widgets/folder_add_widget.dart";
 import "package:pocket_pal/screens/dashboard/widgets/title_option.dart";
 import "package:pocket_pal/screens/dashboard/widgets/folder_widget.dart";
 import "package:pocket_pal/screens/dashboard/widgets/search_bar_widget.dart";
-import "package:pocket_pal/services/authentication_service.dart";
 
 import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/utils/folder_structure_util.dart";

@@ -115,7 +115,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       buttonWidth: double.infinity, 
                       buttonHeight: 50.h, 
                       buttonColor: (!_isButtonEnable) ?
-                        ColorPalette.murky :
+                        ColorPalette.black :
                         ColorPalette.rustic, 
                       buttonChild: Text(
                         "Submit",

@@ -60,7 +60,7 @@ class MyDialogBoxWidget extends StatelessWidget {
           child: Text(
             "Cancel",
             style : GoogleFonts.montserrat(
-              fontWeight : FontWeight.w500
+              fontWeight : FontWeight.w600
             )
           ),
         ),
@@ -75,7 +75,7 @@ class MyDialogBoxWidget extends StatelessWidget {
             "Create", 
             style : GoogleFonts.montserrat(
               color : ColorPalette.rustic,
-              fontWeight : FontWeight.w500
+              fontWeight : FontWeight.w600
             )
           ),
         )

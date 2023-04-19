@@ -10,9 +10,6 @@ import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/utils/envelope_structure_util.dart";
 import "package:pocket_pal/utils/folder_structure_util.dart";
 
-import "package:pocket_pal/screens/dashboard/widgets/dialog_box.dart";
-
-
 class FolderContentPage extends StatefulWidget {
   final Folder folder;
 
@@ -73,9 +70,11 @@ class _FolderContentPageState extends State<FolderContentPage> {
       builder: (context) {
         return MyEnvelopeDialogBoxWidget(
           controllerName: _envelopeName,
+          envelopeAmountcontrollerName: _envelopeStartingAmount,
           dialogBoxHintText: "Untitled Envelope",
           dialogBoxTitle: "Add Envelope",
           dialogBoxErrorMessage: "Please enter a name for your Envelope",
+          envelopeAmountHintText: "Starting Amount",
           dialogBoxOnTap: (){
             if (_envelopeName.text.isNotEmpty){
               Envelope envelope = Envelope(

@@ -149,7 +149,6 @@ class _SignUpPageState extends State<SignUpPage>{
                         }
                       },
                     ),
-
                     SizedBox( height : 36.h),
                     PocketPalButton(
                       buttonOnTap: (!_isButtonEnable) ? null : (){
@@ -166,7 +165,7 @@ class _SignUpPageState extends State<SignUpPage>{
                       buttonWidth: double.infinity, 
                       buttonHeight: 50.h, 
                       buttonColor: (!_isButtonEnable) ? 
-                        ColorPalette.lightGrey :
+                        ColorPalette.black :
                         ColorPalette.rustic,
                       buttonChild: Text(
                         "Sign Up",

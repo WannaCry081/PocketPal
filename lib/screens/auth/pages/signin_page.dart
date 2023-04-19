@@ -144,7 +144,7 @@ class _SignInPageState extends State<SignInPage>{
                       buttonWidth: double.infinity, 
                       buttonHeight: 50.h, 
                       buttonColor: (!_isButtonEnable) ? 
-                        ColorPalette.murky :
+                        ColorPalette.black :
                         ColorPalette.rustic,
                       buttonChild: Text(
                         "Sign In",

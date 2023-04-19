@@ -52,10 +52,11 @@ dependencies:
   firebase_storage: ^11.1.0
   glassmorphism: ^3.0.0
   flutter_slidable: ^2.0.0
-  firebase_messaging: ^14.4.0
-  # flutter_local_notifications: ^8.2.0
-
   pie_chart: ^5.3.2
+  timezone: ^0.8.0
+  flutter_native_timezone: ^2.0.0
+  rxdart: ^0.27.7
+  flutter_local_notifications: ^8.2.0
 
 dev_dependencies:
   flutter_test:

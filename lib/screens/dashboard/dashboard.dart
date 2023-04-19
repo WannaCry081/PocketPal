@@ -26,8 +26,8 @@ class DashboardView extends StatefulWidget {
 
 class _DashboardViewState extends State<DashboardView> {
 
-  
   final TextEditingController _folderName = TextEditingController(text : "");
+
   @override
   void dispose(){
     super.dispose();

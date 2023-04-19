@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/screens/envelope/widgets/glassbox_widget.dart';
@@ -65,9 +66,9 @@ class MoneyFlowCard extends StatelessWidget {
             Text(
               "Php $amount",
               style: GoogleFonts.poppins(
-                fontSize: 30,
+                fontSize: 20.sp,
                 color: ColorPalette.rustic.shade400,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w700,
                 height: 1.3
               )
             ),

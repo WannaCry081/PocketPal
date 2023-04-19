@@ -39,15 +39,14 @@ class TransactionCard extends StatelessWidget {
 
     return Slidable(
       endActionPane: ActionPane(
+        extentRatio: 0.3,
         motion: StretchMotion(),
         children: [
           SlidableAction(
-            onPressed: null,
-            icon:FeatherIcons.edit,
-            backgroundColor: ColorPalette.murky,
-            foregroundColor: ColorPalette.white,
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(20),
+              bottomRight: Radius.circular(20)
             ),
-          SlidableAction(
             onPressed: onPressedDelete,
             icon:FeatherIcons.trash,
             backgroundColor: Colors.red,

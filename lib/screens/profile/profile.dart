@@ -40,9 +40,9 @@ class _ProfileViewState extends State<ProfileView> {
         leading: const PocketPalMenuButton(),
         title:  Text(
           "Profile",
-          style: GoogleFonts.poppins(
-            fontSize : 18.sp,
-            color: ColorPalette.black,
+           style: GoogleFonts.poppins(
+              fontSize : 18.sp,
+              color: ColorPalette.black,
           ),
         )
       ),
@@ -82,9 +82,7 @@ class _ProfileViewState extends State<ProfileView> {
                       profileName: auth.getUserDisplayName, 
                       profileEmail: auth.getUserEmail, 
                     ),
-
                     SizedBox(height: screenHeight * 0.03),
-
                     const MyProfileOverview(
                       folderNumber: 0, 
                       envelopeNumber: 0, 
@@ -93,7 +91,6 @@ class _ProfileViewState extends State<ProfileView> {
                 )
             ),
           ),
-
           Positioned(
             bottom: (screenHeight / 2) - 250,
             child: GestureDetector(

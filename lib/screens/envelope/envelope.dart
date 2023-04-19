@@ -1,19 +1,16 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
-import 'package:pocket_pal/screens/dashboard/widgets/envelope_widget.dart';
-import 'package:pocket_pal/screens/envelope/widgets/money_flow_card.dart';
 import 'package:pocket_pal/screens/envelope/widgets/new_transaction_dialog.dart';
 import 'package:pocket_pal/screens/envelope/widgets/total_balance_card.dart';
 import 'package:pocket_pal/screens/envelope/widgets/transaction_card.dart';
 import 'package:intl/intl.dart';
-import 'package:pocket_pal/screens/graph/envelope_graph.dart';
-import 'package:pocket_pal/screens/notes/envelope_notes.dart';
+import 'package:pocket_pal/screens/envelope/graph/envelope_graph.dart';
+import 'package:pocket_pal/screens/envelope/envelope%20notes/envelope_notes.dart';
 import 'package:pocket_pal/services/authentication_service.dart';
 import 'package:pocket_pal/services/database_service.dart';
 import 'package:pocket_pal/utils/envelope_structure_util.dart';
@@ -170,14 +167,11 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                     widget.envelope.envelopeId),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data == null) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 }
                 final transactions = snapshot.data!['transactions'];
                 final expenseTotal = snapshot.data!['expenseTotal'] as double;
                 final incomeTotal = snapshot.data!['incomeTotal'] as double;
-
-                print(incomeTotal);
-                print(expenseTotal);
                 return Column(
                   children: [
                     Padding(
@@ -275,30 +269,6 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                         ),
                       ),
                     ),
-                    
-                // Padding(
-                //   padding: EdgeInsets.symmetric(
-                //     horizontal: 14.w),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       MoneyFlowCard(
-                //         name: "Income",
-                //         width: (screenWidth / 2) - 20,
-                //         amount: incomeTotal.toStringAsFixed(2), 
-                //         iconColor: Colors.green.shade700,
-                //         icon: FeatherIcons.arrowDown,
-                //        ),
-                //       MoneyFlowCard(
-                //         name: "Expense",
-                //         width: (screenWidth / 2) - 20,
-                //         amount: expenseTotal.toStringAsFixed(2), 
-                //         iconColor: Colors.red.shade700,
-                //         icon: FeatherIcons.arrowUp,
-                //         ),
-                //     ],
-                //   ),
-                // ),
                 SizedBox( height: 15.h,),
                 Expanded(
                   child: Container(
@@ -339,7 +309,6 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                               ]
                             ),
                             SizedBox( height: screenHeight * 0.02,),
-
                             Expanded(
                               child: (transactions == null || transactions.isEmpty) ?
                                 Center(
@@ -349,8 +318,7 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                                       fontSize: 14.sp
                                     ),
                                   ),
-                                )
-                              : 
+                                ) : 
                               (snapshot.hasData) ?
                               ListView.builder (
                                 itemCount: transactions.length,
@@ -379,17 +347,15 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                                             widget.folder.folderId, 
                                             widget.envelope.envelopeId,
                                             index);
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                const SnackBar(
-                                                  content: Text("Successfully Deleted!"),
-                                                  duration: Duration(seconds: 1),));
-                                              startingBalance = 0;
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              const SnackBar(
+                                                content: Text("Successfully Deleted!"),
+                                                duration: Duration(seconds: 1),));
                                         },
                                         );
                                     }),
                                   )
-                                  :
-                                  Center(
+                                  : const Center(
                                       child: CircularProgressIndicator(),
                                     )
                                 )

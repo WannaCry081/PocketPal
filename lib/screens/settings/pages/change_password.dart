@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 // import 'package:pocket_pal/screens/auth/widgets/password_bottom_sheet_widget.dart';
@@ -16,48 +17,23 @@ class ChangePasswordView extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(screenHeight * 0.08),
-        child: SafeArea(
-          child: Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.04
-                ),
-                child: GestureDetector(
-                  onTap : (){ },
-                  child : Center(
-                    child : Icon(
-                      Icons.arrow_back_ios_new_rounded, 
-                      color : ColorPalette.rustic,
-                      size : 30
-                    )
-                  )
-                ),
-              ),
-
-              Text(
-                "Change password",
-                style: GoogleFonts.poppins(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500
-                )
-              )
-            ],
-          )
-        ),
+       appBar: AppBar(
+        title: Text(
+          "Change Password",
+            style: GoogleFonts.poppins(
+              fontSize : 18.sp,
+              color: ColorPalette.black,
+            ),
+          ),
       ),
-
       body: SafeArea(
         child: Center(
           child: Form(
             child: SizedBox(
-              width: screenWidth - (screenWidth * 0.16),
+              width: screenWidth - (screenWidth * 0.10),
               child: Column(
                 children: [
                   SizedBox (height: screenHeight * 0.03),
-
                   PocketPalFormField(
                     formHintText: "Current Password",
                     formIsObsecure: true,
@@ -67,9 +43,7 @@ class ChangePasswordView extends StatelessWidget {
                         onPressed: (){},
                       ),
                   ),
-
                   SizedBox (height: screenHeight * 0.025),
-
                   PocketPalFormField(
                     formHintText: "Enter New Password",
                     formIsObsecure: true,
@@ -95,9 +69,7 @@ class ChangePasswordView extends StatelessWidget {
                       ),
                     formOnTap: (){}
                   ),
-
-                  const Spacer(),
-
+                  SizedBox (height: screenHeight * 0.03),
                   PocketPalButton(
                     buttonOnTap: (){},
                      buttonWidth: screenWidth, 
@@ -107,7 +79,7 @@ class ChangePasswordView extends StatelessWidget {
                      buttonChild: Text(
                         "Save Changes",
                         style : GoogleFonts.poppins(
-                          fontSize : 18,
+                          fontSize : 16.sp,
                           fontWeight : FontWeight.w700,
                           color : ColorPalette.white
                         )

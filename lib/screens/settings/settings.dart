@@ -2,6 +2,8 @@ import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:pocket_pal/screens/settings/pages/change_display_name.dart";
+import "package:pocket_pal/screens/settings/pages/change_password.dart";
 import "package:provider/provider.dart";
 
 import "package:pocket_pal/providers/settings_provider.dart";
@@ -34,61 +36,65 @@ class SettingsView extends StatelessWidget {
         leading: const PocketPalMenuButton(),
         title:  Text(
           "Settings",
-          style: GoogleFonts.poppins(
-            fontSize : 16.sp,
-            color: ColorPalette.black,
+           style: GoogleFonts.poppins(
+              fontSize : 18.sp,
+              color: ColorPalette.black,
           ),
         )
       ),
       body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox( height: 40.h,),
-              SettingsContainerWidget(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 20.h, 
-                    horizontal: 14.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SettingsHeaderWidget(
-                        headerName: "PROFILE"
-                      ),
-                        
-                      SettingsItemsWidget(
-                        prefixIcon: FeatherIcons.user,
-                        itemName: "Change display name",
-                        onTap: (){}
-                      ),
-                        
-                      SizedBox( height: screenHeight * 0.035),
-                        
-                      const SettingsHeaderWidget(
-                        headerName: "ACCOUNTS"
-                      ),
-                        
-                      SettingsItemsWidget(
-                        prefixIcon: FeatherIcons.lock,
-                        itemName: "Change password",
-                        onTap: (){}
-                      ),
-                      SettingsItemsWidget(
-                        prefixIcon: FeatherIcons.trash2,
-                        itemName: "Delete Account",
-                        onTap: (){}
-                      ),
-                        
-                      SizedBox( height: screenHeight * 0.035),
-                        
-                      const SettingsHeaderWidget(
-                        headerName: "APP SETTINGS"
-                      ),
-                      
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: Row(
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                SizedBox( height: screenHeight * 0.05),
+                SettingsContainerWidget(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 20.h, 
+                      horizontal: 14.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SettingsHeaderWidget(
+                          headerName: "PROFILE"
+                        ),
+                        SettingsItemsWidget(
+                          prefixIcon: FeatherIcons.user,
+                          itemName: "Change display name",
+                          onTap: (){
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder : (context) => const ChangeDisplayNameView()
+                              )
+                            );
+                          }
+                        ),
+                        SizedBox( height: screenHeight * 0.035),
+                        const SettingsHeaderWidget(
+                          headerName: "ACCOUNTS"
+                        ),
+                        SettingsItemsWidget(
+                          prefixIcon: FeatherIcons.lock,
+                          itemName: "Change password",
+                          onTap: (){
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder : (context) => const ChangePasswordView()
+                              )
+                            );
+                          }
+                        ),
+                        SettingsItemsWidget(
+                          prefixIcon: FeatherIcons.trash2,
+                          itemName: "Delete Account",
+                          onTap: (){}
+                        ),
+                        SizedBox( height: screenHeight * 0.035),
+                        const SettingsHeaderWidget(
+                          headerName: "APP SETTINGS"
+                        ),
+                        Row(
                           children:[
                             const Icon(FeatherIcons.moon,
                               size: 26),
@@ -96,32 +102,44 @@ class SettingsView extends StatelessWidget {
                             Text(
                               "Dark Mode",
                               style: GoogleFonts.poppins(
-                                fontSize: 14.sp,
+                                fontSize: 16.sp,
                                 fontWeight: FontWeight.w500
                               )
                             ),
-                      
                             const Spacer(),
-                      
                             Switch(
                               value: wSettings.getIsDarkTheme,
                               activeColor: ColorPalette.rustic,
                               onChanged: (value) => rSettings.setDarkTheme = value
                             )
                           ]
-                        ),
-                      ),
-                        
-                     SettingsItemsWidget(
-                        prefixIcon: FeatherIcons.bell,
-                        itemName: "Push Notifications",
-                        onTap: (){}
-                      ),
-                    ],
-                  ),
-                )
-              ),
-            ],
+                        ), 
+                        Row(
+                          children:[
+                            const Icon(FeatherIcons.bell,
+                              size: 26),
+                            SizedBox( width: 15.w ),
+                            Text(
+                              "Push Notifications",
+                              style: GoogleFonts.poppins(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500
+                              )
+                            ),
+                            const Spacer(),
+                            Switch(
+                              value: true,
+                              activeColor: ColorPalette.rustic,
+                              onChanged: (value) => false,
+                            )
+                          ]
+                        ), 
+                      ],
+                    ),
+                  )
+                ),
+              ],
+            ),
           ),
         )
       )

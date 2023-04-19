@@ -18,7 +18,7 @@ class SettingsContainerWidget extends StatelessWidget {
     return Container(
       child: child,
       height: 500, 
-      width: screenWidth - (screenWidth * 0.12),
+      width: screenWidth - (screenWidth * 0.10),
       padding: EdgeInsets.only(
         top : 10.h,
         left: 14.w,

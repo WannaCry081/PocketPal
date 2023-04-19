@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:pocket_pal/services/messaging_service.dart";
 import "package:provider/provider.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
@@ -12,6 +13,7 @@ import "package:pocket_pal/providers/settings_provider.dart";
 import "package:pocket_pal/widgets/pocket_pal_button.dart";
 
 import "package:pocket_pal/screens/onboard/widgets/pageview_tile_widget.dart";
+
 
 
 class OnboardView extends StatefulWidget {
@@ -44,6 +46,13 @@ class _OnboardViewState extends State<OnboardView> {
   ];
 
   int _currentPage = 0;
+
+  @override
+  void initState(){
+    super.initState();
+    PocketPalNotification().init();
+    return;
+  }
 
   @override
   void dispose(){
@@ -94,11 +103,17 @@ class _OnboardViewState extends State<OnboardView> {
                         if (_currentPage == 2){
                           rSettings.setDefaultSettings();
                           
+                          PocketPalNotification().showNotification(
+                            title: "Welcome to Pocket Pal!" ,
+                            body : "Thank you for choosing Pocket Pal, the easiest way to track your expenses. Start tracking your spending today and take control of your finances."
+                          );
+
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder : (context) => const AuthView()
                             )
                           );
+
                         }
                     
                         _pageController.animateToPage(

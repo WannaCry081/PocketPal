@@ -29,13 +29,9 @@ class MenuItems {
     "Calculator",
     FeatherIcons.plusSquare,
   );
-  static const ewallet =  MenuItem(
-      "E-Wallet",
-      FeatherIcons.pocket,
-  );
-  static const notifications =  MenuItem(
-      "Notifications",
-      FeatherIcons.bell
+  static const notifications = MenuItem(
+    "Notifications",
+    FeatherIcons.bell
   );
   static const settings =  MenuItem(
       "Settings",
@@ -45,12 +41,12 @@ class MenuItems {
   static const all = <MenuItem>[
     home, 
     profile,
+    calendar,
+    calculator,
+    notifications,
     settings,
-    ewallet,
-    notifications
   ];
 }
-
 
 class MenuView extends StatelessWidget {
   final MenuItem currentItem;

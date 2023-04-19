@@ -75,8 +75,6 @@ class _FolderContentPageState extends State<FolderContentPage> {
           dialogBoxHintText: "Untitled Envelope",
           dialogBoxTitle: "Add Envelope",
           dialogBoxErrorMessage: "Please enter a name for your Envelope",
-          envelopeAmountHintText: "Enter starting amount",
-          envelopeAmountcontrollerName: _envelopeStartingAmount,
           dialogBoxOnTap: (){
             if (_envelopeName.text.isNotEmpty){
               Envelope envelope = Envelope(
@@ -91,7 +89,7 @@ class _FolderContentPageState extends State<FolderContentPage> {
 
               _envelopeName.clear();
               Navigator.of(context).pop();
-              }
+            }
           },
         );
       }

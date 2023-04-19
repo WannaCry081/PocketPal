@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:pocket_pal/const/color_palette.dart";
 
 import "package:pocket_pal/screens/dashboard/pages/folder_content.dart";
 import "package:pocket_pal/screens/dashboard/pages/folder_grid.dart";

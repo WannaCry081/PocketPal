@@ -13,8 +13,6 @@ class MyDialogBoxWidget extends StatelessWidget {
   final String dialogBoxHintText;
   final String dialogBoxTitle;
   final String dialogBoxErrorMessage;
-  final TextEditingController  ? envelopeAmountcontrollerName;
-  final String  envelopeAmountHintText;
   final void Function() dialogBoxOnTap;
   
   MyDialogBoxWidget({ 
@@ -24,8 +22,6 @@ class MyDialogBoxWidget extends StatelessWidget {
     required this.controllerName,
     required this.dialogBoxTitle,
     required this.dialogBoxOnTap,
-    this.envelopeAmountHintText ="",
-    this.envelopeAmountcontrollerName,
   });
 
   @override
@@ -41,34 +37,16 @@ class MyDialogBoxWidget extends StatelessWidget {
       ),
       content : Form(
         key : _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            PocketPalFormField(
-              formController: controllerName,
-              formHintText: dialogBoxHintText,
-              formValidator: (value){
-                if (value == null || value.isEmpty){
-                  return dialogBoxErrorMessage;
-                } else {
-                  return null;
-                }
-              },
-            ),
-            PocketPalFormField(
-              formController: envelopeAmountcontrollerName,
-              formHintText: envelopeAmountHintText,
-              formValidator: (value){
-                if(value!.isEmpty){
-                  return "Please enter a starting amount.";
-                }
-                if(double.tryParse(value) == null){
-                  return "Please enter a valid amount.";
-                }
-                return null;
-              },
-            ),
-          ],
+        child: PocketPalFormField(
+          formController: controllerName,
+          formHintText: dialogBoxHintText,
+          formValidator: (value){
+            if (value == null || value.isEmpty){
+              return dialogBoxErrorMessage;
+            } else {
+              return null;
+            }
+          },
         ),
       ),
       actions: [

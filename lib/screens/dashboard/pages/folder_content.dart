@@ -31,6 +31,7 @@ class _FolderContentPageState extends State<FolderContentPage> {
   void dispose(){
     super.dispose();
     _envelopeName.dispose();
+    _envelopeStartingAmount.dispose();
     return;
   }
 
@@ -88,6 +89,7 @@ class _FolderContentPageState extends State<FolderContentPage> {
               );
 
               _envelopeName.clear();
+              _envelopeStartingAmount.clear();
               Navigator.of(context).pop();
             }
           },
@@ -113,7 +115,8 @@ class _FolderContentPageState extends State<FolderContentPage> {
               envelope: e,
               envelopeOnTap: () => 
                 _dashboardNavigateToEnvelope(e),
-              envelopeOnLongPress: _dashboardEditEnvelope,
+              envelopeOnLongPress: () => 
+                _dashboardEditEnvelope(e),
 
             )
           ).toList();
@@ -154,11 +157,19 @@ class _FolderContentPageState extends State<FolderContentPage> {
     return;
   }
 
-  void _dashboardEditEnvelope() {
+  void _dashboardEditEnvelope(Envelope envelope) {
     showModalBottomSheet(
       context: context, 
       builder: (context){
-        return MyBottomEditSheetWidget();
+        return MyBottomEditSheetWidget(
+          removeFunction: (){
+            PocketPalDatabase().deleteEnvelope(
+              widget.folder.folderId,
+              envelope.envelopeId
+            );
+            Navigator.of(context).pop();
+          },
+        );
       }
     );
     return;

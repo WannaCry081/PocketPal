@@ -80,15 +80,24 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  void _dashboardEditFolder() {
+  void _dashboardEditFolder(Folder folder) {
     showModalBottomSheet(
       context: context, 
       builder: (context){
-        return MyBottomEditSheetWidget();
+        return MyBottomEditSheetWidget(
+          removeFunction: (){
+            PocketPalDatabase().deleteFolder(
+              folder.folderId
+            );
+            Navigator.of(context).pop();
+          },
+        );
       }
     );
     return;
   }
+
+ 
 
   void _dashboardAddFolder(bool isShared){
     showDialog(
@@ -165,7 +174,8 @@ class _DashboardViewState extends State<DashboardView> {
               ).map(
                 (e) => MyFolderWidget(
                   folder: e,
-                  folderOnLongPress: _dashboardEditFolder,
+                  folderOnLongPress: () => 
+                    _dashboardEditFolder(e),
                   folderOnTap : () =>
                     _dashboardNavigateToFolder(e)
                 )

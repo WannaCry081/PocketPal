@@ -29,6 +29,31 @@ class PocketPalDatabase {
     );
   }
 
+  Future<void> deleteFolder( String docName ) async {
+    final userUid = PocketPalAuthentication().getUserUID;
+
+    final document = _db.collection(userUid).doc(docName);  
+    final subCollection = document.collection("$docName+Envelope");
+
+    final subCollectionSnapshot = await subCollection.get();
+    for (final docs in subCollectionSnapshot.docs){
+      await docs.reference.delete();
+    }
+
+    await subCollection.doc(subCollection.id).delete();
+    await document.delete();
+    return;
+  }
+
+  Future<void> deleteEnvelope(String docId, String docName ) async {
+    final userUid = PocketPalAuthentication().getUserUID;
+
+    final document = _db.collection(userUid)
+      .doc(docId).collection("$docId+Envelope").doc(docName);
+    await document.delete();
+    return;
+  }
+
   Future<void> createEnvelope(String docName, Map<String, dynamic> data) async {  
     final userUid = PocketPalAuthentication().getUserUID;
 

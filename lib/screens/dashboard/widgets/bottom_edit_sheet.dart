@@ -5,7 +5,7 @@ import "package:flutter_feather_icons/flutter_feather_icons.dart";
 
 
 
-class MyBottomEditSheetWidget extends StatefulWidget { 
+class MyBottomEditSheetWidget extends StatelessWidget { 
   
   final void Function() ? shareFunction;
   final void Function() ? renameFunction;
@@ -19,21 +19,6 @@ class MyBottomEditSheetWidget extends StatefulWidget {
     this.detailsFunction,
     this.removeFunction,
   });
-
-  @override
-  State<MyBottomEditSheetWidget> createState() => _MyBottomEditSheetWidgetState();
-}
-
-class _MyBottomEditSheetWidgetState extends State<MyBottomEditSheetWidget> {
-
-  final TextEditingController _controller = TextEditingController(text : "");
-
-  @override
-  void dispose(){
-    super.dispose();
-    _controller.dispose();
-    return;
-  }
 
   @override
   Widget build(BuildContext context){
@@ -50,22 +35,22 @@ class _MyBottomEditSheetWidgetState extends State<MyBottomEditSheetWidget> {
           _bottomEditBarItem(
             title : "Share",
             icon : FeatherIcons.userPlus,
-            function : widget.shareFunction,
+            function : shareFunction,
           ),
           _bottomEditBarItem(
             title : "Rename",
             icon : FeatherIcons.edit,
-            function : widget.renameFunction
+            function : renameFunction
           ),
           _bottomEditBarItem(
             title : "Details and activity",
             icon : FeatherIcons.info,
-            function : widget.detailsFunction
+            function : detailsFunction
           ),
           _bottomEditBarItem(
             title : "Remove",
             icon : FeatherIcons.trash2,
-            function : widget.removeFunction
+            function : removeFunction 
           ),
 
           SizedBox (height : 10.h )
@@ -74,11 +59,11 @@ class _MyBottomEditSheetWidgetState extends State<MyBottomEditSheetWidget> {
     );
   }
 
-  Widget _bottomEditBarItem({icon, title, function}){
+  Widget _bottomEditBarItem({icon, title, void Function() ? function}){
     return Column(
       children: [
         GestureDetector(
-          onTap : (){},
+          onTap : function,
           child : Row(
             crossAxisAlignment : CrossAxisAlignment.center,
             children : [

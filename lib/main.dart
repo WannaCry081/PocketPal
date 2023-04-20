@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:pocket_pal/screens/auth/pages/loading_dart.dart";
+import "package:pocket_pal/screens/calculator/calculator.dart";
 import "package:pocket_pal/screens/calendar/calendar.dart";
 import "package:provider/provider.dart";
 import "package:firebase_core/firebase_core.dart";
@@ -68,9 +69,11 @@ class PocketPalApp extends StatelessWidget{
           ThemeMode.dark : 
           ThemeMode.light, 
         
-        home : (firstInstall) ? 
-          const OnboardView() : 
-          const AuthViewBuilder()
+        home: CalculatorView()
+        
+        // home : (firstInstall) ? 
+        //   const OnboardView() : 
+        //   const AuthViewBuilder()
       ),
     );
   }

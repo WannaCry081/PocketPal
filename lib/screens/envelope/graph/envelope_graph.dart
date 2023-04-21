@@ -77,7 +77,7 @@ class EnvelopeSummaryPieChart extends StatelessWidget {
                       dataMap: dataMap,
                       chartType: ChartType.ring,
                       chartRadius: screenWidth * 0.6,
-                      ringStrokeWidth: 40,
+                      ringStrokeWidth: 50,
                       colorList: colorList,
                       chartValuesOptions: ChartValuesOptions(
                         showChartValuesInPercentage: true,

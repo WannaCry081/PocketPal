@@ -99,6 +99,7 @@ flutter:
     - assets/icon/Menu.svg
     - assets/icon/Folder.svg
     - assets/icon/Envelope.svg
+    - assets/icon/peso_sign.svg
 
     - assets/images/Splash.png
     - assets/images/Profile.png

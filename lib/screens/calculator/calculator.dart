@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pie_chart/pie_chart.dart';
 import 'package:pocket_pal/const/color_palette.dart';
-import 'package:pocket_pal/screens/calculator/widgets/result_container.dart';
-import 'package:math_expressions/math_expressions.dart';
+import 'package:pocket_pal/screens/calculator/widgets/budget_allocation.dart';
+import 'package:pocket_pal/screens/calculator/widgets/calculator_graph.dart';
+import 'package:pocket_pal/screens/calculator/widgets/textfield_widget.dart';
+import 'package:pocket_pal/widgets/pocket_pal_button.dart';
 
 class CalculatorView extends StatefulWidget {
   const CalculatorView({super.key});
@@ -16,8 +20,51 @@ class CalculatorView extends StatefulWidget {
 
 class _CalculatorViewState extends State<CalculatorView> {
 
-  String userInput = "";
-  String result = "0";
+  TextEditingController _incomeController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+   Map<String, double> dataMap = {
+    "Necessities": 50,
+    "Wants": 30,
+    "Savings": 20,
+    };
+  
+  final colorList = <Color>[
+      ColorPalette.rustic.shade500,
+      ColorPalette.navy.shade500,
+      ColorPalette.murky.shade500,
+    ];
+  
+  String _buttonText = "Calculate";
+  double _needs = 0.0;
+  double _wants = 0.0;
+  double _savings = 0.0;
+  bool showAllocation = false;
+
+  void calculateBudget(){
+    double income = double.parse(_incomeController.text);
+     _needs = income * 0.50;
+     _wants = income * 0.30;
+     _savings = income * 0.20;
+
+      if (_needs == _needs.toInt()) {
+       _needs = _needs.toInt().toDouble();
+     } 
+     if (_wants == _wants.toInt()) {
+       _wants = _wants.toInt().toDouble();
+     } 
+     if (_savings == _savings.toInt()) {
+       _savings = _savings.toInt().toDouble();
+     } 
+
+  }
+
+  void updateBudget(){
+  if(formKey.currentState!.validate()){
+    calculateBudget();
+    setState(() {});
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -35,187 +82,124 @@ class _CalculatorViewState extends State<CalculatorView> {
           },
           child: const Icon(FeatherIcons.arrowLeft)
         ),
-        title: Text(
-            "Calculator",
-            style: GoogleFonts.poppins(
-              fontSize : 18.sp,
-              color: ColorPalette.black,
-            ),
-        ),
       ),
 
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              height: screenHeight / 3.5,
-              child: MyResultWidget(
-                userInput: userInput, 
-                result: result,
-                screenHeight: screenHeight,
-                screenWidth: screenWidth,
-                )
-            ),
-            Expanded(
-              child: Container(
-                height: screenHeight * 2 / 3.5,
-                color: const Color(0xFFFEFEFE),
-                padding: const EdgeInsets.all(10),
-                child: GridView.builder(
-                  itemCount: buttonList.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10, 
-                  ), 
-                  itemBuilder: (context, index){
-              
-                    return InkWell(
-                      onTap: (){
-                        setState(() {
-                          handleButtonPress(buttonList[index]);
-                        });
-                      },
-                      splashColor: Colors.red,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: getBGColor(buttonList[index]),
-                          boxShadow: [
-                        
-                          BoxShadow(
-                            color: Colors.grey.shade400,
-                            offset: const Offset(4,4),
-                            blurRadius: 5.0,
-                            spreadRadius: 0.5
-                          ),
-                        
-                          BoxShadow(
-                            color: ColorPalette.white!,
-                            offset: const Offset(-4.0, -4.0),
-                          blurRadius: 10.0,
-                            spreadRadius: 0.5
-                          ),
-                          ]
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "Budget Calculator",
+                  style: GoogleFonts.poppins(
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.bold,
+                    color: ColorPalette.navy.shade600
+                  )
+                ),
+                SizedBox( height: 3.h),
+                Text(
+                  "Enter your income to create a\nsuggested budget.",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontSize: 13.sp,
+                    height: 1.2
+                  )
+                ),
+                SizedBox( height: 22.h),
+                Form(
+                  key: formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: MyCalculatorTextFieldWidget(
+                    screenWidth: screenWidth,
+                    incomeController: _incomeController,
+                  ),
+                ),
+                SizedBox( height: 10.h),
+                PocketPalButton(
+                  buttonOnTap: (){
+                    if(formKey.currentState!.validate()){
+                      setState(() {
+                      updateBudget();
+                      showAllocation = true;
+                      _buttonText = "Recalculate";
+                      FocusScope.of(context).unfocus();
+                    });
+                    }
+                  }, 
+                  buttonWidth: screenWidth * 0.70, 
+                  buttonHeight: 45.h, 
+                  buttonColor: ColorPalette.rustic, 
+                  buttonChild: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        _buttonText,
+                        style: GoogleFonts.poppins(
+                          fontSize: 16.sp,
+                          color: ColorPalette.white,
+                          fontWeight: FontWeight.w700
                         ),
-                        child: Center(
+                      ),
+                      SizedBox( width: 1.w),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        size: 15,
+                        color: ColorPalette.white,
+                      )
+                    ],
+                  )),
+                  SizedBox( height: 40.h),
+                  Visibility(
+                    visible: showAllocation,
+                    child: Column(
+                      children: [
+                        Text(
+                          "Your 50/30/20 Budget Allocation",
+                          style: GoogleFonts.poppins(
+                            fontSize: 16.sp,
+                            color: ColorPalette.navy.shade400,
+                            fontWeight: FontWeight.w800
+                          ),
+                        ),
+                        SizedBox( height: 6.h),
+                        MyBudgetAllocation(
+                          needs:  _needs.toStringAsFixed(_needs.truncateToDouble() == _needs ? 0 : 2),
+                          wants: _wants.toStringAsFixed(_needs.truncateToDouble() == _needs ? 0 : 2),
+                          savings: _savings.toStringAsFixed(_needs.truncateToDouble() == _needs ? 0 : 2),
+                          fontSize: _needs.toString().length > 5 ? 17.sp : 24.sp
+                        ),
+                        SizedBox( height: 25.h),
+                        MyCalculatorGraph(
+                          screenWidth: screenWidth,
+                          dataMap: dataMap,
+                          colorList: colorList
+                        ),
+                        SizedBox( height: 40.h),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 10.h,
+                            horizontal: 14.h),
                           child: Text(
-                            buttonList[index], 
+                            "     The 50/30/20 budget is a simple and effective way to manage your money and ensure that you're prioritizing your spending in a way that aligns with your goals. By dividing your income into three categories, you can easily see where your money is going and make adjustments as needed.",
                             style: GoogleFonts.poppins(
-                              color: getColor(buttonList[index]),
-                              fontSize: 30.sp,
-                              fontWeight: FontWeight.w600,
-                            )
+                              fontSize: 12.sp,
+                            ),
+                            textAlign: TextAlign.justify,
                           ),
-                        ),
-                              ),
-                    );
-                }),
-              ),
-            )
-          ]
+                        )
+                      ],
+                    ),
+                  ),
+              ]
+            ),
+          ),
         ),
       )
     );
   }
 
-  getColor(String text){
-    if( 
-      text == "/" ||
-      text == "*" ||
-      text == "+" ||
-      text == "-" ||
-      text == "C" ||
-      text == "(" ||
-      text == ")"
-    ){
-      return ColorPalette.rustic.shade400;
-    }
-    if(text == "=" || text == "AC"){
-      return Colors.white;
-    }
-    return const Color(0xFF343434);
-  }
-
-  getBGColor(String text){
-    if(text == "AC"){
-      return ColorPalette.navy.shade700;
-    }
-    if(text == "="){
-      return ColorPalette.rustic;
-    }
-    return const Color(0xFFFEFEFE);
-  }
-
-  List<String> buttonList = [
-    "AC", 
-    "(", 
-    ")", 
-    "/",
-    "7",
-    "8",
-    "9",
-    "*",
-    "4",
-    "5",
-    "6",
-    "+",
-    "1",
-    "2",
-    "3",
-    "-",
-    "C",
-    "0",
-    ".",
-    "=",
-  ];
-
-  handleButtonPress(String text){
-    if(text == "AC"){
-      userInput = "";
-      result = "0";
-      return;
-    }
-    
-    if(text == "C"){
-      if(userInput.isNotEmpty){
-        userInput = userInput.substring(0, userInput.length - 1);
-        return;
-      }
-      else {
-        return null;
-      }
-    }
-
-    if (text == "="){
-      result = calculate();
-      userInput = result;
-      if(userInput.endsWith(".0")){
-        userInput = userInput.replaceAll(".0", "");
-      }
-      if(result.endsWith(".0")){
-        result = result.replaceAll(".0", "");
-      }
-      return;
-    }
-    userInput += text;
-  }
-  
-  String calculate(){
-    try{
-      var exp = Parser().parse(userInput);
-      var evaluation = exp.evaluate(
-        EvaluationType.REAL,
-        ContextModel()
-      );
-      return evaluation.toString();
-    }
-    catch(e){
-      return "Error";
-    }
-  }
-
-
+ 
   
 }

@@ -1,22 +1,28 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:google_fonts/google_fonts.dart";
+
 import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/screens/dashboard/pages/folder_chat_box.dart";
+import "package:pocket_pal/services/database_service.dart";
+
 import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_sheet.dart";
 import "package:pocket_pal/screens/dashboard/widgets/envelope_widget.dart";
 import "package:pocket_pal/screens/envelope/envelope.dart";
 import "package:pocket_pal/screens/envelope/widgets/envelope_dialog_box.dart";
-import "package:pocket_pal/services/database_service.dart";
+
 import "package:pocket_pal/utils/envelope_structure_util.dart";
 import "package:pocket_pal/utils/folder_structure_util.dart";
+
 
 class FolderContentPage extends StatefulWidget {
   final Folder folder;
 
   const FolderContentPage({ 
-    super.key,
+    Key ? key,
     required this.folder
-  });
+  }) : super(key : key);
 
   @override
   State<FolderContentPage> createState() => _FolderContentPageState();
@@ -47,7 +53,25 @@ class _FolderContentPageState extends State<FolderContentPage> {
           style : GoogleFonts.poppins(
             fontSize : 16.sp
           )
-        )
+        ),
+
+        actions: [
+          IconButton(
+            icon : const Icon(
+              FeatherIcons.messageCircle,
+              color : Colors.black
+            ),
+            onPressed: (){
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder : (context) => FolderChatBox(
+                    folderChatBoxName : widget.folder.folderName
+                  )
+                )
+              );
+            },
+          )
+        ],
       ),
 
       floatingActionButton: FloatingActionButton(

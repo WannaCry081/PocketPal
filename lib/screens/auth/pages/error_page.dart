@@ -8,7 +8,7 @@ import "package:pocket_pal/widgets/pocket_pal_button.dart";
 
 class ErrorPage extends StatelessWidget {
 
-  const ErrorPage({super.key});
+  const ErrorPage({ Key ? key }) : super(key : key);
   
   @override
   Widget build(BuildContext context) {

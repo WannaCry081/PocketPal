@@ -108,9 +108,9 @@ class SettingsView extends StatelessWidget {
                             ),
                             const Spacer(),
                             Switch(
-                              value: wSettings.getIsDarkTheme,
+                              value: wSettings.getIsLight,
                               activeColor: ColorPalette.rustic,
-                              onChanged: (value) => rSettings.setDarkTheme = value
+                              onChanged: rSettings.setIsLight
                             )
                           ]
                         ), 

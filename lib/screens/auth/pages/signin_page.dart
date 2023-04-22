@@ -23,9 +23,9 @@ class SignInPage extends StatefulWidget {
   final void Function() ? changeStateIsFirstInstall;
 
   const SignInPage({ 
-    super.key,
+    Key ? key,
     required this.changeStateIsFirstInstall 
-  });
+  }) : super(key : key);
 
   @override
   State<SignInPage> createState() => _SignInPageState();
@@ -131,12 +131,13 @@ class _SignInPageState extends State<SignInPage>{
                     SizedBox( height : 36.h),
                     PocketPalButton(
                       buttonOnTap: (!_isButtonEnable) ? null : (){
-
                         if (_formKey.currentState!.validate()){
                           _formKey.currentState!.save();
                           
-                          if (wSettings.getFirstInstall){
-                            wSettings.setFirstInstall = false;
+                          if (wSettings.getIsFirstInstall){
+                            rSettings.setIsFirstInstall(
+                              !wSettings.getIsFirstInstall
+                            );
                           }
                           _signInPageEmailAndPasswordAuth();
                         }
@@ -162,8 +163,10 @@ class _SignInPageState extends State<SignInPage>{
                     SizedBox( height : 20.h ),
                     PocketPalButton(
                       buttonOnTap: (){
-                        if (wSettings.getFirstInstall){
-                          rSettings.setFirstInstall = false;
+                        if (wSettings.getIsFirstInstall){
+                          rSettings.setIsFirstInstall(
+                            !wSettings.getIsFirstInstall
+                          );
                         }
                         _signInPageGoogleAuth();
                       }, 

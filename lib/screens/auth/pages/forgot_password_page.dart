@@ -16,7 +16,7 @@ import "package:pocket_pal/utils/password_checker_util.dart";
 import "package:pocket_pal/providers/settings_provider.dart";
 
 class ForgotPasswordPage extends StatefulWidget { 
-  const ForgotPasswordPage({ super.key });
+  const ForgotPasswordPage({ Key ? key }) : super(key : key);
 
   @override
   State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
@@ -99,18 +99,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     SizedBox( height : 20.h),
                     PocketPalButton(
                       buttonOnTap: (!_isButtonEnable)? null : (){
-
                         if (_formKey.currentState!.validate()){
                           _formKey.currentState!.save();
 
-                          if (wSettings.getFirstInstall){
-                            rSettings.setFirstInstall = false;
+                          if (wSettings.getIsFirstInstall){
+                            rSettings.setIsFirstInstall(
+                              !wSettings.getIsFirstInstall
+                            );
                           }
+                          _forgotPasswordPageResetPassword();
+                          Navigator.of(context).pop();
                         }
-
-                        _forgotPasswordPageResetPassword();
-
-                        Navigator.of(context).pop();
                       }, 
                       buttonWidth: double.infinity, 
                       buttonHeight: 50.h, 

@@ -8,7 +8,7 @@ import "package:pocket_pal/screens/auth/auth.dart";
 
 
 class AuthViewBuilder extends StatelessWidget {
-  const AuthViewBuilder({ super.key });
+  const AuthViewBuilder({ Key ? key }) : super(key : key);
 
   @override 
   Widget build(BuildContext context){
@@ -20,16 +20,18 @@ class AuthViewBuilder extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting){
             return const LoadingPage();
           } 
-          
-          if (snapshot.hasData){
+
+          else if (snapshot.hasData){
             return const MenuDrawerView();
           } 
           
-          if (snapshot.hasError){
+          else if (snapshot.hasError){
             return const ErrorPage();
           }
-
-          return const AuthView();          
+          
+          else {
+            return const AuthView();          
+          }
         }
       )
     );

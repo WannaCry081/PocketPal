@@ -8,27 +8,34 @@ import "package:pocket_pal/screens/auth/pages/signup_page.dart";
 
 
 class AuthView extends StatefulWidget {
-  const AuthView({ super.key });
+  const AuthView({ Key ? key }) : super(key : key);
 
   @override
   State<AuthView> createState() => _AuthViewState();
 }
-
 
 class _AuthViewState extends State<AuthView>{
 
   bool _isFirstInstall = true;
 
   @override
-  void didChangeDependencies(){
-    super.didChangeDependencies();
-    setState((){
-      _isFirstInstall = Provider.of<SettingsProvider>(
-      context, listen: true).getFirstInstall;
-    }); 
+  void initState(){
+    super.initState();
+    _updateIsFirstInstall();
     return;
   }
 
+  void _updateIsFirstInstall(){
+    final settings = Provider.of<SettingsProvider>(
+      context, listen: false);
+
+    if (!settings.getIsFirstInstall){
+      setState((){
+        _isFirstInstall = settings.getIsFirstInstall;
+      });
+    }
+    return;
+  }
 
   @override 
   Widget build(BuildContext context){

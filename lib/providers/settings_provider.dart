@@ -15,22 +15,24 @@ class SettingsProvider with ChangeNotifier {
     return;
   }
 
-  bool get getIsDarkTheme => _pref?.getBool("isDark") ?? false;
-  bool get getFirstInstall => _pref?.getBool("firstInstall") ?? true;
+  bool get getIsLight => _pref?.getBool("isLight") ?? true;
+  bool get getIsFirstInstall => _pref?.getBool("isFirstInstall") ?? true;
+  bool get getShowOnboard => _pref?.getBool("showOnboard") ?? true;
 
-  set setFirstInstall(bool value) {
-    _pref?.setBool("firstInstall", value);
+  Future<void> setIsFirstInstall(bool value) async {
+    await _pref?.setBool("isFirstInstall", value);
     notifyListeners();
+    return;
   }
 
-  set setDarkTheme(bool value){
-    _pref?.setBool("isDark", value);
+  Future<void> setIsLight(bool value) async {
+    await _pref?.setBool("isLight", value);
     notifyListeners();
+    return;
   }
 
-
-  void setDefaultSettings() {
-    _pref?.setBool("isDark", false);
+  Future<void> setShowOnboard(bool value) async { 
+    await _pref?.setBool("showOnboard", value);
     notifyListeners();
     return;
   }

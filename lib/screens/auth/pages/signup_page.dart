@@ -22,9 +22,9 @@ class SignUpPage extends StatefulWidget {
   final void Function() ? changeStateIsFirstInstall;
 
   const SignUpPage({ 
-    super.key,
+    Key ? key,
     required this.changeStateIsFirstInstall 
-  });
+  }) : super(key : key);
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -154,11 +154,12 @@ class _SignUpPageState extends State<SignUpPage>{
                       buttonOnTap: (!_isButtonEnable) ? null : (){
                         if (_formKey.currentState!.validate()){
                           _formKey.currentState!.save();
-
-                          if (wSettings.getFirstInstall){
-                            rSettings.setFirstInstall = false;
+                          
+                          if (wSettings.getIsFirstInstall){
+                            rSettings.setIsFirstInstall(
+                              !wSettings.getIsFirstInstall
+                            );
                           }
-
                           _signUpPageEmailAndPasswordAuth();
                         }
                       }, 

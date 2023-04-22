@@ -28,6 +28,7 @@ class PocketPalAuthentication {
     );
 
     final currentUser = newUser.user!;
+    
     await currentUser.updateDisplayName(userName);
     await currentUser.updatePhotoURL(
       await PocketPalStorage().getDefaultImage()

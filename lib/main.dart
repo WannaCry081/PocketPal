@@ -1,8 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:pocket_pal/screens/auth/pages/loading_dart.dart";
-import "package:pocket_pal/screens/calculator/calculator.dart";
-import "package:pocket_pal/screens/calendar/calendar.dart";
 import "package:provider/provider.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -20,19 +18,20 @@ import "package:pocket_pal/const/light_theme.dart";
 Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
+  tz.initializeTimeZones();
 
   await Firebase.initializeApp();
   await SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp]
   );  
 
-  tz.initializeTimeZones();
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create : (context) => SettingsProvider()
         ),
+        
       ],
       child : const PocketPalApp()
     )
@@ -42,15 +41,15 @@ Future<void> main() async {
 }
   
 class PocketPalApp extends StatelessWidget{
-  const PocketPalApp({ super.key });
+  const PocketPalApp({ Key ? key }) : super(key : key);
 
   @override
   Widget build(BuildContext context){
 
     final wSettings = context.watch<SettingsProvider>();
 
-    final bool firstInstall = wSettings.getFirstInstall;
-    final bool isDark = wSettings.getIsDarkTheme;
+    final bool showOnboard = wSettings.getShowOnboard;
+    final bool isLight = wSettings.getIsLight;
     
     return ScreenUtilInit(
       designSize: const Size(360, 640),
@@ -61,6 +60,7 @@ class PocketPalApp extends StatelessWidget{
         theme : lightTheme,
         darkTheme: darkTheme,
 
+<<<<<<< HEAD
         themeMode : (isDark) ? 
           ThemeMode.dark : 
           ThemeMode.light, 
@@ -68,6 +68,27 @@ class PocketPalApp extends StatelessWidget{
         home : (firstInstall) ? 
           const OnboardView() : 
           const AuthViewBuilder()
+=======
+        themeMode : (isLight) ? 
+          ThemeMode.light : 
+          ThemeMode.dark, 
+          
+        home : FutureBuilder(
+          future : Firebase.initializeApp(),
+          builder : (context, snapshot) {
+            if (snapshot.hasData){
+              if (showOnboard){
+                return const OnboardView();
+              } else {
+                return const AuthViewBuilder();
+              }
+            }
+            else {
+              return const LoadingPage();
+            }
+          }
+        )
+>>>>>>> lirae-branch
       ),
     );
   }

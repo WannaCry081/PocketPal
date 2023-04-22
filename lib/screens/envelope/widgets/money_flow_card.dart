@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/screens/envelope/widgets/glassbox_widget.dart';
@@ -8,8 +9,7 @@ class MoneyFlowCard extends StatelessWidget {
   final double width;
   final String amount;
   final String name;
-  final Color iconColor;
-  final IconData icon;
+  final double fontSize;
 
 
   const MoneyFlowCard({
@@ -17,8 +17,7 @@ class MoneyFlowCard extends StatelessWidget {
     required this.name,
     required this.width,
     required this.amount,
-    required this.iconColor,
-    required this.icon,
+    required this.fontSize,
     
   });
 
@@ -26,51 +25,58 @@ class MoneyFlowCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      height: 150,
+      height: 120,
       decoration: BoxDecoration(
-        color: ColorPalette.lightGrey,
-        borderRadius: BorderRadius.circular(20)
-        
+        borderRadius: BorderRadius.circular(20),
+        gradient: const LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              Color(0xFFea5753),
+              Color(0xFFfa9372),
+            ]
+          ),
+         boxShadow: [
+              BoxShadow(
+                color: Colors.grey.shade400,
+                offset: Offset(4,4),
+                blurRadius: 10.0,
+                spreadRadius: 0
+              ),
+            ]
       ),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const SizedBox ( width: 10),
+            Text(
+              "$name",
+              style: GoogleFonts.poppins(
+                fontSize: 18.sp,
+                color: ColorPalette.black,
+                fontWeight: FontWeight.w600,
+              )
+            ),
+            const SizedBox ( height: 5),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Icon(icon,
-                      color: Colors.white,
-                      ),
-                  ),
-                  decoration: BoxDecoration(
-                    color: iconColor,
-                    shape: BoxShape.circle
-                  ),
+                SvgPicture.asset(
+                    "assets/icon/peso_sign.svg",
+                    height: 16.h,
+                    color: ColorPalette.white,
                 ),
-                const SizedBox ( width: 10),
                 Text(
-                  "$name",
+                  "$amount",
                   style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    color: Colors.grey[800],
+                    fontSize: fontSize,
+                    color: ColorPalette.white,
                     fontWeight: FontWeight.w600,
+                    height: 1.3
                   )
                 ),
               ],
-            ),
-            const SizedBox ( height: 5),
-            Text(
-              "Php $amount",
-              style: GoogleFonts.poppins(
-                fontSize: 20.sp,
-                color: ColorPalette.rustic.shade400,
-                fontWeight: FontWeight.w700,
-                height: 1.3
-              )
             ),
           ],
         ),

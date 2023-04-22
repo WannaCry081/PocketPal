@@ -6,6 +6,7 @@ class EnvelopeTransaction {
   String transactionName;
   late String transactionUsername;
   late String transactionType;
+  late String transactionCategory;
   late double transactionAmount;
   late DateTime transactionDate;
 
@@ -13,6 +14,7 @@ class EnvelopeTransaction {
     required this.transactionName,
     required this.transactionUsername,
     required this.transactionType,
+    required this.transactionCategory,
     required this.transactionAmount,
     this.transactionId = "",
   }){
@@ -24,6 +26,7 @@ class EnvelopeTransaction {
       "id" : transactionId,
       "transactionName" : transactionName,
       "transactionType" : transactionType,
+      "transactionCategory" : transactionCategory,
       "transactionAmount" : transactionAmount,
       "transactionDate" : transactionDate,
       "transactionUsername" : transactionUsername,
@@ -35,6 +38,7 @@ class EnvelopeTransaction {
       transactionId: map["id"],
       transactionName: map["transactionName"],
       transactionType: map["transactionType"], 
+      transactionCategory: map["transactionCategory"], 
       transactionAmount: map["transactionAmount"], 
       transactionUsername: map["transactionUsername"]
     );

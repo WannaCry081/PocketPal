@@ -59,7 +59,7 @@ dependencies:
   flutter_local_notifications: ^8.2.0
   timezone: ^0.8.0
   syncfusion_flutter_calendar: ^20.3.47
-  math_expressions: ^2.4.0
+  gradient_borders: ^1.0.0
 
 dev_dependencies:
   flutter_test:

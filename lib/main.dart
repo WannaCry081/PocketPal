@@ -60,15 +60,6 @@ class PocketPalApp extends StatelessWidget{
         theme : lightTheme,
         darkTheme: darkTheme,
 
-<<<<<<< HEAD
-        themeMode : (isDark) ? 
-          ThemeMode.dark : 
-          ThemeMode.light, 
-
-        home : (firstInstall) ? 
-          const OnboardView() : 
-          const AuthViewBuilder()
-=======
         themeMode : (isLight) ? 
           ThemeMode.light : 
           ThemeMode.dark, 
@@ -88,7 +79,6 @@ class PocketPalApp extends StatelessWidget{
             }
           }
         )
->>>>>>> lirae-branch
       ),
     );
   }

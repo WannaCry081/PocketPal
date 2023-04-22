@@ -131,8 +131,13 @@ class PocketPalDatabase {
         final data = snapshot.data() as Map<String, dynamic>;
 
         final transactions = <Map<String, dynamic>>[];
+        final categories = <String>[];
         double expenseTotal = 0;
         double incomeTotal = 0;
+        final categoryAmounts = <String, double>{};
+        final expenseCategoryAmounts = <String, double>{};
+        final incomeCategoryAmounts = <String, double>{};
+
 
         if (data.containsKey('envelopeTransaction')) {
           final List<dynamic>? envelopeData = data['envelopeTransaction'] as List<dynamic>?;
@@ -143,11 +148,38 @@ class PocketPalDatabase {
               if (transactionData['transactionType'] == "Expense") {
                 final expenseAmount = (transactionData['transactionAmount'] as num).toDouble();
                 expenseTotal += expenseAmount;
+
+                final category = transactionData['transactionCategory'] as String?;
+                if (category != null) {
+                  if (!expenseCategoryAmounts.containsKey(category)) {
+                    expenseCategoryAmounts[category] = expenseAmount;
+                  } else {
+                    expenseCategoryAmounts.update(category, (value) => value + expenseAmount);
+                  }
+                }
               }
               if (transactionData['transactionType'] == "Income") {
                 final incomeAmount = (transactionData['transactionAmount'] as num).toDouble();
                 incomeTotal += incomeAmount;
+
+                final category = transactionData['transactionCategory'] as String?;
+                if (category != null) {
+                  if (!incomeCategoryAmounts.containsKey(category)) {
+                    incomeCategoryAmounts[category] = incomeAmount;
+                  } else {
+                    incomeCategoryAmounts.update(category, (value) => value + incomeAmount);
+                  }
+                }
               }
+
+              final category = transactionData['transactionCategory'] as String?;
+              if (category != null) {
+                if (!categories.contains(category)) {
+                  categories.add(category);
+                }
+                 final categoryAmount = (transactionData['transactionAmount'] as num).toDouble();
+                  categoryAmounts.update(category, (value) => value + categoryAmount, ifAbsent: () => categoryAmount);
+                  }
             }
           }
         }
@@ -155,6 +187,10 @@ class PocketPalDatabase {
           'transactions': transactions,
           'expenseTotal': expenseTotal,
           'incomeTotal': incomeTotal,
+          'categories': categories,
+          'categoryAmounts': categoryAmounts,
+          'expenseCategoryAmounts': expenseCategoryAmounts,
+          'incomeCategoryAmounts': incomeCategoryAmounts,
           };
       });
     }

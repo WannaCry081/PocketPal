@@ -13,7 +13,8 @@ class TransactionCard extends StatelessWidget {
   final String transactionName;
   final String transactionAmount;
   final String transactionType;
-
+  final String transactionCategory;
+  final Color? categoryColor;
 
   final String transactionUsername;
   final String dateCreated;
@@ -27,6 +28,8 @@ class TransactionCard extends StatelessWidget {
     required this.transactionName,
     required this.transactionAmount,
     required this.transactionType,
+    required this.transactionCategory,
+    required this.categoryColor,
     required this.width,
     required this.onPressedDelete,
     });
@@ -92,20 +95,42 @@ class TransactionCard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              transactionUsername,
-              style: GoogleFonts.poppins(
-                color: ColorPalette.grey,
-                fontWeight: FontWeight.w500,
-                fontSize: 12.sp
-              ),),
-            Text(
-              dateCreated,
-              style: GoogleFonts.poppins(
-                color: ColorPalette.grey,
-                fontSize: 12.sp
-              ),
-      
+            Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: categoryColor ?? ColorPalette.grey,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 2.0.h,
+                      horizontal: 10.w),
+                    child: Text(
+                      transactionCategory.toUpperCase(),
+                      style: GoogleFonts.poppins(
+                        color: ColorPalette.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12.sp
+                      ),),
+                  ),
+                ),
+                SizedBox( width: 5.w),
+                Text(
+                  transactionUsername,
+                  style: GoogleFonts.poppins(
+                    color: Colors.grey[700],
+                    fontWeight: FontWeight.w500,
+                    fontSize: 13.sp
+                  ),),
+              ],
+            ),
+              Text(
+                dateCreated,
+                style: GoogleFonts.poppins(
+                  color: Colors.grey[700],
+                  fontSize: 12.sp
+                ),
                 )
               ],
             )

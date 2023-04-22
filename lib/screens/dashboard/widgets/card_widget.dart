@@ -3,12 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
+import 'package:pocket_pal/services/authentication_service.dart';
 
 class MyCardWidget extends StatelessWidget {
   const MyCardWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    final auth = PocketPalAuthentication();
 
     final screenSize = MediaQuery.of(context).size;
     final screenWidth = screenSize.width;
@@ -26,7 +29,7 @@ class MyCardWidget extends StatelessWidget {
             Positioned(
               bottom : (-i * 10),
               child: Container(
-                height : 95.h + 20.w,
+                height : 90.h + 20.w,
                 width : (screenWidth - ((screenWidth * 0.06)*2))- (30*i),
                 decoration: BoxDecoration(
                   color: ColorPalette.rustic[300 - (i*100)],
@@ -35,7 +38,7 @@ class MyCardWidget extends StatelessWidget {
               ),
             ),
           Container(
-          height : 95.h + 20.w,
+          height : 90.h + 20.w,
           decoration: BoxDecoration(
             color: Color(0xffFFFBFF),
             borderRadius: BorderRadius.circular(15),
@@ -67,11 +70,10 @@ class MyCardWidget extends StatelessWidget {
                   fontWeight: FontWeight.w600
                 )
               ),
-              SizedBox( height: 5.h),
               Text(
-                "How can PocketPal help\nyou with your finances\ntoday?",
+                "Let's get to the top of\nour expenses today!",
                 style: GoogleFonts.poppins(
-                  fontSize: 11.sp,
+                  fontSize: 13.sp,
                   color: ColorPalette.grey,
                   height: 1
                 )

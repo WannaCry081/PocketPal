@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -52,17 +53,42 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
   late final TextEditingController transactionType;
   late final TextEditingController transactionAmount;
   late final TextEditingController transactionName;
+  late final TextEditingController transactionCategory;
 
   List<dynamic> transactions = [];
   List<dynamic> expenseTransactions = [];
   List<dynamic> incomeTransactions = [];
+  List<String> categories = [
+      "Food",
+      "School",
+      "Transport",
+      "Grocery",
+      "Entertainment",
+      "Pets",
+      "Travel",
+      "Miscellaneous",
+  ];
+
+  final Map<String, Color> categoryColorMap = {
+    "Food": ColorPalette.rustic.shade200,
+    "School": ColorPalette.navy.shade500,
+    "Transport": Colors.red.shade200,
+    "Grocery": Colors.orange.shade200,
+    "Entertainment": Color.fromARGB(255, 216, 195, 89),
+    "Pets": Colors.green.shade200,
+    "Travel": Colors.blue.shade200,
+    "Miscellaneous": Colors.purple.shade200,
+  };
 
 
+   
   @override
   void initState(){
+    print(categories);
     transactionType = TextEditingController(text : "Expense");
     transactionAmount = TextEditingController(text : "");
     transactionName = TextEditingController(text : "");
+    transactionCategory = TextEditingController(text : "");
     totalBalance = widget.envelope.envelopeStartingAmount;
     startingBalance = widget.envelope.envelopeStartingAmount;
     super.initState();
@@ -76,11 +102,13 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
     transactionType.dispose();
     transactionAmount.dispose();
     transactionName.dispose();
+    transactionCategory.dispose();
     return; 
   } 
 
   void addTransaction (String envelopeId) async {
     final data = EnvelopeTransaction(
+      transactionCategory: transactionCategory.text.trim(),
       transactionName: transactionName.text.trim(), 
       transactionUsername: auth.getUserDisplayName,
       transactionType: transactionType.text.trim(), 
@@ -109,7 +137,9 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
           transactionTypeController: transactionType,
           transactionNameController: transactionName,
           transactionAmountController: transactionAmount,
+          transactionCategoryController: transactionCategory,
           addTransactionFunction: addTransaction,
+          categories: categories,
           isIncome: false,
         );
       });
@@ -172,6 +202,19 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                 final transactions = snapshot.data!['transactions'];
                 final expenseTotal = snapshot.data!['expenseTotal'] as double;
                 final incomeTotal = snapshot.data!['incomeTotal'] as double;
+                final categoryAmounts = snapshot.data!['categoryAmounts'] as Map<String,double>;
+                final expenseCategoryAmounts = snapshot.data!['expenseCategoryAmounts'] as Map<String,double>;
+                final incomeCategoryAmounts = snapshot.data!['incomeCategoryAmounts'] as Map<String,double>;
+                print(expenseCategoryAmounts);
+                
+                for (final transaction in transactions) {
+                  final category = transaction['transactionCategory'] as String;
+
+                  if (!categories.contains(category)) {
+                    categories.add(category);
+                  }
+                }
+                
                 return Column(
                   children: [
                     Padding(
@@ -245,6 +288,10 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                                 incomeTotal: incomeTotal,
                                 expenseTotal: expenseTotal,
                                 width: screenWidth,
+                                incomedataMap: incomeCategoryAmounts,
+                                expensedataMap: expenseCategoryAmounts,
+                                categories: categories,
+                                categoryColorMap: categoryColorMap,
                                 
                               )
                             )
@@ -331,9 +378,12 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                                       transaction['transactionUsername'] as String;
                                   final transactionType =
                                       transaction['transactionType'] as String;
+                                  final transactionCategory =
+                                      transaction['transactionCategory'] as String;
                                   final transactionAmount = (transaction['transactionAmount'] as num).toDouble();
                                   final transactionDate = transaction['transactionDate'] as Timestamp;
                                   final formattedDate = formatter.format(transactionDate.toDate());
+                                  Color? categoryColor = categoryColorMap[transactionCategory];
 
                                   return TransactionCard(
                                         width: screenWidth - 30,
@@ -341,6 +391,8 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                                         transactionAmount: transactionAmount.toDouble().toString(),
                                         transactionName: transactionName,
                                         transactionType: transactionType,
+                                        transactionCategory: transactionCategory,
+                                        categoryColor: categoryColor,
                                         transactionUsername: transactionUsername,
                                         onPressedDelete: (BuildContext context) async{
                                           db.deleteEnvelopeTransaction(

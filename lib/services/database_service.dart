@@ -1,5 +1,6 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:pocket_pal/services/authentication_service.dart";
+import "package:pocket_pal/utils/chatbox_structure_util.dart";
 import "package:pocket_pal/utils/envelope_structure_util.dart";
 import "package:pocket_pal/utils/folder_structure_util.dart";
 
@@ -7,11 +8,10 @@ import "package:pocket_pal/utils/folder_structure_util.dart";
 class PocketPalDatabase {
 
   final _db = FirebaseFirestore.instance;
+  final _userUid = PocketPalAuthentication().getUserUID;
 
   Future<void> addFolder(Map<String, dynamic> data) async {
-    final userUid = PocketPalAuthentication().getUserUID;
-
-    final collection = _db.collection(userUid).doc();
+    final collection = _db.collection(_userUid).doc();
     data["folderId"] = collection.id;
     await collection.set(data);
      
@@ -19,9 +19,7 @@ class PocketPalDatabase {
   }
 
   Stream<List<Folder>> getFolder(){
-    final userUid = PocketPalAuthentication().getUserUID;
-
-    final collection = _db.collection(userUid);
+    final collection = _db.collection(_userUid);
     return collection.snapshots().map(
       (snapshot) => snapshot.docs.map(
         (doc) => Folder.fromMap(doc.data())
@@ -30,9 +28,7 @@ class PocketPalDatabase {
   }
 
   Future<void> deleteFolder( String docName ) async {
-    final userUid = PocketPalAuthentication().getUserUID;
-
-    final document = _db.collection(userUid).doc(docName);  
+    final document = _db.collection(_userUid).doc(docName);  
     final subCollection = document.collection("$docName+Envelope");
 
     final subCollectionSnapshot = await subCollection.get();
@@ -46,18 +42,14 @@ class PocketPalDatabase {
   }
 
   Future<void> deleteEnvelope(String docId, String docName ) async {
-    final userUid = PocketPalAuthentication().getUserUID;
-
-    final document = _db.collection(userUid)
+    final document = _db.collection(_userUid)
       .doc(docId).collection("$docId+Envelope").doc(docName);
     await document.delete();
     return;
   }
 
   Future<void> createEnvelope(String docName, Map<String, dynamic> data) async {  
-    final userUid = PocketPalAuthentication().getUserUID;
-
-    final collection = _db.collection(userUid).doc(
+    final collection = _db.collection(_userUid).doc(
       docName).collection("$docName+Envelope").doc();
 
     data["envelopeId"] = collection.id;
@@ -71,10 +63,7 @@ class PocketPalDatabase {
     String docName,
     String envelopeName,
     Map<String, dynamic> data) async { 
-
-    final userUid = PocketPalAuthentication().getUserUID;
-
-    final collection = _db.collection(userUid).doc(
+    final collection = _db.collection(_userUid).doc(
       docName).collection("$docName+Envelope").doc(envelopeName);
 
     collection.set({
@@ -89,9 +78,7 @@ class PocketPalDatabase {
     String docName, 
     String envelopeName,
     Map<String, dynamic> data) async {  
-    final userUid = PocketPalAuthentication().getUserUID;
-
-    final collection = _db.collection(userUid).doc(
+    final collection = _db.collection(_userUid).doc(
       docName).collection("$docName+Envelope").doc(envelopeName);
 
      collection.set({
@@ -105,9 +92,7 @@ class PocketPalDatabase {
 
 
   Stream<List<Envelope>> getEnvelope(String docName){
-    final userUid = PocketPalAuthentication().getUserUID;
-
-    final collection = _db.collection(userUid).doc(docName).collection("$docName+Envelope");
+    final collection = _db.collection(_userUid).doc(docName).collection("$docName+Envelope");
 
     return collection.snapshots().map(
       (snapshot) => snapshot.docs.map(
@@ -120,9 +105,8 @@ class PocketPalDatabase {
       String docName, 
       String envelopeName,
   ) {
-      final userUid = PocketPalAuthentication().getUserUID;
       final documentRef = FirebaseFirestore.instance
-        .collection(userUid)
+        .collection(_userUid)
         .doc(docName)
         .collection("$docName+Envelope")
         .doc(envelopeName);
@@ -199,9 +183,8 @@ class PocketPalDatabase {
       String docName, 
       String envelopeName,
     ){
-      final userUid = PocketPalAuthentication().getUserUID;
       final documentRef = FirebaseFirestore.instance
-        .collection(userUid)
+        .collection(_userUid)
         .doc(docName)
         .collection("$docName+Envelope")
         .doc(envelopeName);
@@ -229,10 +212,7 @@ class PocketPalDatabase {
       String docName,
       String envelopeName,
       int index) async { 
-
-    final userUid = PocketPalAuthentication().getUserUID;
-
-    final collection = _db.collection(userUid)
+    final collection = _db.collection(_userUid)
       .doc(docName)
       .collection("$docName+Envelope")
       .doc(envelopeName);
@@ -259,10 +239,7 @@ class PocketPalDatabase {
       String docName,
       String envelopeName,
       int index) async { 
-
-    final userUid = PocketPalAuthentication().getUserUID;
-
-    final collection = _db.collection(userUid)
+    final collection = _db.collection(_userUid)
       .doc(docName)
       .collection("$docName+Envelope")
       .doc(envelopeName);
@@ -285,6 +262,24 @@ class PocketPalDatabase {
     return;
   }
 
+  Future<void> createMessage(String docName, Map<String, dynamic> data) async {
+    final collection = _db.collection(_userUid).doc(docName)
+      .collection("$docName+ChatBox").doc();
 
+    data["messageId"] = collection.id;
+    collection.set(data);
+    return;
+  }
+
+  Stream<List<ChatBox>> getMessages(String docName){
+    final collection = _db.collection(_userUid).doc(docName)
+      .collection("$docName+ChatBox");
+
+    return collection.snapshots().map(
+      (snapshot) => snapshot.docs.map(
+        (doc) => ChatBox.fromMap(doc.data())
+      ).toList()
+    );
+  }
 
 }

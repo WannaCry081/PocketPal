@@ -1,5 +1,6 @@
 import "package:firebase_auth/firebase_auth.dart";
 import "package:google_sign_in/google_sign_in.dart";
+import "package:pocket_pal/services/database_service.dart";
 
 import "package:pocket_pal/services/storage_service.dart";
 
@@ -70,10 +71,41 @@ class PocketPalAuthentication {
     return;
   }
 
+  Future<void> authenticationUpdateDisplayName(String newDisplayName) async {
+    final currentUser = _auth.currentUser!;
+    await currentUser.updateDisplayName(newDisplayName);
+    return;
+  }
+
+  Future<void> authenticationDeleteAccount() async {
+    final user = _auth.currentUser!;
+    // final db = PocketPalDatabase();
+    await user.delete();
+    return;
+  }
+
 
   String get getUserDisplayName => _auth.currentUser?.displayName ?? "";
   String get getUserEmail => _auth.currentUser?.email ?? "";
   String get getUserPhotoUrl => _auth.currentUser?.photoURL ?? "";
   String get getUserUID => _auth.currentUser!.uid;
+
+  Future<void> authenticationChangePassword(
+    String oldPassword,
+    String newPassword
+  ) async {
+
+    final currentUser = _auth.currentUser!;
+
+    final credential = EmailAuthProvider.credential(
+      email : currentUser.email!, 
+      password: oldPassword
+    );
+
+    await currentUser.reauthenticateWithCredential(credential);
+    await currentUser.updatePassword(newPassword);
+
+    return;
+  }
 }
 

@@ -26,20 +26,28 @@ class PocketPalDatabase {
       ).toList()
     );
   }
+  
+  Future<void> deleteFolder(String docName) async {
+    final document = _db.collection(_userUid).doc(docName);
 
-  Future<void> deleteFolder( String docName ) async {
-    final document = _db.collection(_userUid).doc(docName);  
-    final subCollection = document.collection("$docName+Envelope");
+    final List<String> docNames = [
+      "$docName+Envelope",
+      "$docName+ChatBox"
+    ];
 
-    final subCollectionSnapshot = await subCollection.get();
-    for (final docs in subCollectionSnapshot.docs){
-      await docs.reference.delete();
+    for (int i = 0; i < docNames.length; i++) {
+      final subCollection = document.collection(docNames[i]);
+
+      final subCollectionSnapshot = await subCollection.get();
+      for (final docs in subCollectionSnapshot.docs) {
+        await docs.reference.delete();
+      }
+      await subCollection.doc(subCollection.id).delete();
     }
-
-    await subCollection.doc(subCollection.id).delete();
     await document.delete();
     return;
   }
+
 
   Future<void> deleteEnvelope(String docId, String docName ) async {
     final document = _db.collection(_userUid)

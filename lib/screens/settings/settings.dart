@@ -4,6 +4,7 @@ import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/screens/settings/pages/change_display_name.dart";
 import "package:pocket_pal/screens/settings/pages/change_password.dart";
+import "package:pocket_pal/services/authentication_service.dart";
 import "package:provider/provider.dart";
 
 import "package:pocket_pal/providers/settings_provider.dart";
@@ -21,6 +22,8 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
+
+    final auth = PocketPalAuthentication();
 
     final rSettings = context.read<SettingsProvider>();
     final wSettings = context.watch<SettingsProvider>();
@@ -88,7 +91,9 @@ class SettingsView extends StatelessWidget {
                         SettingsItemsWidget(
                           prefixIcon: FeatherIcons.trash2,
                           itemName: "Delete Account",
-                          onTap: (){}
+                          onTap: (){
+                            auth.authenticationDeleteAccount();
+                          }
                         ),
                         SizedBox( height: screenHeight * 0.035),
                         const SettingsHeaderWidget(

@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
-import "package:flutter_local_notifications/flutter_local_notifications.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/services/authentication_service.dart";

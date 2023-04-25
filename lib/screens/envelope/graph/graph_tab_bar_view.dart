@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:pocket_pal/const/color_palette.dart';
-import 'package:pocket_pal/screens/envelope/widgets/glassbox_widget.dart';
 
 class MyPieChart extends StatelessWidget {
   final double screenHeight;
@@ -30,7 +29,7 @@ class MyPieChart extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.grey[100],
           borderRadius: BorderRadius.circular(12),
-          border: const  GradientBoxBorder(
+          border: const GradientBoxBorder(
             width: 2,
             gradient: LinearGradient(
                   begin: Alignment.topLeft,

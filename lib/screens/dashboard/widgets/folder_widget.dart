@@ -50,8 +50,8 @@ class MyFolderWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children : [
                 Text(
-                  (folder.folderName.length > 12) ? 
-                    "${folder.folderName.substring(0, 12)}..." : 
+                  (folder.folderName.length > 10) ? 
+                    "${folder.folderName.substring(0, 10)}..." : 
                     folder.folderName, 
                   style : GoogleFonts.montserrat(
                     fontSize : folderTitleSize.sp,
@@ -59,7 +59,7 @@ class MyFolderWidget extends StatelessWidget {
                   )
                 ),
                 Text(
-                  "${folder.folderIsShared}", 
+                  "${folder.folderDate.day}/${folder.folderDate.month}/${folder.folderDate.year} ", 
                   style : GoogleFonts.montserrat(
                     fontSize : folderDescriptionSize.sp,
                     fontWeight: FontWeight.w600,

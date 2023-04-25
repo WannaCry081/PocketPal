@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:pocket_pal/screens/auth/auth_builder.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 
 import "package:pocket_pal/screens/menu/widgets/logout_button_widget.dart";
@@ -11,6 +12,7 @@ import "package:pocket_pal/utils/menu_item_util.dart";
 
 
 import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/widgets/pocket_pal_dialog_box.dart";
 
 class MenuItems {
   static const home = MenuItem(
@@ -92,7 +94,31 @@ class MenuView extends StatelessWidget {
 
               const Spacer(),
               GestureDetector(
-                onTap : _userLogout,
+                onTap : (){
+                  showDialog(
+                    context : context, 
+                    builder : (context) {
+                      return PocketPalDialogBox(
+                        pocketPalDialogTitle: "Confirm Logout", 
+                        pocketPalDialogMessage: "Are you sure you want to log out?", 
+                        pocketPalDialogOption1: "No", 
+                        pocketPalDialogOption2: "Yes", 
+                        pocketPalDialogOption1OnTap: (){
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder : (context) => const AuthViewBuilder()
+                            )
+                          );
+                          Navigator.of(context).pop();
+                        },
+                        pocketPalDialogOption2OnTap: (){
+                          PocketPalAuthentication().authenticationLogout();
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    }
+                  );
+                },
                 child: const MyLogoutButtonWidget()
               ),
               SizedBox(height: 30.h),
@@ -102,11 +128,6 @@ class MenuView extends StatelessWidget {
       )
     );
 
-  }
-  Future<void> _userLogout() async {
-    await PocketPalAuthentication()
-      .authenticationLogout(); 
-    return;
   }
 
   Widget buildMenuItem(MenuItem item) => ListTileTheme(

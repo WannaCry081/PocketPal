@@ -290,4 +290,12 @@ class PocketPalDatabase {
     );
   }
 
+  Future<void> deleteMessage(String docName, String docId) async {
+    final collection = _db.collection(_userUid).doc(docName)
+      .collection("$docName+ChatBox").doc(docId);
+
+    await collection.delete();
+    return;
+  }
+
 }

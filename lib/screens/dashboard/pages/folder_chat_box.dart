@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_sheet.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/utils/chatbox_structure_util.dart";
@@ -98,6 +99,7 @@ class _FolderChatBoxState extends State<FolderChatBox> {
           final data = snapshot.data!;
           final itemList = data.map(
             (e) =>_chatBoxMessage(
+              chatBoxOnLongPress : () => _showBottomSheet(e),
               chatBox : e
             )
           ).toList();
@@ -126,55 +128,58 @@ class _FolderChatBoxState extends State<FolderChatBox> {
   
 
 
-  Widget _chatBoxMessage({ required ChatBox chatBox}){
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 14.w,
-        vertical: 10.h 
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            radius : 20.r,
-            backgroundImage: NetworkImage(
-              chatBox.messageUserProfile
+  Widget _chatBoxMessage({ required void Function() chatBoxOnLongPress, required ChatBox chatBox}){
+    return GestureDetector(
+      onLongPress : chatBoxOnLongPress,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 14.w,
+          vertical: 10.h 
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius : 20.r,
+              backgroundImage: NetworkImage(
+                chatBox.messageUserProfile
+              ),
             ),
-          ),
-
-          SizedBox(width : 14.w),
-          Expanded(
-            child : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children : [
-                    Text(
-                      chatBox.messageUserName,
-                      style : GoogleFonts.poppins(
-                        fontWeight : FontWeight.w600,
-                        fontSize : 16.sp
+    
+            SizedBox(width : 14.w),
+            Expanded(
+              child : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children : [
+                      Text(
+                        chatBox.messageUserName,
+                        style : GoogleFonts.poppins(
+                          fontWeight : FontWeight.w600,
+                          fontSize : 16.sp
+                        )
+                      ),
+    
+                      SizedBox( width : 10.w),
+                      Text(
+                        "${chatBox.messageDate.month}/${chatBox.messageDate.day}/${chatBox.messageDate.year}",
+                        style : GoogleFonts.poppins(
+                          fontSize : 12.sp
+                        )
                       )
-                    ),
-
-                    SizedBox( width : 10.w),
-                    Text(
-                      "${chatBox.messageDate.month} ${chatBox.messageDate.day} ${chatBox.messageDate.year}",
-                      style : GoogleFonts.poppins(
-                        fontSize : 12.sp
-                      )
-                    )
-                  ]
-                ),
-
-                Text(
-                  chatBox.message
-                ),
-              ],
-            ) 
-          )
-        ],
+                    ]
+                  ),
+    
+                  Text(
+                    chatBox.message
+                  ),
+                ],
+              ) 
+            )
+          ],
+        ),
       ),
     );
   }
@@ -234,5 +239,23 @@ class _FolderChatBoxState extends State<FolderChatBox> {
         ]
       ),
     );
+  }
+
+  void _showBottomSheet(ChatBox chatBox){
+    showModalBottomSheet(
+      context : context, 
+      builder :(context) {
+        return MyBottomEditSheetWidget(
+          removeFunction: (){
+            PocketPalDatabase().deleteMessage(
+              widget.folder.folderId,
+              chatBox.messageId
+            );
+            Navigator.of(context).pop();
+          },
+        );
+      },
+    );
+    return;
   }
 }

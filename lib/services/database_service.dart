@@ -270,13 +270,13 @@ class PocketPalDatabase {
     return;
   }
 
-  Future<void> createMessage(String docName, Map<String, dynamic> data) async {
+  Future<String> createMessage(String docName, Map<String, dynamic> data) async {
     final collection = _db.collection(_userUid).doc(docName)
       .collection("$docName+ChatBox").doc();
 
     data["messageId"] = collection.id;
     collection.set(data);
-    return;
+    return data["messageId"];
   }
 
   Stream<List<ChatBox>> getMessages(String docName){
@@ -295,6 +295,17 @@ class PocketPalDatabase {
       .collection("$docName+ChatBox").doc(docId);
 
     await collection.delete();
+    return;
+  }
+
+  Future<void> updateMessage(
+    String docName, 
+    String docId, 
+    Map<String, dynamic> newData ) async{
+
+    final collection = _db.collection(_userUid).doc(docName)
+      .collection("$docName+ChatBox").doc(docId);
+    await collection.update(newData);
     return;
   }
 

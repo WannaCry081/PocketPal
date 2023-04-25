@@ -1,4 +1,6 @@
 class ChatBox {
+  
+  bool messageIsImage;
   String messageId;
   String messageUserName;
   String messageUserProfile;
@@ -7,6 +9,7 @@ class ChatBox {
 
   ChatBox({
     this.messageId = "",
+    required this.messageIsImage,
     required this.messageUserName,
     required this.messageUserProfile,
     required this.message
@@ -20,6 +23,7 @@ class ChatBox {
       "messageUserName" : messageUserName,
       "messageUserProfile" : messageUserProfile,
       "messageDate" : messageDate,
+      "messageIsImage" : messageIsImage,
       "message" : message,
     };
   }
@@ -29,6 +33,7 @@ class ChatBox {
       messageId: map["messageId"],
       messageUserName: map["messageUserName"], 
       messageUserProfile: map["messageUserProfile"],
+      messageIsImage: map["messageIsImage"],
       message: map["message"], 
     );
   }

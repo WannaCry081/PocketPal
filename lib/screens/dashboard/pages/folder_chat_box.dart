@@ -1,10 +1,15 @@
+import "dart:io";
+
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:image_picker/image_picker.dart";
+import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_sheet.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 import "package:pocket_pal/services/database_service.dart";
+import "package:pocket_pal/services/storage_service.dart";
 import "package:pocket_pal/utils/chatbox_structure_util.dart";
 import "package:pocket_pal/utils/folder_structure_util.dart";
 import "package:pocket_pal/widgets/pocket_pal_formfield.dart";
@@ -27,6 +32,9 @@ class _FolderChatBoxState extends State<FolderChatBox> {
 
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _textController = TextEditingController(text : "");
+  final _auth = PocketPalAuthentication();
+  final _db = PocketPalDatabase();
+
 
   @override
   void initState(){
@@ -171,10 +179,16 @@ class _FolderChatBoxState extends State<FolderChatBox> {
                       )
                     ]
                   ),
-    
-                  Text(
-                    chatBox.message
-                  ),
+                  
+                  (chatBox.messageIsImage) ? 
+                    Image.network(
+                      chatBox.message,
+                      height : 400.h
+
+                    ): Text(
+                    chatBox.message,
+                    style : GoogleFonts.poppins()
+                  )
                 ],
               ) 
             )
@@ -192,50 +206,47 @@ class _FolderChatBoxState extends State<FolderChatBox> {
       ),
       child: Row(
         children :[
-          Container(
-            child : Center(
+          GestureDetector(
+            onTap: _chatBoxSendImage,
+            child: const Center(
               child : Icon(
                 FeatherIcons.image
               )
-            )
+            ),
           ),
 
           SizedBox(width : 14.w),
           Expanded(
             child: PocketPalFormField(
+              // formKeyboardType: TextInputType.multiline,
+              // formMaxLines: null,
               formController: _textController,
               formHintText: "Message",
+              formSuffixIcon: IconButton(
+                icon : const Icon(
+                  FeatherIcons.send,
+                ),
+                onPressed: (){
+                  if (_textController.text.isNotEmpty){
+
+                    ChatBox chatBox = ChatBox(
+                      messageIsImage: false,
+                      messageUserName: _auth.getUserDisplayName, 
+                      messageUserProfile: _auth.getUserPhotoUrl, 
+                      message: _textController.text.trim()
+                    );
+
+                    _db.createMessage(
+                      widget.folder.folderId, 
+                      chatBox.toMap()
+                    );
+
+                    _textController.clear();
+                  }
+                },
+              ),
             )
           ),
-
-           GestureDetector(
-            onTap: (){
-              if (_textController.text.isNotEmpty){
-                final auth = PocketPalAuthentication();
-
-                ChatBox chatBox = ChatBox(
-                  messageUserName: auth.getUserDisplayName, 
-                  messageUserProfile: auth.getUserPhotoUrl, 
-                  message: _textController.text.trim()
-                );
-
-                PocketPalDatabase().createMessage(
-                  widget.folder.folderId, 
-                  chatBox.toMap()
-                );
-
-                _textController.clear();
-              }
-            },
-             child: Container(
-              child : Center(
-                child : Icon(
-                  FeatherIcons.send
-                )
-              )
-            ),
-           ),
-
         ]
       ),
     );
@@ -247,7 +258,7 @@ class _FolderChatBoxState extends State<FolderChatBox> {
       builder :(context) {
         return MyBottomEditSheetWidget(
           removeFunction: (){
-            PocketPalDatabase().deleteMessage(
+            _db.deleteMessage(
               widget.folder.folderId,
               chatBox.messageId
             );
@@ -256,6 +267,50 @@ class _FolderChatBoxState extends State<FolderChatBox> {
         );
       },
     );
+    return;
+  }
+
+  Future<void> _chatBoxSendImage() async {
+    final newPicture = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );  
+
+    if (newPicture != null){
+
+      final storage = PocketPalStorage();
+
+      ChatBox chatBox = ChatBox(
+        messageUserName: _auth.getUserDisplayName, 
+        messageUserProfile: _auth.getUserPhotoUrl, 
+        message: newPicture.path,
+        messageIsImage: true
+      );
+
+      String messageId = await _db.createMessage(
+        widget.folder.folderId, 
+        chatBox.toMap()
+      );
+
+
+      await storage.addImageToChatBox(
+        File(newPicture.path), 
+        widget.folder.folderId,
+        messageId
+      );
+
+      chatBox.message = await storage.getImageUrlFromChatBox(
+        widget.folder.folderId,
+        messageId 
+      );
+
+      await _db.updateMessage(
+        widget.folder.folderId, 
+        messageId,
+        chatBox.toMap()
+      );
+
+      _textController.clear();
+    }      
     return;
   }
 }

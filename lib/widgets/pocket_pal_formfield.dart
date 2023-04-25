@@ -9,6 +9,9 @@ class PocketPalFormField extends StatelessWidget {
   final TextEditingController ? formController;
   final String formHintText;
   
+  // final int ? formMaxLines;
+  // final TextInputType ? formKeyboardType;
+
   final bool formIsObsecure;
   final bool formIsReadOnly;
 
@@ -22,6 +25,8 @@ class PocketPalFormField extends StatelessWidget {
   const PocketPalFormField({
     super.key,
     this.formController,
+    // this.formMaxLines,
+    // this.formKeyboardType,
     required this.formHintText,
     this.formIsObsecure = false,
     this.formIsReadOnly = false,  
@@ -41,6 +46,9 @@ class PocketPalFormField extends StatelessWidget {
       onTap: formOnTap,
       onChanged: formOnChange,
       onSaved: formOnSaved,
+
+      // keyboardType: formKeyboardType,
+      // maxLines : formMaxLines,
 
       decoration: InputDecoration(
         hintText: formHintText, 

@@ -17,7 +17,8 @@ import "package:pocket_pal/widgets/pocket_pal_menu_button.dart";
 
 
 class DashboardView extends StatefulWidget {
-  const DashboardView({ super.key });
+  const DashboardView({ 
+    super.key });
 
   @override
   State<DashboardView> createState() => _DashboardViewState();
@@ -50,7 +51,8 @@ class _DashboardViewState extends State<DashboardView> {
           child : Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children : [
-              const MySearchBarWidget(),
+              MySearchBarWidget(
+              ),
               const MyCardWidget(),
 
               MyTitleOptionWidget(

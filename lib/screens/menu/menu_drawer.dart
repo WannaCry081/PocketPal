@@ -3,6 +3,7 @@ import "package:flutter_zoom_drawer/flutter_zoom_drawer.dart";
 import "package:pocket_pal/screens/calculator/calculator.dart";
 import 'package:pocket_pal/screens/calendar/calendar.dart';
 import "package:pocket_pal/screens/notifications/notifications.dart";
+import "package:pocket_pal/utils/folder_structure_util.dart";
 import "package:pocket_pal/utils/menu_item_util.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
@@ -13,7 +14,8 @@ import "package:pocket_pal/screens/profile/profile.dart";
 import "package:pocket_pal/screens/settings/settings.dart";
 
 class MenuDrawerView extends StatefulWidget {
-  const MenuDrawerView({super.key});
+  const MenuDrawerView({
+    super.key});
 
   @override
   State<MenuDrawerView> createState() => _MenuDrawerViewState();
@@ -56,7 +58,7 @@ class _MenuDrawerViewState extends State<MenuDrawerView> {
    Widget getScreen(){
     switch (currentItem) {
       case MenuItems.home:
-        return const DashboardView();
+        return DashboardView();
       case MenuItems.profile:
         return const ProfileView();
       case MenuItems.calendar:
@@ -68,7 +70,7 @@ class _MenuDrawerViewState extends State<MenuDrawerView> {
       case MenuItems.settings:
         return const SettingsView();
       default: 
-        return const DashboardView();
+        return  DashboardView();
     }
   }
 }

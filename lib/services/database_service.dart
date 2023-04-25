@@ -188,7 +188,6 @@ class PocketPalDatabase {
           'expenseTotal': expenseTotal,
           'incomeTotal': incomeTotal,
           'categories': categories,
-          'categoryAmounts': categoryAmounts,
           'expenseCategoryAmounts': expenseCategoryAmounts,
           'incomeCategoryAmounts': incomeCategoryAmounts,
           };
@@ -284,6 +283,10 @@ class PocketPalDatabase {
     });
     return;
   }
+
+ 
+
+
 
 
 

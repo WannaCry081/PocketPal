@@ -57,7 +57,7 @@ class MyCardWidget extends StatelessWidget {
           ),
         ),
         Positioned(
-          left: 15,
+          left: 10,
           top: 30,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,9 +71,9 @@ class MyCardWidget extends StatelessWidget {
                 )
               ),
               Text(
-                "Let's get to the top of\nour expenses today!",
+                "Let's get to the top of\nyour expenses today!",
                 style: GoogleFonts.poppins(
-                  fontSize: 13.sp,
+                  fontSize: 12.sp,
                   color: ColorPalette.grey,
                   height: 1
                 )

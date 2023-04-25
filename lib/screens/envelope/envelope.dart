@@ -202,7 +202,6 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                 final transactions = snapshot.data!['transactions'];
                 final expenseTotal = snapshot.data!['expenseTotal'] as double;
                 final incomeTotal = snapshot.data!['incomeTotal'] as double;
-                final categoryAmounts = snapshot.data!['categoryAmounts'] as Map<String,double>;
                 final expenseCategoryAmounts = snapshot.data!['expenseCategoryAmounts'] as Map<String,double>;
                 final incomeCategoryAmounts = snapshot.data!['incomeCategoryAmounts'] as Map<String,double>;
                 print(expenseCategoryAmounts);

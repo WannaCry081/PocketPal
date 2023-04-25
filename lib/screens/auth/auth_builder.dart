@@ -5,10 +5,13 @@ import "package:pocket_pal/screens/auth/pages/loading_dart.dart";
 import "package:pocket_pal/screens/auth/pages/error_page.dart";
 import "package:pocket_pal/screens/menu/menu_drawer.dart";
 import "package:pocket_pal/screens/auth/auth.dart";
+import "package:pocket_pal/utils/folder_structure_util.dart";
 
 
 class AuthViewBuilder extends StatelessWidget {
-  const AuthViewBuilder({ Key ? key }) : super(key : key);
+
+  const AuthViewBuilder({ 
+    Key ? key }) : super(key : key);
 
   @override 
   Widget build(BuildContext context){
@@ -22,7 +25,7 @@ class AuthViewBuilder extends StatelessWidget {
           } 
 
           else if (snapshot.hasData){
-            return const MenuDrawerView();
+            return MenuDrawerView();
           } 
           
           else if (snapshot.hasError){

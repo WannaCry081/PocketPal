@@ -2,9 +2,11 @@ import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:pocket_pal/screens/auth/auth_builder.dart";
 import "package:pocket_pal/screens/settings/pages/change_display_name.dart";
 import "package:pocket_pal/screens/settings/pages/change_password.dart";
 import "package:pocket_pal/services/authentication_service.dart";
+import "package:pocket_pal/widgets/pocket_pal_dialog_box.dart";
 import "package:provider/provider.dart";
 
 import "package:pocket_pal/providers/settings_provider.dart";
@@ -92,7 +94,24 @@ class SettingsView extends StatelessWidget {
                           prefixIcon: FeatherIcons.trash2,
                           itemName: "Delete Account",
                           onTap: (){
-                            auth.authenticationDeleteAccount();
+                            PocketPalDialogBox(
+                              pocketPalDialogTitle: "Confirm Deletion",
+                              pocketPalDialogMessage: "Are you sure you want to delete your account?",
+                              pocketPalDialogOption1: "No",
+                              pocketPalDialogOption2: "Yes",
+                              pocketPalDialogOption1OnTap: (){
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder : (context) => const AuthViewBuilder() 
+                                  )
+                                );
+                                Navigator.of(context).pop();
+                              },
+                              pocketPalDialogOption2OnTap: (){
+                                auth.authenticationDeleteAccount();
+                                Navigator.of(context).pop();
+                              },
+                            );
                           }
                         ),
                         SizedBox( height: screenHeight * 0.035),

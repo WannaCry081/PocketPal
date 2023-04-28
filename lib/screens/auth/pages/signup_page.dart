@@ -75,7 +75,7 @@ class _SignUpPageState extends State<SignUpPage>{
               child : Padding(
                 padding: EdgeInsets.symmetric(
                   vertical: 20.h,
-                  horizontal: 14.w
+                  horizontal: 16.w
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

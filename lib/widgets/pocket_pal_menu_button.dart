@@ -8,15 +8,11 @@ class PocketPalMenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: 14.w),
-      child: IconButton(
-        onPressed: () {
-          ZoomDrawer.of(context)!.toggle();
-        },
-        icon: SvgPicture.asset("assets/icon/Menu.svg")
-      ),
+    return IconButton(
+      onPressed: () {
+        ZoomDrawer.of(context)!.toggle();
+      },
+      icon: SvgPicture.asset("assets/icon/Menu.svg")
     );
   }
 }

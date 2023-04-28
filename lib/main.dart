@@ -10,6 +10,7 @@ import "package:pocket_pal/screens/auth/auth_builder.dart";
 import "package:pocket_pal/screens/onboard/onboard.dart";
 
 import "package:pocket_pal/providers/settings_provider.dart";
+import "package:pocket_pal/providers/folder_provider.dart";
 
 import "package:pocket_pal/const/dark_theme.dart";
 import "package:pocket_pal/const/light_theme.dart";
@@ -28,6 +29,11 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+
+        ChangeNotifierProvider(
+          create : (context) => FolderProvider()
+        ),
+        
         ChangeNotifierProvider(
           create : (context) => SettingsProvider()
         ),
@@ -79,7 +85,6 @@ class PocketPalApp extends StatelessWidget{
             }
           }
         )
-
 
       ),
     );

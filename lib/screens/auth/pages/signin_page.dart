@@ -72,7 +72,7 @@ class _SignInPageState extends State<SignInPage>{
               child : Padding(
                 padding: EdgeInsets.symmetric(
                   vertical: 20.h,
-                  horizontal: 14.w
+                  horizontal: 16.w
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

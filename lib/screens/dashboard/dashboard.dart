@@ -1,6 +1,12 @@
 import "package:flutter/material.dart";
+import "package:flutter_feather_icons/flutter_feather_icons.dart";
+import "package:flutter_svg/flutter_svg.dart";
+import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/const/font_style.dart";
+import "package:provider/provider.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 
+import "package:pocket_pal/providers/folder_provider.dart";
 import "package:pocket_pal/screens/dashboard/pages/folder_content.dart";
 import "package:pocket_pal/screens/dashboard/pages/folder_grid.dart";
 import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_sheet.dart";
@@ -28,6 +34,16 @@ class _DashboardViewState extends State<DashboardView> {
 
   final TextEditingController _folderName = TextEditingController(text : "");
 
+
+  @override 
+  void initState(){
+    super.initState();
+    Provider.of<FolderProvider>(
+      context, 
+      listen : false
+    ).fetchFolder();
+  }
+
   @override
   void dispose(){
     super.dispose();
@@ -38,50 +54,193 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context){
 
-    final db = PocketPalDatabase();
+    final folderProvider = Provider.of<FolderProvider>(context);
+    final List<Folder> folderItem = folderProvider.getFolderList;
+    final int folderItemLength = folderItem.length;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: const PocketPalMenuButton(),
-      ),
+      
       body : SafeArea(
-        child : SingleChildScrollView(
-          child : Column(
+        child: SingleChildScrollView(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children : [
-              MySearchBarWidget(
+              
+              _dashboardCustomAppBar(),
+        
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 18.w,
+                  vertical: 14.h
+                ),
+                child: titleText(
+                  "Manage\nall your Expenses",
+                  titleSize : 24.sp,
+                  titleWeight: FontWeight.w600
+                ),
               ),
-              const MyCardWidget(),
+        
+              _dashboardCustomCardWidget(),
 
-              MyTitleOptionWidget(
-                folderTitleTopSize: 22.h,
-                folderTitleText: "Personal Wall",
-                folderTitleOnTap: () => 
-                  _dashboardNavigateToFolders(false),
+              SizedBox( height : 10.h), 
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 18.w,
+                  vertical: 10.h
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children : [
+                    titleText(
+                      "My Wall",
+                      titleWeight: FontWeight.w600,
+                      titleSize : 16.sp
+                    ),
 
+                    GestureDetector(
+                      onTap : (){},
+                      child: bodyText(
+                        "View all",
+                        bodyWeight: FontWeight.w600,
+                        bodySize : 14.sp,
+                        bodyColor : ColorPalette.rustic
+                      ),
+                    )
+                  ]
+                ),
               ),
 
-              _dashboardFolderView(db, false), 
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                child: Row(
+                  children : [
+                    for (int i=0; i< 3; i++)
+                      Container(
+                        width : 140.w,
+                        height : 180.h + 20.w,
+                        margin : EdgeInsets.only(
+                          left : 16.w,
+                          top : 5.h,
+                          bottom : 5.h,
+                          right : (i == 2) ? 16.w : 0,
+                        ),
+                        decoration : BoxDecoration(
+                          borderRadius: BorderRadius.circular(30.r),
+                          color : ColorPalette.rustic[50]
+                        ),
+                        child : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children : [
 
-              MyTitleOptionWidget(
-                folderTitleTopSize : 16.h, 
-                folderTitleText: "Group Wall",
-                folderTitleOnTap: () => 
-                  _dashboardNavigateToFolders(true),
+                            SvgPicture.asset(
+                              "assets/icon/Folder.svg",
+                              width : 90.h,
+                              height : 90.h
+                            ),
+
+                            SizedBox( height : 8.h ), 
+
+                            titleText(
+                              "Design",
+                              titleWeight: FontWeight.w600,
+                              titleSize : 14.sp
+                            ),
+
+                            SizedBox( height : 2.h ), 
+                            bodyText( 
+                              "72 Envelopes",
+                              bodySize : 12.sp,
+                              bodyColor: ColorPalette.grey
+
+                            )
+                          ]
+                        )
+                      ),
+                  ]
+                ),
               ),
 
-              _dashboardFolderView(db, true), 
+              SizedBox( height : 10.h), 
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 18.w,
+                  vertical: 10.h
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children : [
+                    titleText(
+                      "Recents",
+                      titleWeight: FontWeight.w600,
+                      titleSize : 16.sp
+                    ),
 
-              SizedBox( height : 20.h ),
+                    GestureDetector(
+                      onTap : (){},
+                      child: bodyText(
+                        "View all",
+                        bodyWeight: FontWeight.w600,
+                        bodySize : 14.sp,
+                        bodyColor : ColorPalette.rustic
+                      ),
+                    )
+                  ]
+                ),
+              ),
+              
             ]
-          )
-        )
+          ),
+        ),
       )
     );
   }
 
+
+  Widget _dashboardCustomCardWidget() {
+    return Container(
+      height : 160.h,
+      width : double.infinity,
+      margin : EdgeInsets.symmetric(
+        horizontal: 16.w,
+        vertical: 10.h
+      ),
+
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30.r),
+        color : ColorPalette.rustic
+      ),
+    );
+  }
+
+  Widget _dashboardCustomAppBar(){
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: 16.w,
+        vertical: 6.h
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children : [
+          const PocketPalMenuButton(),
+
+          GestureDetector(
+            onTap : (){},
+            child : CircleAvatar(
+              radius: 20.r,
+              backgroundColor: ColorPalette.lightGrey,
+              child: Icon(
+                FeatherIcons.search,
+                color : ColorPalette.black
+              ),
+            )
+          )         
+        ]
+      ),
+    );
+  }
+
+  // =====================================================
   void _dashboardEditFolder(Folder folder) {
     showModalBottomSheet(
       context: context, 

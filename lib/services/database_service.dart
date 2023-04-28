@@ -5,6 +5,45 @@ import "package:pocket_pal/utils/envelope_structure_util.dart";
 import "package:pocket_pal/utils/folder_structure_util.dart";
 
 
+class PocketPalFirestore {
+
+  final _db = FirebaseFirestore.instance;
+  final _userUid = PocketPalAuthentication().getUserUID;
+
+  Future<QuerySnapshot> getFolderSnapshot({String ? code}) async {
+    final collectionSnapshot = _db.collection(code ??_userUid);
+    return await collectionSnapshot.get();
+  } 
+
+   Future<void> addFolder(Map<String, dynamic> data) async {
+    final collection = _db.collection(_userUid).doc();
+    data["folderId"] = collection.id;
+    await collection.set(data);
+    return;
+  }
+
+  Future<void> deleteFolder(String docName) async {
+    final document = _db.collection(_userUid).doc(docName);
+
+    final List<String> docNames = [
+      "$docName+Envelope",
+      "$docName+ChatBox"
+    ];
+
+    for (int i = 0; i < docNames.length; i++) {
+      final subCollection = document.collection(docNames[i]);
+
+      final subCollectionSnapshot = await subCollection.get();
+      for (final docs in subCollectionSnapshot.docs) {
+        await docs.reference.delete();
+      }
+      await subCollection.doc(subCollection.id).delete();
+    }
+    await document.delete();
+    return;
+  }
+}
+
 class PocketPalDatabase {
 
   final _db = FirebaseFirestore.instance;

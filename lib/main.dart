@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:pocket_pal/screens/auth/pages/error_page.dart";
 import "package:pocket_pal/screens/auth/pages/loading_dart.dart";
 import "package:provider/provider.dart";
 import "package:firebase_core/firebase_core.dart";
@@ -56,6 +57,7 @@ class PocketPalApp extends StatelessWidget{
 
     final bool showOnboard = wSettings.getShowOnboard;
     final bool isLight = wSettings.getIsLight;
+    final bool isConnected = wSettings.getIsConnected;
     
     return ScreenUtilInit(
       designSize: const Size(360, 640),
@@ -70,7 +72,7 @@ class PocketPalApp extends StatelessWidget{
           ThemeMode.light : 
           ThemeMode.dark, 
           
-        home : FutureBuilder(
+        home : (!isConnected) ? const ErrorPage() : FutureBuilder(
           future : Firebase.initializeApp(),
           builder : (context, snapshot) {
             if (snapshot.hasData){
@@ -90,3 +92,5 @@ class PocketPalApp extends StatelessWidget{
     );
   }
 }
+
+

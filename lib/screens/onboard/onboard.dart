@@ -1,13 +1,16 @@
 import "dart:async";
 
 import "package:flutter/material.dart";
-import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/providers/settings_provider.dart";
+import "package:provider/provider.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:google_fonts/google_fonts.dart";
-import "package:pocket_pal/const/font_style.dart";
+
 import "package:pocket_pal/screens/auth/auth_builder.dart";
 import "package:pocket_pal/screens/onboard/widgets/pageview_indicator_widget.dart";
+
+import "package:pocket_pal/const/font_style.dart";
+import "package:pocket_pal/const/color_palette.dart";
 
 
 class OnboardView extends StatefulWidget {
@@ -146,10 +149,10 @@ class _OnboardViewState extends State<OnboardView> {
                       bodyColor : ColorPalette.grey
                     ),
 
-                    SizedBox( height : 20.h ),
+                    SizedBox( height : 26.h ),
                     _onboardButton(),
 
-                    SizedBox(height : 10.h) 
+                    SizedBox(height : 14.h) 
                   ]
                 ),
               ),
@@ -161,6 +164,10 @@ class _OnboardViewState extends State<OnboardView> {
   }
 
   Widget _onboardButton(){
+
+    final wSettings = context.watch<SettingsProvider>();
+    final rSettings = context.read<SettingsProvider>();
+    
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children : [
@@ -173,6 +180,13 @@ class _OnboardViewState extends State<OnboardView> {
 
         GestureDetector(
           onTap : (){
+
+            if (wSettings.getShowOnboard){
+              rSettings.setShowOnboard(
+                !wSettings.getShowOnboard
+              );
+            }
+
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder : (context) =>const AuthViewBuilder()
@@ -195,7 +209,8 @@ class _OnboardViewState extends State<OnboardView> {
             child : Center(
               child : Icon(
                 FeatherIcons.arrowRight, 
-                color : ColorPalette.white
+                color : ColorPalette.white, 
+                size: 26.sp,
               )
             )
           )

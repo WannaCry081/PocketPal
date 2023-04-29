@@ -14,26 +14,35 @@ class LoadingPage extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            CircularProgressIndicator(
-              strokeWidth: 8,
-              color : ColorPalette.grey
+            SizedBox(
+              height : 100.h,
+              width: 100.h,
+
+              child: CircleAvatar(
+                backgroundColor: ColorPalette.lightGrey,
+              ),
             ),
 
-            SizedBox(
-              height : 40.h,
-              width : 40.h, 
-              child : CircularProgressIndicator(
-                color: ColorPalette.navy,
-                strokeWidth: 10,
-              )
+            CircularProgressIndicator(
+              strokeWidth: 10,
+              color : ColorPalette.grey
             ),
 
             SizedBox(
               height : 60.h,
               width : 60.h, 
               child : CircularProgressIndicator(
+                color: ColorPalette.navy,
+                strokeWidth: 8,
+              )
+            ),
+
+            SizedBox(
+              height : 80.h,
+              width : 80.h, 
+              child : CircularProgressIndicator(
                 color: ColorPalette.rustic,
-                strokeWidth: 12,
+                strokeWidth: 10,
               )
             ),
 

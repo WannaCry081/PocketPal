@@ -1,21 +1,17 @@
 import "package:flutter/material.dart";
+import "package:provider/provider.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
-import "package:flutter_svg/flutter_svg.dart";
 import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/const/font_style.dart";
-import "package:provider/provider.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 
 import "package:pocket_pal/providers/folder_provider.dart";
-import "package:pocket_pal/screens/dashboard/pages/folder_content.dart";
 import "package:pocket_pal/screens/dashboard/pages/folder_grid.dart";
 import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_sheet.dart";
 import "package:pocket_pal/screens/dashboard/widgets/dialog_box.dart";
 import "package:pocket_pal/screens/dashboard/widgets/card_widget.dart";
-import "package:pocket_pal/screens/dashboard/widgets/folder_add_widget.dart";
 import "package:pocket_pal/screens/dashboard/widgets/title_option.dart";
 import "package:pocket_pal/screens/dashboard/widgets/folder_widget.dart";
-import "package:pocket_pal/screens/dashboard/widgets/search_bar_widget.dart";
 
 import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/utils/folder_structure_util.dart";
@@ -32,22 +28,21 @@ class DashboardView extends StatefulWidget {
 
 class _DashboardViewState extends State<DashboardView> {
 
-  final TextEditingController _folderName = TextEditingController(text : "");
+  final TextEditingController _folderNameController = TextEditingController(text : "");
 
-
-  @override 
-  void initState(){
-    super.initState();
+  @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
     Provider.of<FolderProvider>(
       context, 
-      listen : false
+      listen : true
     ).fetchFolder();
-  }
+  } 
 
   @override
   void dispose(){
     super.dispose();
-    _folderName.dispose();
+    _folderNameController.dispose();
     return;
   }
 
@@ -59,7 +54,15 @@ class _DashboardViewState extends State<DashboardView> {
     final int folderItemLength = folderItem.length;
 
     return Scaffold(
-      
+      floatingActionButton: FloatingActionButton(
+        onPressed: _dashboardAddFolder,
+        backgroundColor: ColorPalette.rustic,
+        shape: const CircleBorder(),
+        child : Icon(
+          FeatherIcons.plus, 
+          color : ColorPalette.white
+        ),
+      ),
       body : SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -79,89 +82,39 @@ class _DashboardViewState extends State<DashboardView> {
                   titleWeight: FontWeight.w600
                 ),
               ),
-        
-              _dashboardCustomCardWidget(),
+
+              const MyCardWidget(),
 
               SizedBox( height : 10.h), 
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 18.w,
-                  vertical: 10.h
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children : [
-                    titleText(
-                      "My Wall",
-                      titleWeight: FontWeight.w600,
-                      titleSize : 16.sp
-                    ),
-
-                    GestureDetector(
-                      onTap : (){},
-                      child: bodyText(
-                        "View all",
-                        bodyWeight: FontWeight.w600,
-                        bodySize : 14.sp,
-                        bodyColor : ColorPalette.rustic
-                      ),
+              
+              MyTitleOptionWidget(
+                folderTitleText: "My Wall",
+                folderTitleOnTap: (){
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder : (context) => FolderGridPage(
+                        folderNameController : _folderNameController,
+                        folderAddOnTap : _dashboardAddFolder,
+                      )
                     )
-                  ]
-                ),
+                  );
+                },
               ),
 
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                child: Row(
-                  children : [
-                    for (int i=0; i< 3; i++)
-                      Container(
-                        width : 140.w,
-                        height : 180.h + 20.w,
-                        margin : EdgeInsets.only(
-                          left : 16.w,
-                          top : 5.h,
-                          bottom : 5.h,
-                          right : (i == 2) ? 16.w : 0,
-                        ),
-                        decoration : BoxDecoration(
-                          borderRadius: BorderRadius.circular(30.r),
-                          color : ColorPalette.rustic[50]
-                        ),
-                        child : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children : [
-
-                            SvgPicture.asset(
-                              "assets/icon/Folder.svg",
-                              width : 90.h,
-                              height : 90.h
-                            ),
-
-                            SizedBox( height : 8.h ), 
-
-                            titleText(
-                              "Design",
-                              titleWeight: FontWeight.w600,
-                              titleSize : 14.sp
-                            ),
-
-                            SizedBox( height : 2.h ), 
-                            bodyText( 
-                              "72 Envelopes",
-                              bodySize : 12.sp,
-                              bodyColor: ColorPalette.grey
-
-                            )
-                          ]
-                        )
-                      ),
-                  ]
+              (folderItem.isEmpty) ?
+                SizedBox(
+                  height : 160.h + 20.w,
+                  child : Center(
+                    child : titleText(
+                      "No Wall Added",
+                    )
+                  )
+                ) :
+                _dashboardFolderView(
+                  folderItem: folderItem,
+                  folderItemLength: folderItemLength
                 ),
-              ),
 
-              SizedBox( height : 10.h), 
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 18.w,
@@ -196,21 +149,31 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
+  void _dashboardAddFolder(){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return MyDialogBoxWidget(
+          controllerName: _folderNameController,
+          dialogBoxHintText: "Untitled Wall",
+          dialogBoxTitle: "Add Wall",
+          dialogBoxErrorMessage: "Please enter a name for your Wall",
+          dialogBoxOnTap: (){
+            Folder folder = Folder(
+              folderName: _folderNameController.text.trim(),
+            );
 
-  Widget _dashboardCustomCardWidget() {
-    return Container(
-      height : 160.h,
-      width : double.infinity,
-      margin : EdgeInsets.symmetric(
-        horizontal: 16.w,
-        vertical: 10.h
-      ),
+            PocketPalDatabase().addFolder(
+              folder.toMap()
+            );
 
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30.r),
-        color : ColorPalette.rustic
-      ),
+            _folderNameController.clear();
+            Navigator.of(context).pop();
+          },
+        );
+      }
     );
+    return;
   }
 
   Widget _dashboardCustomAppBar(){
@@ -240,7 +203,32 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  // =====================================================
+  Widget _dashboardFolderView({ 
+    required int folderItemLength,
+    required List<Folder> folderItem
+  }){
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      physics: const BouncingScrollPhysics(),
+      child: Row(
+        children : [
+          for (int i=0; i<((folderItemLength > 10) ? 10 : folderItemLength); i++)
+            Padding(
+              padding : EdgeInsets.only(
+                left : 16.w,
+                top : 5.h,
+                bottom : 5.h,
+                right : (i == 2) ? 16.w : 0,
+              ),
+              child: MyFolderWidget(
+                folder : folderItem[i] 
+              ),
+            )
+        ]
+      ),
+    );
+  }
+
   void _dashboardEditFolder(Folder folder) {
     showModalBottomSheet(
       context: context, 
@@ -256,121 +244,6 @@ class _DashboardViewState extends State<DashboardView> {
       }
     );
     return;
-  }
-
- 
-
-  void _dashboardAddFolder(bool isShared){
-    showDialog(
-      context: context,
-      builder: (context) {
-        return MyDialogBoxWidget(
-          controllerName: _folderName,
-          dialogBoxHintText: "Untitled Wall",
-          dialogBoxTitle: "Add Wall",
-          dialogBoxErrorMessage: "Please enter a name for your Wall",
-          dialogBoxOnTap: (){
- 
-            Folder folder = Folder(
-              folderName: _folderName.text.trim(),
-              folderIsShared: isShared
-            );
-
-            PocketPalDatabase().addFolder(
-              folder.toMap()
-            );
-
-            _folderName.clear();
-            Navigator.of(context).pop();
-          },
-        );
-      }
-    );
-    return;
-  }
-
-  void _dashboardNavigateToFolder(Folder folder){
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder : (context) => FolderContentPage(
-          folder : folder
-        )
-      )
-    );
-    return;
-  }
-
-  void _dashboardNavigateToFolders(bool isShared){
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder : (create) => FolderGridPage(
-          isShared : isShared,
-        )
-      )
-    );
-    return;
-  }
-
-
-  Widget _dashboardFolderView(PocketPalDatabase db, bool isShared){
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 7.w 
-        ),
-        child: StreamBuilder(
-          stream: db.getFolder(),
-          builder: (context, snapshot) {
-            
-            if (snapshot.connectionState == ConnectionState.waiting){
-              return const Center(
-                child : CircularProgressIndicator()
-              );
-            } else if (snapshot.hasData){
-              
-              final data = snapshot.data!;
-              final itemList = data.where(
-                (e) => e.folderIsShared == isShared
-              ).map(
-                (e) => MyFolderWidget(
-                  folder: e,
-                  folderOnLongPress: () => 
-                    _dashboardEditFolder(e),
-                  folderOnTap : () =>
-                    _dashboardNavigateToFolder(e)
-                )
-              ).toList();
-                    
-              final itemLength = (itemList.length >= 10) ?
-                10 : itemList.length;
-                    
-              return Row(
-                children : [
-                  for (int i=0; i<itemLength; i++)  
-                    itemList[i],
-                  
-                  MyFolderAddWidget(
-                    folderOnTap: () => 
-                      _dashboardAddFolder(isShared),
-                  )
-                ]
-              );
-                    
-            } else {
-              return Row(
-                children: [
-                  MyFolderAddWidget(
-                    folderOnTap: () => 
-                      _dashboardAddFolder(isShared),
-                  ),
-                ],
-              );
-            }
-          }
-        ),
-      ),
-    );
   }
 }
 

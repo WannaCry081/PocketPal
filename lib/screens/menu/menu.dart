@@ -10,9 +10,9 @@ import "package:pocket_pal/screens/menu/widgets/profile_widget.dart";
 
 import "package:pocket_pal/utils/menu_item_util.dart";
 
-
 import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/widgets/pocket_pal_dialog_box.dart";
+
 
 class MenuItems {
   static const home = MenuItem(
@@ -69,13 +69,13 @@ class MenuView extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: 14.w
+            horizontal: 16.w,
+            vertical: 30.h
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 60.h),
-              
               MyProfileWidget(
                 profilePicture: auth.getUserPhotoUrl,
                 profileName: auth.getUserDisplayName,
@@ -95,6 +95,7 @@ class MenuView extends StatelessWidget {
               const Spacer(),
               GestureDetector(
                 onTap : (){
+
                   showDialog(
                     context : context, 
                     builder : (context) {
@@ -121,7 +122,6 @@ class MenuView extends StatelessWidget {
                 },
                 child: const MyLogoutButtonWidget()
               ),
-              SizedBox(height: 30.h),
             ],
           ),
         ),  
@@ -151,5 +151,5 @@ class MenuView extends StatelessWidget {
       selected: currentItem == item,
       onTap: () => onSelectedItem(item),
     ),
-    );
+  );
 }

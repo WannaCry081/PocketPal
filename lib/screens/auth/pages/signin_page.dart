@@ -52,6 +52,10 @@ class _SignInPageState extends State<SignInPage>{
   @override
   void dispose(){
     super.dispose();
+
+    _email.removeListener(_textEditingControllerListener);
+    _password.removeListener(_textEditingControllerListener);
+
     _email.dispose();
     _password.dispose();
     return;

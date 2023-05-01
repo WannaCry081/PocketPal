@@ -21,7 +21,7 @@ class MyProfileWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CircleAvatar(
-          radius: 32.r,
+          radius: 36.r,
           backgroundColor: ColorPalette.rustic,
           backgroundImage: NetworkImage(profilePicture),
         ),

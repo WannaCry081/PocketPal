@@ -55,8 +55,16 @@ class _SignUpPageState extends State<SignUpPage>{
   @override
   void dispose(){
     super.dispose();
+
+    _name.removeListener(_textEditingControllerListener);
+    _email.removeListener(_textEditingControllerListener);
+    _password.removeListener(_textEditingControllerListener);
+    _confirmPassword.removeListener(_textEditingControllerListener);
+
+    _name.dispose();
     _email.dispose();
     _password.dispose();
+    _confirmPassword.dispose();
     return;
   }
   

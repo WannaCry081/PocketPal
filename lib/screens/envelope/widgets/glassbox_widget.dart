@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glassmorphism/glassmorphism.dart';
+import 'package:pocket_pal/const/color_palette.dart';
 
 class Glassbox extends StatelessWidget {
   final double height;
@@ -22,6 +23,7 @@ class Glassbox extends StatelessWidget {
       child: Container(
           height: height,
           width: width,
+          color: ColorPalette.rustic,
           child: Stack(
             children: [
               GlassmorphicContainer(

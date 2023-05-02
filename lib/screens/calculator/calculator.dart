@@ -4,10 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
-import 'package:pocket_pal/screens/calculator/widgets/budget_allocation.dart';
+import 'package:pocket_pal/const/font_style.dart';
+import 'package:pocket_pal/screens/calculator/widgets/budget_tiles.dart';
 import 'package:pocket_pal/screens/calculator/widgets/calculator_graph.dart';
 import 'package:pocket_pal/screens/calculator/widgets/textfield_widget.dart';
+import 'package:pocket_pal/screens/envelope/widgets/glassbox_widget.dart';
 import 'package:pocket_pal/widgets/pocket_pal_button.dart';
+import 'package:pocket_pal/widgets/pocket_pal_formfield.dart';
 
 class CalculatorView extends StatefulWidget {
   const CalculatorView({super.key});
@@ -22,9 +25,9 @@ class _CalculatorViewState extends State<CalculatorView> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
    Map<String, double> dataMap = {
-    "Necessities": 50,
-    "Wants": 30,
-    "Savings": 20,
+    "Necessities (50%)": 50,
+    "Wants (30%)": 30,
+    "Savings (20%)": 20,
     };
   
   final colorList = <Color>[
@@ -67,7 +70,6 @@ class _CalculatorViewState extends State<CalculatorView> {
   @override
   Widget build(BuildContext context) {
 
-  final screenHeight = MediaQuery.of(context).size.height;
   final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -88,22 +90,20 @@ class _CalculatorViewState extends State<CalculatorView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  "Budget Calculator",
-                  style: GoogleFonts.poppins(
-                    fontSize: 28.sp,
-                    fontWeight: FontWeight.bold,
-                    color: ColorPalette.navy.shade600
-                  )
+                SizedBox(height: 10.h,),
+                titleText(
+                  " 50/30/20 Budget Calculator",
+                  titleAlignment: TextAlign.center,
+                  titleColor: ColorPalette.navy,
+                  titleSize: 22.sp,
+                  titleWeight: FontWeight.w700
                 ),
                 SizedBox( height: 3.h),
-                Text(
+                bodyText(
                   "Enter your income to create a\nsuggested budget.",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                    fontSize: 13.sp,
-                    height: 1.2
-                  )
+                  bodyAlignment: TextAlign.center,
+                  bodySize: 14.sp,
+                  bodyHeight: 1.2,
                 ),
                 SizedBox( height: 22.h),
                 Form(
@@ -132,13 +132,11 @@ class _CalculatorViewState extends State<CalculatorView> {
                   buttonChild: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      titleText(
                         _buttonText,
-                        style: GoogleFonts.poppins(
-                          fontSize: 16.sp,
-                          color: ColorPalette.white,
-                          fontWeight: FontWeight.w700
-                        ),
+                        titleSize: 16.sp,
+                        titleColor: ColorPalette.white,
+                        titleWeight: FontWeight.w600,
                       ),
                       SizedBox( width: 1.w),
                       Icon(
@@ -148,45 +146,32 @@ class _CalculatorViewState extends State<CalculatorView> {
                       )
                     ],
                   )),
-                  SizedBox( height: 40.h),
+                  SizedBox( height: 10.h),
                   Visibility(
                     visible: showAllocation,
                     child: Column(
                       children: [
-                        Text(
-                          "Your 50/30/20 Budget Allocation",
-                          style: GoogleFonts.poppins(
-                            fontSize: 16.sp,
-                            color: ColorPalette.navy.shade400,
-                            fontWeight: FontWeight.w800
-                          ),
-                        ),
                         SizedBox( height: 6.h),
-                        MyBudgetAllocation(
-                          needs:  _needs.toStringAsFixed(_needs.truncateToDouble() == _needs ? 0 : 2),
-                          wants: _wants.toStringAsFixed(_needs.truncateToDouble() == _needs ? 0 : 2),
-                          savings: _savings.toStringAsFixed(_needs.truncateToDouble() == _needs ? 0 : 2),
-                          fontSize: _needs.toString().length > 5 ? 17.sp : 24.sp
-                        ),
-                        SizedBox( height: 25.h),
-                        MyCalculatorGraph(
-                          screenWidth: screenWidth,
-                          dataMap: dataMap,
-                          colorList: colorList
-                        ),
-                        SizedBox( height: 40.h),
                         Padding(
                           padding: EdgeInsets.symmetric(
-                            vertical: 10.h,
-                            horizontal: 14.h),
-                          child: Text(
-                            "     The 50/30/20 budget is a simple and effective way to manage your money and ensure that you're prioritizing your spending in a way that aligns with your goals. By dividing your income into three categories, you can easily see where your money is going and make adjustments as needed.",
-                            style: GoogleFonts.poppins(
-                              fontSize: 12.sp,
-                            ),
-                            textAlign: TextAlign.justify,
+                            horizontal: 16.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                               MyCalculatorGraph(
+                                screenWidth: screenWidth,
+                                dataMap: dataMap,
+                                colorList: colorList
+                              ),
+                              MyBudgetTiles(
+                                needs:  _needs.toStringAsFixed(_needs.truncateToDouble() == _needs ? 0 : 2),
+                                wants: _wants.toStringAsFixed(_needs.truncateToDouble() == _needs ? 0 : 2),
+                                savings: _savings.toStringAsFixed(_needs.truncateToDouble() == _needs ? 0 : 2),
+                                fontSize: _needs.toString().length > 6 ? 17.sp : 26.sp
+                              ),
+                            ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),

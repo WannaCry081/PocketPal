@@ -18,16 +18,15 @@ class MyCalculatorGraph extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB( 25, 10, 5,0),
+      padding: const EdgeInsets.fromLTRB(10, 10, 5,0),
       child: PieChart(
           dataMap: dataMap,
           chartType: ChartType.ring,
-          chartRadius: screenWidth * 0.43,
-          ringStrokeWidth: 45,
+          chartRadius: screenWidth * 0.45,
+          ringStrokeWidth: 25,
           colorList: colorList,
           chartValuesOptions: ChartValuesOptions(
             showChartValuesInPercentage: true,
-            showChartValuesOutside: true,
             decimalPlaces: 0,
             chartValueBackgroundColor: ColorPalette.murky.shade100,
             chartValueStyle: GoogleFonts.poppins(
@@ -36,7 +35,7 @@ class MyCalculatorGraph extends StatelessWidget {
             )
           ),
           legendOptions: LegendOptions(
-            legendPosition: LegendPosition.right,
+            legendPosition: LegendPosition.bottom,
             legendTextStyle: GoogleFonts.poppins(
               fontSize: 14.sp,
             )

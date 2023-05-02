@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:pocket_pal/screens/auth/pages/error_page.dart";
+import "package:pocket_pal/screens/calculator/calculator.dart";
+import "package:pocket_pal/screens/calendar/calendar.dart";
 import "package:provider/provider.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -67,7 +69,7 @@ class PocketPalApp extends StatelessWidget {
           themeMode : (wSettings.getIsLight) ? 
             ThemeMode.light : 
             ThemeMode.dark,
-          
+
           home :  FutureBuilder(
             future : Firebase.initializeApp(),
             builder : (context, snapshot) {

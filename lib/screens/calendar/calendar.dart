@@ -5,16 +5,32 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:table_calendar/table_calendar.dart';
 
-class CalendarView extends StatelessWidget {
+
+class CalendarView extends StatefulWidget {
   const CalendarView({super.key});
+
+  @override
+  State<CalendarView> createState() => _CalendarViewState();
+}
+
+class _CalendarViewState extends State<CalendarView> {
+  DateTime today = DateTime.now();
+  CalendarFormat format = CalendarFormat.month;
+
+  void _onDaySelected(DateTime day, DateTime focusedDay){
+    setState(() {
+      today = day;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
 
     final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar : AppBar(
         leading: GestureDetector(
           onTap: () {
@@ -36,50 +52,37 @@ class CalendarView extends StatelessWidget {
           vertical: 20.h),
         child: Container(
           height: screenHeight / 2,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: ColorPalette.murky.shade100,
-          ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: SfCalendar(
-              todayTextStyle: GoogleFonts.poppins(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500
+            child: TableCalendar(
+              firstDay: DateTime.utc(2010, 10, 16),
+              lastDay: DateTime.utc(2030, 3, 14),
+              focusedDay: today,
+              headerStyle: HeaderStyle(
+                formatButtonVisible: true,
+                titleCentered: true,
+                formatButtonShowsNext: false
               ),
-              headerStyle: CalendarHeaderStyle(
-                textAlign: TextAlign.center,
-                textStyle: GoogleFonts.poppins(
-                  color: ColorPalette.black,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18.sp,
-                )
+              availableGestures: AvailableGestures.all,
+              onDaySelected: _onDaySelected,
+              selectedDayPredicate: (day) => isSameDay(day, today),
+              onFormatChanged: (CalendarFormat _format){
+                setState(() {
+                  format = _format;
+                });
+              },
+              calendarStyle: CalendarStyle(
+                todayDecoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: ColorPalette.rustic.shade200
+                ),
+                selectedDecoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: ColorPalette.rustic.shade400
+                ),
               ),
               
-              showNavigationArrow: true,
-              monthViewSettings: MonthViewSettings(
-                monthCellStyle: MonthCellStyle(
-                  backgroundColor: ColorPalette.white,
-                  trailingDatesBackgroundColor: ColorPalette.lightGrey,
-                  leadingDatesBackgroundColor:  ColorPalette.lightGrey,
-                  todayBackgroundColor: ColorPalette.rustic.shade100,
-                  textStyle: GoogleFonts.poppins(
-                    fontSize: 14.sp,
-                    color: ColorPalette.black
-                  ),
-                  trailingDatesTextStyle: GoogleFonts.poppins(
-                    fontSize: 14.sp,
-                    color: ColorPalette.black
-                  ),
-                  leadingDatesTextStyle: GoogleFonts.poppins(
-                    fontSize: 14.sp,
-                    color: ColorPalette.black
-                  ),
-                ),
-                
-              ),
-
-            ),
+            )
           ),
         ),
       ),

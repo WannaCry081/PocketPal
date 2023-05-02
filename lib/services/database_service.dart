@@ -2,7 +2,6 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 import "package:pocket_pal/utils/chatbox_structure_util.dart";
 import "package:pocket_pal/utils/envelope_structure_util.dart";
-import "package:pocket_pal/utils/folder_structure_util.dart";
 
 
 class PocketPalFirestore {
@@ -10,6 +9,7 @@ class PocketPalFirestore {
   final _db = FirebaseFirestore.instance;
   final _userUid = PocketPalAuthentication().getUserUID;
 
+  // Folders ======================================================
   Future<QuerySnapshot> getFolderSnapshot({String ? code}) async {
     final collectionSnapshot = _db.collection(code ??_userUid);
     return await collectionSnapshot.get();
@@ -24,7 +24,7 @@ class PocketPalFirestore {
 
   Future<void> deleteFolder(String docName) async {
     final document = _db.collection(_userUid).doc(docName);
-
+  
     final List<String> docNames = [
       "$docName+Envelope",
       "$docName+ChatBox"
@@ -42,6 +42,61 @@ class PocketPalFirestore {
     await document.delete();
     return;
   }
+
+  Future<void> updateFolder(Map<String, dynamic> data) async {
+
+    return;
+  }
+
+  // Envelope ======================================================
+  Future<void> addEnvelope(Map<String, dynamic> data, String docName, {String ? code}) async {
+    final collection = _db.collection(code ?? _userUid).doc(docName)
+      .collection("$docName+Envelope").doc();
+
+    data["envelopeId"] = collection.id;
+    await collection.set(data);
+    return;
+  }
+
+  Future<QuerySnapshot> getEnvelopeSnapshot(String docName, {String ? code}) async {
+    final collectionSnapshot = _db.collection(code ??_userUid).doc(docName)
+      .collection("$docName+Envelope");
+    return await collectionSnapshot.get();
+  } 
+
+  Future<void> updateEnvelope() async {
+    return;
+  }
+
+  Future<void> deleteEnvelope(String docName, String docId) async {
+     final document = _db.collection(_userUid)
+      .doc(docName).collection("$docName+Envelope").doc(docId);
+    await document.delete();
+    return;
+  }
+
+  // ChatBox ======================================================
+  Future<void> addMessage(Map<String, dynamic> data, String docName, String docId, {String ?  code}) async {
+    final collection = _db.collection(code ?? _userUid).doc(docName)
+      .collection("$docName+ChatBox").doc();
+    
+    data["messageId"] = collection.id;
+    await collection.set(data); 
+    return;
+  }
+
+  Future<void> updateMessage() async {
+    
+    return;
+  }
+
+  Future<void> deleteMessage(String docName, String docId, {String ? code}) async {  
+    final collection = _db.collection(code ?? _userUid).doc(docName)
+      .collection("$docName+ChatBox").doc(docId);
+    await collection.delete();
+    return;
+  }
+  
 }
 
 class PocketPalDatabase {
@@ -49,43 +104,46 @@ class PocketPalDatabase {
   final _db = FirebaseFirestore.instance;
   final _userUid = PocketPalAuthentication().getUserUID;
 
-  Future<void> addFolder(Map<String, dynamic> data) async {
-    final collection = _db.collection(_userUid).doc();
-    data["folderId"] = collection.id;
-    await collection.set(data);
-     
-    return;
+  
+  Future<String> createMessage(String docName, Map<String, dynamic> data) async {
+    final collection = _db.collection(_userUid).doc(docName)
+      .collection("$docName+ChatBox").doc();
+
+    data["messageId"] = collection.id;
+    collection.set(data);
+    return data["messageId"];
   }
 
-  Stream<List<Folder>> getFolder(){
-    final collection = _db.collection(_userUid);
+  Stream<List<ChatBox>> getMessages(String docName){
+    final collection = _db.collection(_userUid).doc(docName)
+      .collection("$docName+ChatBox");
+
     return collection.snapshots().map(
       (snapshot) => snapshot.docs.map(
-        (doc) => Folder.fromMap(doc.data())
+        (doc) => ChatBox.fromMap(doc.data())
       ).toList()
     );
   }
-  
-  Future<void> deleteFolder(String docName) async {
-    final document = _db.collection(_userUid).doc(docName);
 
-    final List<String> docNames = [
-      "$docName+Envelope",
-      "$docName+ChatBox"
-    ];
+  Future<void> deleteMessage(String docName, String docId) async {
+    final collection = _db.collection(_userUid).doc(docName)
+      .collection("$docName+ChatBox").doc(docId);
 
-    for (int i = 0; i < docNames.length; i++) {
-      final subCollection = document.collection(docNames[i]);
+    await collection.delete();
+    return; 
+  }
 
-      final subCollectionSnapshot = await subCollection.get();
-      for (final docs in subCollectionSnapshot.docs) {
-        await docs.reference.delete();
-      }
-      await subCollection.doc(subCollection.id).delete();
-    }
-    await document.delete();
+  Future<void> updateMessage(
+    String docName, 
+    String docId, 
+    Map<String, dynamic> newData ) async{
+
+    final collection = _db.collection(_userUid).doc(docName)
+      .collection("$docName+ChatBox").doc(docId);
+    await collection.update(newData);
     return;
   }
+
 
 
   Future<void> deleteEnvelope(String docId, String docName ) async {
@@ -136,7 +194,6 @@ class PocketPalDatabase {
     
     return;
   }
-
 
   Stream<List<Envelope>> getEnvelope(String docName){
     final collection = _db.collection(_userUid).doc(docName).collection("$docName+Envelope");
@@ -305,45 +362,6 @@ class PocketPalDatabase {
     collection.update({
         "envelopeNotes": FieldValue.arrayRemove([valueToRemove])
     });
-    return;
-  }
-
-  Future<String> createMessage(String docName, Map<String, dynamic> data) async {
-    final collection = _db.collection(_userUid).doc(docName)
-      .collection("$docName+ChatBox").doc();
-
-    data["messageId"] = collection.id;
-    collection.set(data);
-    return data["messageId"];
-  }
-
-  Stream<List<ChatBox>> getMessages(String docName){
-    final collection = _db.collection(_userUid).doc(docName)
-      .collection("$docName+ChatBox");
-
-    return collection.snapshots().map(
-      (snapshot) => snapshot.docs.map(
-        (doc) => ChatBox.fromMap(doc.data())
-      ).toList()
-    );
-  }
-
-  Future<void> deleteMessage(String docName, String docId) async {
-    final collection = _db.collection(_userUid).doc(docName)
-      .collection("$docName+ChatBox").doc(docId);
-
-    await collection.delete();
-    return;
-  }
-
-  Future<void> updateMessage(
-    String docName, 
-    String docId, 
-    Map<String, dynamic> newData ) async{
-
-    final collection = _db.collection(_userUid).doc(docName)
-      .collection("$docName+ChatBox").doc(docId);
-    await collection.update(newData);
     return;
   }
 

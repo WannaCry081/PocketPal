@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:pocket_pal/screens/dashboard/pages/folder_content.dart";
 import "package:provider/provider.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:pocket_pal/const/color_palette.dart";
@@ -7,20 +8,17 @@ import "package:flutter_screenutil/flutter_screenutil.dart";
 
 import "package:pocket_pal/providers/folder_provider.dart";
 import "package:pocket_pal/screens/dashboard/pages/folder_grid.dart";
-import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_sheet.dart";
 import "package:pocket_pal/screens/dashboard/widgets/dialog_box.dart";
 import "package:pocket_pal/screens/dashboard/widgets/card_widget.dart";
 import "package:pocket_pal/screens/dashboard/widgets/title_option.dart";
 import "package:pocket_pal/screens/dashboard/widgets/folder_widget.dart";
 
-import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/utils/folder_structure_util.dart";
 import "package:pocket_pal/widgets/pocket_pal_menu_button.dart";
 
 
 class DashboardView extends StatefulWidget {
-  const DashboardView({ 
-    super.key });
+  const DashboardView({ Key ? key }) : super(key : key);
 
   @override
   State<DashboardView> createState() => _DashboardViewState();
@@ -37,6 +35,7 @@ class _DashboardViewState extends State<DashboardView> {
       context, 
       listen : true
     ).fetchFolder();
+    return;
   } 
 
   @override
@@ -48,8 +47,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   Widget build(BuildContext context){
-
-    final folderProvider = Provider.of<FolderProvider>(context);
+    final FolderProvider folderProvider = Provider.of<FolderProvider>(context);
     final List<Folder> folderItem = folderProvider.getFolderList;
     final int folderItemLength = folderItem.length;
 
@@ -94,7 +92,7 @@ class _DashboardViewState extends State<DashboardView> {
                     MaterialPageRoute(
                       builder : (context) => FolderGridPage(
                         folderNameController : _folderNameController,
-                        folderAddOnTap : _dashboardAddFolder,
+                        folderAddOnTap : _dashboardAddFolder
                       )
                     )
                   );
@@ -159,12 +157,14 @@ class _DashboardViewState extends State<DashboardView> {
           dialogBoxTitle: "Add Wall",
           dialogBoxErrorMessage: "Please enter a name for your Wall",
           dialogBoxOnTap: (){
-            Folder folder = Folder(
-              folderName: _folderNameController.text.trim(),
-            );
-
-            PocketPalDatabase().addFolder(
-              folder.toMap()
+            
+             Provider.of<FolderProvider>(
+              context, 
+              listen: false
+            ).addFolder(
+              Folder(
+                folderName: _folderNameController.text.trim(),
+              ).toMap()
             );
 
             _folderNameController.clear();
@@ -221,29 +221,21 @@ class _DashboardViewState extends State<DashboardView> {
                 right : (i == 2) ? 16.w : 0,
               ),
               child: MyFolderWidget(
-                folder : folderItem[i] 
+                folder : folderItem[i],
+                folderOpenContents: (){
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder : (context) => FolderContentPage(
+                        folder: folderItem[i]
+                      )
+                    )
+                  );
+                },
               ),
             )
         ]
       ),
     );
-  }
-
-  void _dashboardEditFolder(Folder folder) {
-    showModalBottomSheet(
-      context: context, 
-      builder: (context){
-        return MyBottomEditSheetWidget(
-          removeFunction: (){
-            PocketPalDatabase().deleteFolder(
-              folder.folderId
-            );
-            Navigator.of(context).pop();
-          },
-        );
-      }
-    );
-    return;
   }
 }
 

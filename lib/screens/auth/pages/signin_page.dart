@@ -1,8 +1,10 @@
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
+import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:pocket_pal/const/font_style.dart";
 import "package:provider/provider.dart";
 
 import "package:pocket_pal/screens/auth/pages/forgot_password_page.dart";
@@ -35,6 +37,7 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage>{
 
   bool _isButtonEnable = false;
+  bool _isObsecure = true;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -83,56 +86,67 @@ class _SignInPageState extends State<SignInPage>{
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children : [
                     MyAuthTitleWidget(
-                      authTitleTitle: "Welcome Back!",
-                      authTitleMessage: "You've been missed!",
-                      authTitleTitleSize: 28.sp,
-                      authTitleTitleMessageSize: 16.sp,
+                      authTitleTitle: "Let's Get Going!",
+                      authTitleMessage: "Sign in to access your saved items and\npersonalized recommendations.",
+                      authTitleTitleSize: 30.sp,
+                      authTitleTitleMessageSize: 14.sp,
                     ),
 
-                    SizedBox( height : 40.h),
-                    PocketPalFormField(
-                      formController: _email,
-                      formHintText: "Email Address",
-                      formValidator: (value){
-                        if (value == null || value.isEmpty){
-                          return "Please enter an Email Address";
-                        } else if (!isEmailAddress(value)) {
-                          return "Please enter a valid Email Address";
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
-
-                    SizedBox( height : 20.h ),
-                    PocketPalFormField(
-                      formController: _password,
-                      formIsObsecure: true,
-                      formHintText: "Password",
-                      formValidator: (value){
-                        if (value == null || value.isEmpty){
-                          return "Please enter your password";
-                        } else if (value.length < 8){
-                          return "Password must be at least 8 characters long";
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
-
-                    SizedBox( height : 14.h),
-                    GestureDetector(
-                      onTap : _navigateToForgotPassword,
-                      child: Text(
-                        "ForgotPassword?",
-                        textAlign: TextAlign.end,
-                        style : GoogleFonts.poppins(
-                          fontSize : 12.sp,
-                        )
+                    SizedBox( height : 32.h),
+                    SizedBox(
+                      height : 50.h,
+                      child: PocketPalFormField(
+                        formController: _email,
+                        formHintText: "Email Address",
+                        formValidator: (value){
+                          if (value == null || value.isEmpty){
+                            return "Please enter an Email Address";
+                          } else if (!isEmailAddress(value)) {
+                            return "Please enter a valid Email Address";
+                          } else {
+                            return null;
+                          }
+                        },
                       ),
                     ),
 
-                    SizedBox( height : 36.h),
+                    SizedBox( height : 10.h ),
+                    SizedBox(
+                      height : 50.h,
+                      child: PocketPalFormField(
+                        formController: _password,
+                        formIsObsecure: _isObsecure,
+                        formHintText: "Password",
+                        formSuffixIcon: IconButton(
+                          icon : Icon(
+                            (_isObsecure) ? 
+                              FeatherIcons.eye : 
+                              FeatherIcons.eyeOff
+                          ),
+                          onPressed: () => setState(() => _isObsecure = !_isObsecure),
+                        ),
+                        formValidator: (value){
+                          if (value == null || value.isEmpty){
+                            return "Please enter your password";
+                          } else if (value.length < 8){
+                            return "Password must be at least 8 characters long";
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
+                    ),
+                    SizedBox( height : 6.h ),
+                    GestureDetector(
+                      onTap : _navigateToForgotPassword, 
+                      child: bodyText(
+                        "Forgot Password?",
+                        bodyAlignment: TextAlign.end,
+                        bodySize : 14.sp,
+                      ),
+                    ),
+
+                    SizedBox( height : 40.h),
                     PocketPalButton(
                       buttonOnTap: (!_isButtonEnable) ? null : (){
                         if (_formKey.currentState!.validate()){
@@ -151,13 +165,11 @@ class _SignInPageState extends State<SignInPage>{
                       buttonColor: (!_isButtonEnable) ? 
                         ColorPalette.black :
                         ColorPalette.crimsonRed,
-                      buttonChild: Text(
+                      buttonChild: bodyText(
                         "Sign In",
-                        style : GoogleFonts.poppins(
-                          fontSize : 14.sp,
-                          fontWeight : FontWeight.w500,
-                          color : ColorPalette.white, 
-                        )
+                        bodySize : 16.sp,
+                        bodyWeight : FontWeight.w600,
+                        bodyColor : ColorPalette.white, 
                       )
                     ),
 
@@ -185,19 +197,17 @@ class _SignInPageState extends State<SignInPage>{
                           ),
 
                           SizedBox( width : 10.w),
-                          Text(
+                          bodyText(
                             "Continue with Google",
-                            style : GoogleFonts.poppins(
-                              fontSize : 14.sp,
-                              color : ColorPalette.black,
-                              fontWeight: FontWeight.w500
-                            )
+                            bodySize : 14.sp,
+                            bodyWeight: FontWeight.w600,
+                            bodyColor : ColorPalette.black,
                           )
                         ]
                       )
                     ),
 
-                    SizedBox(height : 14.h),
+                    SizedBox(height : 18.h),
                     MyBottomHyperlinkWidget(
                       hyperlinkOnTap: widget.changeStateIsFirstInstall, 
                       hyperlinkText: "Don't have an account? ", 
@@ -224,12 +234,10 @@ class _SignInPageState extends State<SignInPage>{
         ),
     
         SizedBox( width : 10.w),
-        Text(
+        bodyText(
           "or signin with",
-          style : GoogleFonts.poppins(
-            color : ColorPalette.grey,
-            fontSize : 12.sp,
-          )
+          bodyColor : ColorPalette.grey,
+          bodySize : 12.sp,
         ),  
     
         SizedBox( width : 10.w ),

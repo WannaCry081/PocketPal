@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/const/font_style.dart";
 
 
 class MyAuthTitleWidget extends StatelessWidget {
@@ -25,22 +25,18 @@ class MyAuthTitleWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children : [
-        Text(
+        titleText(
           authTitleTitle,
-          style : GoogleFonts.poppins(
-            fontSize : authTitleTitleSize,
-            fontWeight : FontWeight.w600
-          )
+          titleSize : authTitleTitleSize,
+          titleWeight : FontWeight.w600
         ),
 
-        SizedBox( height : 4.h),
-        Text(
+        SizedBox( height : 8.h),
+        bodyText(
           authTitleMessage,
-          style : GoogleFonts.montserrat(
-            color : ColorPalette.grey,
-            fontWeight: FontWeight.w500,
-            fontSize : authTitleTitleMessageSize,
-          )
+          bodyColor : ColorPalette.grey,
+          bodyWeight: FontWeight.w500,
+          bodySize : authTitleTitleMessageSize,
         ),
       ]
     );

@@ -1,7 +1,9 @@
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
+import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:pocket_pal/const/font_style.dart";
 import "package:pocket_pal/screens/auth/widgets/auth_title.dart";
 import "package:provider/provider.dart";
 
@@ -34,6 +36,7 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage>{
 
   bool _isButtonEnable = false;
+  List<bool> _isObsecure = [true, true];
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -90,74 +93,103 @@ class _SignUpPageState extends State<SignUpPage>{
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children : [
                     MyAuthTitleWidget(
-                      authTitleTitle: "Create Account",
-                      authTitleMessage: "Sign up to get Started!",
-                      authTitleTitleSize: 28.sp,
-                      authTitleTitleMessageSize: 16.sp,
+                      authTitleTitle: "Start Saving Now!",
+                      authTitleMessage: "Sign up and get started to finance\nyour expenses. Join our community today.",
+                      authTitleTitleSize: 30.sp,
+                      authTitleTitleMessageSize: 14.sp,
                     ),
 
-                    SizedBox( height : 40.h),
-                    PocketPalFormField(
-                      formController: _name,
-                      formHintText: "Full Name",
-                      formValidator: (value){
-                        if (value == null || value.isEmpty){
-                          return "Please enter your Full Name";
-                        } else if (value.length < 4) { 
-                          return "Please enter a valid Name";
-                        } else {
-                          return null;
-                        }
-                      },
+                    SizedBox( height : 32.h),
+
+                    SizedBox(
+                      height : 50.h,
+                      child: PocketPalFormField(
+                        formController: _name,
+                        formHintText: "Full Name",
+                        formValidator: (value){
+                          if (value == null || value.isEmpty){
+                            return "Please enter your Full Name";
+                          } else if (value.length < 4) { 
+                            return "Please enter a valid Name";
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
                     ),
 
-                    SizedBox( height : 20.h ),
-                    PocketPalFormField(
-                      formController: _email,
-                      formHintText: "Email Address",
-                      formValidator: (value){
-                        if (value == null || value.isEmpty){
-                          return "Please enter your Email Address";
-                        } else if (!isEmailAddress(value)) {
-                          return "Please enter a valid Email Address"; 
-                        } else {
-                          return null;
-                        }
-                      },
+                    SizedBox( height : 10.h ),
+                    SizedBox(
+                      height : 50.h,
+                      child: PocketPalFormField(
+                        formController: _email,
+                        formHintText: "Email Address",
+                        formValidator: (value){
+                          if (value == null || value.isEmpty){
+                            return "Please enter your Email Address";
+                          } else if (!isEmailAddress(value)) {
+                            return "Please enter a valid Email Address"; 
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
                     ),
 
-                    SizedBox( height : 20.h ),
-                    PocketPalFormField(
-                      formController: _password,
-                      formIsObsecure: true,
-                      formHintText: "Password",
-                      formValidator: (value){
-                        if (value == null || value.isEmpty){
-                          return "Please enter a Password";
-                        } else if (value.length < 8) { 
-                          return "Password must at least be 8 characters long";
-                        } else {
-                          return null;
-                        }
-                      },
+                    SizedBox( height : 10.h ),
+                    SizedBox(
+                      height : 50.h,
+                      child: PocketPalFormField(
+                        formController: _password,
+                        formIsObsecure: _isObsecure[0],
+                        formHintText: "Password",
+                        formSuffixIcon: IconButton(
+                          icon : Icon(
+                            (_isObsecure[0]) ?
+                              FeatherIcons.eye :
+                              FeatherIcons.eyeOff,
+                          ),
+                          onPressed: () => setState(() => _isObsecure[0] = !_isObsecure[0]),
+                        ),
+                        formValidator: (value){
+                          if (value == null || value.isEmpty){
+                            return "Please enter a Password";
+                          } else if (value.length < 8) { 
+                            return "Password must at least be 8 characters long";
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
                     ),
 
-                    SizedBox( height : 20.h ),
-                    PocketPalFormField(
-                      formController: _confirmPassword,
-                      formIsObsecure: true,
-                      formHintText: "Confirm Password",
-                      formValidator: (value){
-                        if (value == null || value.isEmpty){
-                          return "Please enter your Password";
-                        } else if (_password.text != value) { 
-                          return "Password does not Match";
-                        } else {
-                          return null;
-                        }
-                      },
+                    SizedBox( height : 10.h ),
+                    SizedBox(
+                      height : 50.h,
+                      child: PocketPalFormField(
+                        formController: _confirmPassword,
+                        formIsObsecure: _isObsecure[1],
+                        formHintText: "Confirm Password",
+                        formSuffixIcon: IconButton(
+                          icon : Icon(
+                            (_isObsecure[1]) ?
+                              FeatherIcons.eye :
+                              FeatherIcons.eyeOff,
+                          ),
+                          onPressed: () => setState(() => _isObsecure[1] = !_isObsecure[1]),
+                        ),
+                        formValidator: (value){
+                          if (value == null || value.isEmpty){
+                            return "Please enter your Password";
+                          } else if (_password.text != value) { 
+                            return "Password does not Match";
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
                     ),
-                    SizedBox( height : 36.h),
+                    SizedBox( height : 50.h),
                     PocketPalButton(
                       buttonOnTap: (!_isButtonEnable) ? null : (){
                         if (_formKey.currentState!.validate()){
@@ -176,17 +208,15 @@ class _SignUpPageState extends State<SignUpPage>{
                       buttonColor: (!_isButtonEnable) ? 
                         ColorPalette.black :
                         ColorPalette.crimsonRed,
-                      buttonChild: Text(
+                      buttonChild: bodyText(
                         "Sign Up",
-                        style : GoogleFonts.poppins(
-                          fontSize : 14.sp,
-                          fontWeight : FontWeight.w500,
-                          color : ColorPalette.white
-                        )
+                        bodySize : 16.sp,
+                        bodyWeight : FontWeight.w600,
+                        bodyColor : ColorPalette.white
                       )
                     ),
 
-                    SizedBox(height : 14.h),
+                    SizedBox(height : 18.h),
                     MyBottomHyperlinkWidget(
                       hyperlinkOnTap: widget.changeStateIsFirstInstall, 
                       hyperlinkText: "Already have an account? ", 

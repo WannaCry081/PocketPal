@@ -3,6 +3,7 @@ import "package:google_fonts/google_fonts.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/const/font_style.dart";
 
 
 class MyBottomHyperlinkWidget extends StatelessWidget {
@@ -23,21 +24,17 @@ class MyBottomHyperlinkWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children : [
-        Text(
+        bodyText(
           hyperlinkText,
-          style : GoogleFonts.poppins(
-            fontSize : 12.sp
-          )
+          bodySize : 14.sp
         ),
 
         GestureDetector(
           onTap : hyperlinkOnTap,
-          child : Text(
+          child : bodyText(
             hyperlinkLink,
-            style : GoogleFonts.poppins(
-              fontSize : 12.sp,
-              color : ColorPalette.crimsonRed
-            )
+            bodySize : 14.sp,
+            bodyColor : ColorPalette.crimsonRed
           )
         )
       ]

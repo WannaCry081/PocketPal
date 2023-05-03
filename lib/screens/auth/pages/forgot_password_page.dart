@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:flutter_svg/flutter_svg.dart";
+import "package:pocket_pal/const/font_style.dart";
 import "package:provider/provider.dart";
 
 import "package:pocket_pal/widgets/pocket_pal_button.dart";
@@ -58,7 +59,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               key : _formKey,
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: 14.h,
+                  horizontal: 16.h,
                   vertical: 20.h
                 ),
                 child: Column(
@@ -76,27 +77,30 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     MyAuthTitleWidget(
                       authTitleTitle: "Forgot Password?", 
                       authTitleMessage: "Enter your email below to receive instructions in retrieving your account.",
-                      authTitleTitleSize: 28.sp,
-                      authTitleTitleMessageSize: 16.sp,
+                      authTitleTitleSize: 30.sp,
+                      authTitleTitleMessageSize: 14.sp,
                     ),
 
                     SizedBox( height : 10.h),
-                    PocketPalFormField(
-                      formController: _email,
-                      formHintText: "Email Address",
-                      formValidator: (value){
-                        if (value == null || value.isEmpty){
-                          return "Please enter an Email Address";
-                        } else if (!isEmailAddress(value)) {
-                          return "Please enter a valid Email Address";
-                        } else {
-                          return null;
-                        }
-                      },
-
+                    SizedBox(
+                      height : 50.h,
+                      child: PocketPalFormField(
+                        formController: _email,
+                        formHintText: "Email Address",
+                        formValidator: (value){
+                          if (value == null || value.isEmpty){
+                            return "Please enter an Email Address";
+                          } else if (!isEmailAddress(value)) {
+                            return "Please enter a valid Email Address";
+                          } else {
+                            return null;
+                          }
+                        },
+                    
+                      ),
                     ),
 
-                    SizedBox( height : 20.h),
+                    SizedBox( height : 14.h),
                     PocketPalButton(
                       buttonOnTap: (!_isButtonEnable)? null : (){
                         if (_formKey.currentState!.validate()){
@@ -116,13 +120,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       buttonColor: (!_isButtonEnable) ?
                         ColorPalette.black :
                         ColorPalette.crimsonRed, 
-                      buttonChild: Text(
+                      buttonChild: bodyText(
                         "Submit",
-                        style : GoogleFonts.poppins(
-                          fontSize : 14.sp,
-                          fontWeight : FontWeight.w500,
-                          color : ColorPalette.white
-                        )
+                        bodySize : 16.sp,
+                        bodyWeight : FontWeight.w600,
+                        bodyColor : ColorPalette.white
+                        
                       )
                     )
                   ]

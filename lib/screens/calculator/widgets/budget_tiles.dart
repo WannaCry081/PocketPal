@@ -26,7 +26,7 @@ class MyBudgetTiles extends StatelessWidget {
           width: 130, 
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: ColorPalette.rustic.shade400
+            color: ColorPalette.crimsonRed.shade400
           ),
           child: MyBudgetValues(
             name: "Needs",
@@ -40,7 +40,7 @@ class MyBudgetTiles extends StatelessWidget {
           width: 130, 
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: ColorPalette.navy.shade400
+            color: ColorPalette.midnightBlue.shade400
           ),
           child: MyBudgetValues(
             name: "Wants",
@@ -54,7 +54,7 @@ class MyBudgetTiles extends StatelessWidget {
           width: 130,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: ColorPalette.murky.shade400
+            color: ColorPalette.salmonPink.shade400
           ),
           child: MyBudgetValues(
             name: "Savings",

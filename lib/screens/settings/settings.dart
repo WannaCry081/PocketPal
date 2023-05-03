@@ -132,9 +132,9 @@ class SettingsView extends StatelessWidget {
                             ),
                             const Spacer(),
                             Switch(
-                              value: wSettings.getIsLight,
-                              activeColor: ColorPalette.rustic,
-                              onChanged: rSettings.setIsLight
+                              value: wSettings.getIsLightMode,
+                              activeColor: ColorPalette.crimsonRed,
+                              onChanged: rSettings.setIsLightMode
                             )
                           ]
                         ), 
@@ -153,7 +153,7 @@ class SettingsView extends StatelessWidget {
                             const Spacer(),
                             Switch(
                               value: true,
-                              activeColor: ColorPalette.rustic,
+                              activeColor: ColorPalette.crimsonRed,
                               onChanged: (value) => false,
                             )
                           ]

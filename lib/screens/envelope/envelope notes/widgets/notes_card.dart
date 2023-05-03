@@ -88,7 +88,7 @@ class NotesCard extends StatelessWidget {
               Text(
                 dateCreated,
                 style: GoogleFonts.poppins(
-                  color: ColorPalette.rustic.shade500,
+                  color: ColorPalette.crimsonRed.shade500,
                   fontWeight: FontWeight.w500,
                   fontSize: 12.sp
                 ),),
@@ -98,7 +98,7 @@ class NotesCard extends StatelessWidget {
                   vertical: 2.h
                   ),
                 decoration: BoxDecoration(
-                  color: ColorPalette.murky,
+                  color: ColorPalette.midnightBlue,
                   borderRadius: BorderRadius.circular(5)
                 ),
                 child: Text(

@@ -14,7 +14,7 @@ class ErrorPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: ColorPalette.navy,
+      backgroundColor: ColorPalette.black,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -40,7 +40,7 @@ class ErrorPage extends StatelessWidget {
                     },
                     buttonHeight: 50.h,
                     buttonWidth: double.infinity,
-                    buttonColor: ColorPalette.rustic,
+                    buttonColor: ColorPalette.crimsonRed,
                     buttonChild: Text("Go back",
                         style: GoogleFonts.poppins(
                           fontSize: 14.sp,

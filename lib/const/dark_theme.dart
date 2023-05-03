@@ -4,7 +4,7 @@ import "package:pocket_pal/const/color_palette.dart";
 
 ThemeData darkTheme = ThemeData(
   useMaterial3: true,
-  colorSchemeSeed: ColorPalette.rustic,
+  colorSchemeSeed: ColorPalette.crimsonRed,
   brightness: Brightness.dark,
 
   

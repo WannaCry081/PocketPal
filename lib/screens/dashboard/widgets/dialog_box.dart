@@ -74,7 +74,7 @@ class MyDialogBoxWidget extends StatelessWidget {
           child: Text(
             "Create", 
             style : GoogleFonts.montserrat(
-              color : ColorPalette.rustic,
+              color : ColorPalette.crimsonRed,
               fontWeight : FontWeight.w600
             )
           ),

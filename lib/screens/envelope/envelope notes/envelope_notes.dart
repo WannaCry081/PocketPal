@@ -104,7 +104,7 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
       backgroundColor: Colors.grey[50],
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-      backgroundColor: ColorPalette.rustic,
+      backgroundColor: ColorPalette.crimsonRed,
       foregroundColor: ColorPalette.white,
       elevation: 12,
       onPressed: newNotes,

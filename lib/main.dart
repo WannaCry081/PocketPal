@@ -2,15 +2,14 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:pocket_pal/providers/envelope_provider.dart";
 import "package:pocket_pal/screens/auth/pages/error_page.dart";
-import "package:pocket_pal/screens/calculator/calculator.dart";
-import "package:pocket_pal/screens/calendar/calendar.dart";
+import "package:pocket_pal/screens/auth/pages/loading_dart.dart";
+import "package:pocket_pal/screens/onboard/onboard.dart";
 import "package:provider/provider.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:timezone/data/latest.dart" as tz;
 
 import "package:pocket_pal/screens/auth/auth_builder.dart";
-import "package:pocket_pal/screens/onboard/onboard.dart";
 
 import "package:pocket_pal/providers/settings_provider.dart";
 import "package:pocket_pal/providers/folder_provider.dart";
@@ -24,7 +23,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   tz.initializeTimeZones();
 
-  await Firebase.initializeApp();
   await SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp]
   );  
@@ -59,7 +57,9 @@ class PocketPalApp extends StatelessWidget {
   @override
   Widget build(BuildContext context){
 
-    final wSettings = context.watch<SettingsProvider>();
+    final SettingsProvider wSettings = context.watch<SettingsProvider>();
+    final bool isLightMode = wSettings.getIsLightMode;
+    final bool isFirstInstall = wSettings.getIsFirstInstall;
 
     return ScreenUtilInit(
       designSize: const Size(360, 640),
@@ -71,19 +71,21 @@ class PocketPalApp extends StatelessWidget {
           theme : lightTheme,
           darkTheme : darkTheme,
 
-          themeMode : (wSettings.getIsLight) ? 
+          themeMode : (isLightMode) ? 
             ThemeMode.light : 
             ThemeMode.dark,
 
-          home :  FutureBuilder(
+          home : FutureBuilder(
             future : Firebase.initializeApp(),
             builder : (context, snapshot) {
-              if (snapshot.hasData){
-                return (wSettings.getShowOnboard) ?
-                  const OnboardView() :
-                  const AuthViewBuilder();
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (isFirstInstall) {
+                  return const OnboardView();
+                } else {
+                  return const AuthViewBuilder();
+                }
               } else {
-                return const ErrorPage();
+                return const LoadingPage();
               }
             }
           )

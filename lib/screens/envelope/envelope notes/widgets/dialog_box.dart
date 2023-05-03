@@ -42,7 +42,7 @@ class MyNoteDialogBoxWidget extends StatelessWidget {
                   text: "$envelopeNoteName",
                   style: GoogleFonts.poppins(
                     fontWeight: FontWeight.w700,
-                    color: ColorPalette.rustic,
+                    color: ColorPalette.crimsonRed,
                     fontSize: 16.sp
                   )
                 ),
@@ -70,7 +70,7 @@ class MyNoteDialogBoxWidget extends StatelessWidget {
           child: Text(
             "Yes", 
             style : GoogleFonts.montserrat(
-              color : ColorPalette.rustic,
+              color : ColorPalette.crimsonRed,
               fontWeight : FontWeight.w600,
               fontSize: 16.sp
             )

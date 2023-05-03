@@ -36,7 +36,7 @@ class MyTitleOptionWidget extends StatelessWidget {
               "View all",
               bodyWeight: FontWeight.w600,
               bodySize : 14.sp,
-              bodyColor : ColorPalette.rustic
+              bodyColor : ColorPalette.crimsonRed
             ),
           )
         ]

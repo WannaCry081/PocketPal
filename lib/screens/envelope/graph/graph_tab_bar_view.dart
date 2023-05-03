@@ -61,7 +61,7 @@ class MyPieChart extends StatelessWidget {
           colorList:  colorList,
           chartValuesOptions: ChartValuesOptions(
             showChartValuesInPercentage: true,
-            chartValueBackgroundColor: ColorPalette.murky,
+            chartValueBackgroundColor: ColorPalette.midnightBlue,
             chartValueStyle: GoogleFonts.poppins(
               fontSize: 12.sp,
             ),

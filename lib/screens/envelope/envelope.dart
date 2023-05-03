@@ -70,8 +70,8 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
   ];
 
   final Map<String, Color> categoryColorMap = {
-    "Food": ColorPalette.rustic.shade200,
-    "School": ColorPalette.navy.shade500,
+    "Food": ColorPalette.crimsonRed.shade200,
+    "School": ColorPalette.midnightBlue.shade500,
     "Transport": Colors.red.shade200,
     "Grocery": Colors.orange.shade200,
     "Entertainment": Color.fromARGB(255, 216, 195, 89),
@@ -173,7 +173,7 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-      backgroundColor: ColorPalette.rustic,
+      backgroundColor: ColorPalette.crimsonRed,
       foregroundColor: ColorPalette.white,
       elevation: 12,
       onPressed: newTransaction,

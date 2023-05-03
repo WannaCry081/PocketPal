@@ -54,7 +54,7 @@ class _DashboardViewState extends State<DashboardView> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: _dashboardAddFolder,
-        backgroundColor: ColorPalette.rustic,
+        backgroundColor: ColorPalette.crimsonRed,
         shape: const CircleBorder(),
         child : Icon(
           FeatherIcons.plus, 
@@ -133,7 +133,7 @@ class _DashboardViewState extends State<DashboardView> {
                         "View all",
                         bodyWeight: FontWeight.w600,
                         bodySize : 14.sp,
-                        bodyColor : ColorPalette.rustic
+                        bodyColor : ColorPalette.crimsonRed
                       ),
                     )
                   ]

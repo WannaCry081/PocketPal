@@ -83,7 +83,7 @@ class MyNewNotesDialog extends StatelessWidget {
             },
           ),
           MaterialButton(
-            color: ColorPalette.rustic,
+            color: ColorPalette.crimsonRed,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10)),
             child: Text(

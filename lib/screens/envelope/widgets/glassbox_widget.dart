@@ -23,7 +23,7 @@ class Glassbox extends StatelessWidget {
       child: Container(
           height: height,
           width: width,
-          color: ColorPalette.rustic,
+          color: ColorPalette.crimsonRed,
           child: Stack(
             children: [
               GlassmorphicContainer(

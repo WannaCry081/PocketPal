@@ -73,11 +73,11 @@ class _CalendarViewState extends State<CalendarView> {
               calendarStyle: CalendarStyle(
                 todayDecoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: ColorPalette.rustic.shade200
+                  color: ColorPalette.crimsonRed[200]
                 ),
                 selectedDecoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: ColorPalette.rustic.shade400
+                  color: ColorPalette.crimsonRed[400]
                 ),
               ),
               

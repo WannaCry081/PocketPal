@@ -1,4 +1,4 @@
-import "package:flutter/material.dart"; 
+import "package:flutter/material.dart";
 import "package:firebase_auth/firebase_auth.dart";
 
 import "package:pocket_pal/screens/auth/pages/loading_dart.dart";
@@ -12,6 +12,7 @@ class AuthViewBuilder extends StatelessWidget {
 
   @override 
   Widget build(BuildContext context){
+
     return Scaffold(
       body : StreamBuilder<User?>(
         stream : FirebaseAuth.instance.authStateChanges(),

@@ -84,7 +84,7 @@ class _MyDropDownMenuWidgetState extends State<MyDropDownMenuWidget> {
             focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                     width: 2,
-                    color: ColorPalette.rustic.shade200
+                    color: ColorPalette.crimsonRed.shade200
                   ),
               borderRadius: const BorderRadius.all(
                 Radius.circular(12),

@@ -138,19 +138,19 @@ class _SignInPageState extends State<SignInPage>{
                         if (_formKey.currentState!.validate()){
                           _formKey.currentState!.save();
                           
+                          _signInPageEmailAndPasswordAuth();
                           if (wSettings.getIsFirstInstall){
                             rSettings.setIsFirstInstall(
                               !wSettings.getIsFirstInstall
                             );
                           }
-                          _signInPageEmailAndPasswordAuth();
                         }
                       }, 
                       buttonWidth: double.infinity, 
                       buttonHeight: 50.h, 
                       buttonColor: (!_isButtonEnable) ? 
                         ColorPalette.black :
-                        ColorPalette.rustic,
+                        ColorPalette.crimsonRed,
                       buttonChild: Text(
                         "Sign In",
                         style : GoogleFonts.poppins(
@@ -167,12 +167,12 @@ class _SignInPageState extends State<SignInPage>{
                     SizedBox( height : 20.h ),
                     PocketPalButton(
                       buttonOnTap: (){
+                        _signInPageGoogleAuth();
                         if (wSettings.getIsFirstInstall){
                           rSettings.setIsFirstInstall(
                             !wSettings.getIsFirstInstall
                           );
                         }
-                        _signInPageGoogleAuth();
                       }, 
                       buttonWidth: double.infinity, 
                       buttonHeight: 50.h, 

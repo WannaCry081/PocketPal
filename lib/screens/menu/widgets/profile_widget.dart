@@ -22,7 +22,7 @@ class MyProfileWidget extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 36.r,
-          backgroundColor: ColorPalette.rustic,
+          backgroundColor: ColorPalette.crimsonRed,
           backgroundImage: NetworkImage(profilePicture),
         ),
         

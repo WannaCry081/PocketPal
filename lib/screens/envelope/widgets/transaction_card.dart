@@ -74,7 +74,7 @@ class TransactionCard extends StatelessWidget {
               transactionName,
               style: GoogleFonts.poppins(
                 fontSize: 18.sp,
-                color: ColorPalette.rustic,
+                color: ColorPalette.crimsonRed,
                 fontWeight: FontWeight.w600
               )
             ),

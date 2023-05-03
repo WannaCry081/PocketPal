@@ -110,7 +110,7 @@ class _ChangeDisplayNameViewState extends State<ChangeDisplayNameView> {
                     },
                      buttonWidth: screenWidth, 
                      buttonHeight: 50.h, 
-                     buttonColor: ColorPalette.rustic, 
+                     buttonColor: ColorPalette.crimsonRed, 
                      buttonBorderRadius: 10, 
                      buttonChild: Text(
                         "Save Changes",

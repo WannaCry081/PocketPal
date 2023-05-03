@@ -28,7 +28,7 @@ class MyCalculatorGraph extends StatelessWidget {
           chartValuesOptions: ChartValuesOptions(
             showChartValuesInPercentage: true,
             decimalPlaces: 0,
-            chartValueBackgroundColor: ColorPalette.murky.shade100,
+            chartValueBackgroundColor: ColorPalette.midnightBlue.shade100,
             chartValueStyle: GoogleFonts.poppins(
               fontSize: 14.sp,
               color: ColorPalette.black

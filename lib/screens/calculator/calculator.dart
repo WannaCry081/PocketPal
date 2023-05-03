@@ -31,9 +31,9 @@ class _CalculatorViewState extends State<CalculatorView> {
     };
   
   final colorList = <Color>[
-      ColorPalette.rustic.shade500,
-      ColorPalette.navy.shade500,
-      ColorPalette.murky.shade500,
+      ColorPalette.crimsonRed.shade500,
+      ColorPalette.midnightBlue.shade500,
+      ColorPalette.pearlWhite.shade500,
     ];
   
   String _buttonText = "Calculate";
@@ -94,7 +94,7 @@ class _CalculatorViewState extends State<CalculatorView> {
                 titleText(
                   " 50/30/20 Budget Calculator",
                   titleAlignment: TextAlign.center,
-                  titleColor: ColorPalette.navy,
+                  titleColor: ColorPalette.midnightBlue,
                   titleSize: 22.sp,
                   titleWeight: FontWeight.w700
                 ),
@@ -128,7 +128,7 @@ class _CalculatorViewState extends State<CalculatorView> {
                   }, 
                   buttonWidth: screenWidth * 0.70, 
                   buttonHeight: 45.h, 
-                  buttonColor: ColorPalette.rustic, 
+                  buttonColor: ColorPalette.crimsonRed, 
                   buttonChild: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

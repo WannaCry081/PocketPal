@@ -32,7 +32,7 @@ class MyPageViewIndicatorWidget extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color : (pageViewCurrentPage == i) ?  
-                ColorPalette.rustic : 
+                ColorPalette.crimsonRed : 
                 ColorPalette.grey,
               borderRadius: BorderRadius.circular(10)
             ),

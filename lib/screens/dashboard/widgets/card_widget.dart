@@ -30,7 +30,7 @@ class MyCardWidget extends StatelessWidget {
                 height : 90.h + 20.w,
                 width : (screenWidth - ((screenWidth * 0.06)*2))- (30*i),
                 decoration: BoxDecoration(
-                  color: ColorPalette.rustic[300 - (i*100)],
+                  color: ColorPalette.crimsonRed[300 - (i*100)],
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
@@ -41,7 +41,7 @@ class MyCardWidget extends StatelessWidget {
               color: Color(0xffFFFBFF),
               borderRadius: BorderRadius.circular(15),
               border: Border.all(
-                color: ColorPalette.rustic.shade300,
+                color: ColorPalette.crimsonRed.shade300,
                 width: 2
               ),
             ),
@@ -69,7 +69,7 @@ class MyCardWidget extends StatelessWidget {
                 ),
                 titleText(
                   "1, 2, 3!",
-                  titleColor: ColorPalette.rustic,
+                  titleColor: ColorPalette.crimsonRed,
                   titleSize: 26.sp,
                   titleWeight: FontWeight.w700,
                 ),

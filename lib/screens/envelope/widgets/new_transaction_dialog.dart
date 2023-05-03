@@ -237,7 +237,7 @@ class _MyNewTransactionDialogWidgetState extends State<MyNewTransactionDialogWid
             },
           ),
           MaterialButton(
-            color: ColorPalette.rustic,
+            color: ColorPalette.crimsonRed,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10)),
             child: Text(
@@ -267,8 +267,8 @@ class _MyNewTransactionDialogWidgetState extends State<MyNewTransactionDialogWid
   }
 
     final List<Color> categoryColors = [
-      ColorPalette.rustic.shade200,
-      ColorPalette.navy.shade500,
+      ColorPalette.crimsonRed.shade200,
+      ColorPalette.midnightBlue.shade500,
     Colors.red.shade200,
     Colors.orange.shade200,
     Color.fromARGB(255, 216, 195, 89),

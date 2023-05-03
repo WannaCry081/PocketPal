@@ -42,7 +42,7 @@ class MyCalculatorTextFieldWidget extends StatelessWidget {
             ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: ColorPalette.rustic.shade200
+              color: ColorPalette.crimsonRed.shade200
             ),
           borderRadius: const BorderRadius.all(
             Radius.circular(12),

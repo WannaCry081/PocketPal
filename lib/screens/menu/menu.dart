@@ -146,7 +146,7 @@ class MenuView extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
 
-      selectedTileColor: ColorPalette.rustic,
+      selectedTileColor: ColorPalette.crimsonRed,
       minLeadingWidth: 10.w,
       selected: currentItem == item,
       onTap: () => onSelectedItem(item),

@@ -108,13 +108,13 @@ class _ProfileViewState extends State<ProfileView> {
                 children: [
                   Icon(
                     FeatherIcons.edit3,
-                    color: ColorPalette.rustic ),
+                    color: ColorPalette.crimsonRed ),
                   SizedBox (width: 10.w),
                   Text(
                     "Edit profile avatar",
                     style: GoogleFonts.poppins(
                       fontSize: 16.sp,
-                      color: ColorPalette.rustic,
+                      color: ColorPalette.crimsonRed,
                       fontWeight: FontWeight.w600
                     )
                   ),

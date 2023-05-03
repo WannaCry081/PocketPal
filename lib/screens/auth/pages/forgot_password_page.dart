@@ -115,7 +115,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       buttonHeight: 50.h, 
                       buttonColor: (!_isButtonEnable) ?
                         ColorPalette.black :
-                        ColorPalette.rustic, 
+                        ColorPalette.crimsonRed, 
                       buttonChild: Text(
                         "Submit",
                         style : GoogleFonts.poppins(

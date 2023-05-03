@@ -30,7 +30,7 @@ class MyFolderWidget extends StatelessWidget {
         height : 160.h + 20.w,
         decoration : BoxDecoration(
           borderRadius: BorderRadius.circular(30.r),
-          color : ColorPalette.rustic[50]
+          color : ColorPalette.crimsonRed[50]
         ),
         child : Column(
           mainAxisAlignment: MainAxisAlignment.center,

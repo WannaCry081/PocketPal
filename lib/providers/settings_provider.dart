@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
-
 class SettingsProvider with ChangeNotifier {
 
   SharedPreferences ? _pref;
@@ -10,16 +9,11 @@ class SettingsProvider with ChangeNotifier {
     _initPackages();
   }
 
-  
   Future<void> _initPackages() async{
     _pref = await SharedPreferences.getInstance();
     notifyListeners();
     return;
   }
-
-  bool get getIsLight => _pref?.getBool("isLight") ?? true;
-  bool get getIsFirstInstall => _pref?.getBool("isFirstInstall") ?? true;
-  bool get getShowOnboard => _pref?.getBool("showOnboard") ?? true;
 
   Future<void> setIsFirstInstall(bool value) async {
     await _pref?.setBool("isFirstInstall", value);
@@ -27,15 +21,12 @@ class SettingsProvider with ChangeNotifier {
     return;
   }
 
-  Future<void> setIsLight(bool value) async {
-    await _pref?.setBool("isLight", value);
+  Future<void> setIsLightMode(bool value) async {
+    await _pref?.setBool("isLightMode", value);
     notifyListeners();
     return;
   }
 
-  Future<void> setShowOnboard(bool value) async { 
-    await _pref?.setBool("showOnboard", value);
-    notifyListeners();
-    return;
-  }
+  bool get getIsLightMode => _pref?.getBool("isLightMode") ?? true;
+  bool get getIsFirstInstall => _pref?.getBool("isFirstInstall") ?? true;
 }

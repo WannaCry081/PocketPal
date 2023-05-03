@@ -25,7 +25,7 @@ class OverviewCountWidget extends StatelessWidget {
             style: GoogleFonts.poppins(
             fontSize: 20.sp,
             fontWeight: FontWeight.w600,
-            color: ColorPalette.rustic,
+            color: ColorPalette.crimsonRed,
             )
           ),
           TextSpan(

@@ -36,7 +36,7 @@ class MyBottomHyperlinkWidget extends StatelessWidget {
             hyperlinkLink,
             style : GoogleFonts.poppins(
               fontSize : 12.sp,
-              color : ColorPalette.rustic
+              color : ColorPalette.crimsonRed
             )
           )
         )

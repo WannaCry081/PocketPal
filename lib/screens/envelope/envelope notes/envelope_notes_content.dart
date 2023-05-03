@@ -31,7 +31,7 @@ class EnvelopeContentsPage extends StatelessWidget {
             child: GestureDetector(
               onTap: deleteNoteFunction,
               child: Icon(FeatherIcons.trash2,
-              color: ColorPalette.rustic,
+              color: ColorPalette.crimsonRed,
               size: 26,),
             ),
           )
@@ -66,7 +66,7 @@ class EnvelopeContentsPage extends StatelessWidget {
                   ),
                   VerticalDivider(
                     thickness: 3,
-                    color: ColorPalette.rustic,
+                    color: ColorPalette.crimsonRed,
                     width: 22.w,
                     indent: 2,
                     endIndent: 2,
@@ -77,7 +77,7 @@ class EnvelopeContentsPage extends StatelessWidget {
                       vertical: 2.h
                       ),
                     decoration: BoxDecoration(
-                      color: ColorPalette.murky,
+                      color: ColorPalette.midnightBlue,
                       borderRadius: BorderRadius.circular(5)
                     ),
                     child: Text(

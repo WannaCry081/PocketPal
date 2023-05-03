@@ -53,7 +53,7 @@ class _FolderGridPageState extends State<FolderGridPage> {
 
       floatingActionButton: FloatingActionButton(
         onPressed: widget.folderAddOnTap,
-        backgroundColor: ColorPalette.rustic,
+        backgroundColor: ColorPalette.crimsonRed,
         shape: const CircleBorder(),
         child : Icon(
           FeatherIcons.plus, 

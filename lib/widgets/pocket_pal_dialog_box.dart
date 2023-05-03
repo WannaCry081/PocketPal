@@ -32,7 +32,7 @@ class PocketPalDialogBox extends StatelessWidget {
         pocketPalDialogTitle,
         style : GoogleFonts.poppins(
           fontWeight: FontWeight.w600,
-          color : ColorPalette.rustic
+          color : ColorPalette.crimsonRed
         )
       ),
       content : Text(
@@ -58,7 +58,7 @@ class PocketPalDialogBox extends StatelessWidget {
           child : Text(
             pocketPalDialogOption2,
             style : GoogleFonts.poppins(
-              color : ColorPalette.rustic,
+              color : ColorPalette.crimsonRed,
               fontWeight : FontWeight.w500,
               fontSize : 14.sp
             )

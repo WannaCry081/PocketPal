@@ -60,7 +60,7 @@ class MyDialogBoxWidget extends StatelessWidget {
               buttonWidth: 100.w, 
               buttonHeight: 36.h, 
               buttonBorderRadius: 100,
-              buttonColor: ColorPalette.rustic, 
+              buttonColor: ColorPalette.crimsonRed, 
               buttonChild: Text(
                 "Okay",
                 style : GoogleFonts.poppins(

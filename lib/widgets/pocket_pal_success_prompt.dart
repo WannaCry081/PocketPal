@@ -81,7 +81,7 @@ class PocketPalSuccessPrompt extends StatelessWidget {
                   buttonWidth: 100.w, 
                   buttonHeight: 36.h, 
                   buttonBorderRadius: 100,
-                  buttonColor: ColorPalette.rustic, 
+                  buttonColor: ColorPalette.crimsonRed, 
                   buttonChild: Text(
                     "Close",
                     style : GoogleFonts.poppins(

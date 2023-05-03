@@ -163,19 +163,19 @@ class _SignUpPageState extends State<SignUpPage>{
                         if (_formKey.currentState!.validate()){
                           _formKey.currentState!.save();
                           
+                          _signUpPageEmailAndPasswordAuth();
                           if (wSettings.getIsFirstInstall){
                             rSettings.setIsFirstInstall(
                               !wSettings.getIsFirstInstall
                             );
                           }
-                          _signUpPageEmailAndPasswordAuth();
                         }
                       }, 
                       buttonWidth: double.infinity, 
                       buttonHeight: 50.h, 
                       buttonColor: (!_isButtonEnable) ? 
                         ColorPalette.black :
-                        ColorPalette.rustic,
+                        ColorPalette.crimsonRed,
                       buttonChild: Text(
                         "Sign Up",
                         style : GoogleFonts.poppins(

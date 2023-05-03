@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
+import 'package:pocket_pal/const/font_style.dart';
 
 class MyDropDownMenuWidget extends StatefulWidget {
   String? dropdownValue;
@@ -28,7 +29,6 @@ class MyDropDownMenuWidget extends StatefulWidget {
 
 class _MyDropDownMenuWidgetState extends State<MyDropDownMenuWidget> {
 
-
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
@@ -50,9 +50,8 @@ class _MyDropDownMenuWidgetState extends State<MyDropDownMenuWidget> {
                   ),
                 ),
                 SizedBox(width: 10.w),
-                Text(
+                bodyText(
                   category,
-                  style: GoogleFonts.poppins(),
                 ),
               ],
             ),
@@ -61,10 +60,11 @@ class _MyDropDownMenuWidgetState extends State<MyDropDownMenuWidget> {
         DropdownMenuItem<String>(
             value: 'User-defined',
             child: Row(
-              children: const [
+              children: [
                 Icon(Icons.add),
                 SizedBox(width: 8),
-                Text('User-defined'),
+                bodyText(
+                  'User-defined',),
               ],
             ),
           ),

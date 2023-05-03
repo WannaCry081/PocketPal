@@ -6,6 +6,8 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
+import 'package:pocket_pal/const/font_style.dart';
+import 'package:pocket_pal/screens/envelope/widgets/add_transaction_bottomsheet.dart';
 import 'package:pocket_pal/screens/envelope/widgets/new_transaction_dialog.dart';
 import 'package:pocket_pal/screens/envelope/widgets/total_balance_card.dart';
 import 'package:pocket_pal/screens/envelope/widgets/transaction_card.dart';
@@ -36,7 +38,6 @@ class EnvelopeContentPage extends StatefulWidget {
 
 class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
 
-  bool isIncome = false;
   double expenseTotal = 0;
   double incomeTotal = 0;
   double totalBalance = 0;
@@ -84,8 +85,7 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
    
   @override
   void initState(){
-    print(categories);
-    transactionType = TextEditingController(text : "Expense");
+    transactionType = TextEditingController(text : "");
     transactionAmount = TextEditingController(text : "");
     transactionName = TextEditingController(text : "");
     transactionCategory = TextEditingController(text : "");
@@ -94,7 +94,6 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
     super.initState();
     return; 
   }
-
 
   @override
   void dispose(){
@@ -125,26 +124,6 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
       clearController();
   }
 
-
-  void newTransaction(){
-    showDialog(
-      barrierDismissible: false,
-      context: context, 
-      builder: (BuildContext context){
-        return MyNewTransactionDialogWidget(
-          fieldName: widget.envelope.envelopeId,
-          formKey: formKey,
-          transactionTypeController: transactionType,
-          transactionNameController: transactionName,
-          transactionAmountController: transactionAmount,
-          transactionCategoryController: transactionCategory,
-          addTransactionFunction: addTransaction,
-          categories: categories,
-          isIncome: false,
-        );
-      });
-  }
-
   void clearController(){
     transactionType.clear();
     transactionAmount.clear();
@@ -171,12 +150,28 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
     final screenHeight = MediaQuery.of(context).size.height;
     
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(),
       backgroundColor: ColorPalette.crimsonRed,
       foregroundColor: ColorPalette.white,
       elevation: 12,
-      onPressed: newTransaction,
+      onPressed: (){
+        showModalBottomSheet(
+          context: context, 
+          isScrollControlled: true,
+          builder: (context){
+            return AddNewTransaction(
+              fieldName: widget.envelope.envelopeId,
+              formKey: formKey,
+              transactionTypeController: transactionType,
+              transactionNameController: transactionName,
+              transactionAmountController: transactionAmount,
+              transactionCategoryController: transactionCategory,
+              addTransactionFunction: addTransaction,
+              categories: categories,
+            );
+          });
+      },
       child: const Icon(FeatherIcons.plus),
       ),
       extendBodyBehindAppBar: true,
@@ -235,25 +230,20 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                                   color: ColorPalette.white,),
                               ),
                               SizedBox( width: 10.h,),
-                              Text(
+                              titleText(
                                 widget.envelope.envelopeName,
-                                style: GoogleFonts.poppins(
-                                  fontSize : 18.sp,
-                                  color: ColorPalette.white,
-                                ),
+                                titleSize: 18.sp,
+                                titleColor: ColorPalette.white,
                               )
                             ],
                           ),
-
                           GestureDetector(
                             onTap: _dashboardNavigateToEnvelopeNotes,
-                            child: Text(
+                            child: titleText(
                               "Add Note",
-                              style: GoogleFonts.poppins(
-                                fontSize : 16.sp,
-                                color: ColorPalette.white,
-                                fontWeight: FontWeight.w600
-                              ),
+                              titleSize: 16.sp,
+                              titleColor: ColorPalette.white,
+                              titleWeight: FontWeight.w600,
                             ),
                           )
                           ]
@@ -265,12 +255,11 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                       padding: EdgeInsets.symmetric(
                          horizontal: 14.w ),
                       child: TotalBalanceCard(
-                            width: screenWidth,
-                            //balance: totalBalance.toStringAsFixed(2),
-                            balance: 
-                               (transactions == null || transactions.isEmpty) ? 
-                               startingBalance.toStringAsFixed(2) : 
-                                (startingBalance - expenseTotal + incomeTotal).toStringAsFixed(2),
+                        width: screenWidth,
+                        balance: 
+                            (transactions == null || transactions.isEmpty) ? 
+                            startingBalance.toStringAsFixed(2) : 
+                            (startingBalance - expenseTotal + incomeTotal).toStringAsFixed(2),
                       ),
                     ),
                     SizedBox( height: 12.h,),
@@ -337,20 +326,16 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children:[
-                                Text(
+                                titleText(
                                   "Recent Transactions",
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 16.h,
-                                    fontWeight: FontWeight.w600
-                                  )
+                                  titleSize: 16.sp,
+                                  titleWeight: FontWeight.w600,
                                 ),
-                                Text(
+                                titleText(
                                   "See All",
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: ColorPalette.grey
-                                  )
+                                  titleSize: 16.sp,
+                                  titleColor: ColorPalette.grey,
+                                  titleWeight: FontWeight.w500,
                                 ),
                               ]
                             ),

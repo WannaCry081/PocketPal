@@ -76,6 +76,7 @@ class _FolderContentPageState extends State<FolderContentPage> {
       ),
 
       floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(),
         backgroundColor: ColorPalette.crimsonRed,
         onPressed: _dashboardAddEnvelope,
         child : Icon(

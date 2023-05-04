@@ -1,55 +1,65 @@
 import "package:flutter/material.dart";
-import "package:google_fonts/google_fonts.dart";
-import "package:flutter_svg/flutter_svg.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:flutter_svg/flutter_svg.dart";
 
-import "package:pocket_pal/utils/envelope_structure_util.dart";
+import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/const/font_style.dart";
+import "package:pocket_pal/utils/Envelope_structure_util.dart";
+
 
 
 class MyEnvelopeWidget extends StatelessWidget {
+  
   final Envelope envelope;
-  final double envelopeSize;
-  final double envelopeTitleSize;
-  final void Function() ? envelopeOnTap;
-  final void Function() ? envelopeOnLongPress;
+  final void Function() ? envelopeOpenContents;
+  final void Function() ? envelopeEditContents;
 
   const MyEnvelopeWidget({ 
-    super.key, 
+    Key ? key,
     required this.envelope,
-    this.envelopeSize = 60, 
-    this.envelopeTitleSize = 14,
-    this.envelopeOnLongPress,
-    this.envelopeOnTap,
-  });
+    this.envelopeOpenContents,
+    this.envelopeEditContents
+  }) : super(key : key);
 
   @override
   Widget build(BuildContext context){
     return GestureDetector(
-      onTap: envelopeOnTap,
-      onLongPress: envelopeOnLongPress,
-      child: Stack(
-        alignment : Alignment.center,
-        children : [  
-          SvgPicture.asset(
-            "assets/icon/Envelope.svg",
-            width : envelopeSize.w + envelopeSize.h, 
-            height : envelopeSize.h + envelopeSize.w
-          ),
-          
-          Positioned(
-            bottom : 0,
-            child : Text(
-              (envelope.envelopeName.length > 14) ? 
-                "${envelope.envelopeName.substring(0, 14)}..." : 
-                envelope.envelopeName,
-              style : GoogleFonts.montserrat(
-                fontSize : envelopeTitleSize.sp,
-                fontWeight: FontWeight.w600
-              )
-            )
-          )
-        ]
-      ),  
+      onTap : envelopeOpenContents,
+      onLongPress : envelopeEditContents,
+      child: Container(
+        width : 140.w,
+        height : 160.h + 20.w,
+        decoration : BoxDecoration(
+          borderRadius: BorderRadius.circular(30.r),
+          color : ColorPalette.salmonPink[50]
+        ),
+        child : Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children : [
+    
+            SvgPicture.asset(
+              "assets/icon/Envelope.svg",
+              width : 90.h,
+              height : 90.h
+            ),
+    
+            SizedBox( height : 8.h ), 
+    
+            SizedBox(
+              width : 100.w,
+              child: Center(
+                child: titleText(
+                  envelope.envelopeName,
+                  titleOverflow: TextOverflow.ellipsis,
+                  titleWeight: FontWeight.w600,
+                  titleSize : 14.sp,
+                ),
+              ),
+            ),
+  
+          ]
+        )
+      ),
     );
   }
 }

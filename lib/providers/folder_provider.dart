@@ -33,20 +33,28 @@ class FolderProvider with ChangeNotifier {
     return; 
   } 
 
-  Future<void> addFolder(Map<String, dynamic> data) async {
-    await PocketPalFirestore().addFolder(data);
+  Future<void> addFolder(Map<String, dynamic> data, { String ? code }) async {
+    await PocketPalFirestore().addFolder(data, code : code);
     fetchFolder(code : _groupCode);
     return;
   }
 
-  Future<void> updateFolder() async {
-
+  Future<void> updateFolder(
+    String docName, 
+    Map<String, dynamic> data, { 
+      String ? code 
+  }) async {
+    await PocketPalFirestore().updateFolder(
+      docName,
+      data, 
+      code : code
+    );
     fetchFolder(code : _groupCode);
     return;
   }
 
-  Future<void> deleteFolder(String docName) async {
-    await PocketPalFirestore().deleteFolder(docName);
+  Future<void> deleteFolder(String docName, { String ? code }) async {
+    await PocketPalFirestore().deleteFolder(docName, code : code);
     fetchFolder(code : _groupCode);
     return;
   }

@@ -30,6 +30,13 @@ class _DashboardViewState extends State<DashboardView> {
 
   final TextEditingController _folderNameController = TextEditingController(text : "");
 
+  @override 
+  void initState(){
+    super.initState();
+    // create user info firestore
+    return;
+  }
+
   @override
   void didChangeDependencies(){
     super.didChangeDependencies();
@@ -103,7 +110,7 @@ class _DashboardViewState extends State<DashboardView> {
 
               (folderItem.isEmpty) ?
                 SizedBox(
-                  height : 160.h + 20.w,
+                  height : 160.h + 30.w,
                   child : Center(
                     child : titleText(
                       "No Wall Added",
@@ -164,7 +171,7 @@ class _DashboardViewState extends State<DashboardView> {
             Navigator.of(context).pop();
           },
           dialogBoxOnCreate: (){
-             Provider.of<FolderProvider>(
+            Provider.of<FolderProvider>(
               context, 
               listen: false
             ).addFolder(
@@ -223,7 +230,7 @@ class _DashboardViewState extends State<DashboardView> {
                 left : 16.w,
                 top : 5.h,
                 bottom : 5.h,
-                right : (i == ((folderItemLength > 10) ? 9 : folderItemLength)) ? 16.w : 0,
+                right : (i == ((folderItemLength < 10) ? folderItemLength-1 : 9)) ? 16.w : 0,
               ),
               child: MyFolderWidget(
                 folder : folderItem[i],
@@ -252,7 +259,13 @@ class _DashboardViewState extends State<DashboardView> {
       builder: (context){
         return MyBottomEditSheetWidget(
           folder : folder,
-          bottomSheetOnDelete: (){},
+          bottomSheetOnDelete: (){
+            Provider.of<FolderProvider>(
+              context, 
+              listen: false
+            ).deleteFolder(folder.folderId);
+            Navigator.of(context).pop();
+          },
           bottomSheetOnEdit: (){},
         );
       }

@@ -192,15 +192,21 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                                 GestureDetector(
                                   child: bodyText (
                                     'Cancel',
-                                    bodyColor: ColorPalette.black
+                                    bodyColor: ColorPalette.black,
+                                    bodySize : 14.sp,
+                                    bodyWeight: FontWeight.w500
                                   ),
                                   onTap: () {
                                     Navigator.of(context).pop();
                                   },
                                 ),
                                 TextButton(
-                                  child: bodyText(
-                                    'Add',),
+                                  child: bodyText (
+                                    'Add',
+                                    bodyColor: ColorPalette.crimsonRed,
+                                    bodySize : 14.sp,
+                                    bodyWeight: FontWeight.w500
+                                  ),
                                   onPressed: () {
                                     setState(() {
                                       widget.categories.add(newCategory);
@@ -232,11 +238,11 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       GestureDetector(
-                        child: titleText(
-                          "Cancel",
-                          titleColor : ColorPalette.grey,
-                          titleWeight : FontWeight.w500,
-                          titleSize : 14.sp
+                        child: bodyText (
+                          'Cancel',
+                          bodyColor: ColorPalette.black,
+                          bodySize : 14.sp,
+                          bodyWeight: FontWeight.w500
                         ),
                         onTap: (){
                           Navigator.of(context).pop();
@@ -248,11 +254,11 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                       ),
                       SizedBox( width: 15.w,),
                       GestureDetector(
-                        child: titleText(
-                          "Save",
-                          titleColor : ColorPalette.crimsonRed,
-                          titleWeight : FontWeight.w500,
-                          titleSize : 14.sp
+                      child: bodyText (
+                          'Save',
+                          bodyColor: ColorPalette.crimsonRed,
+                          bodySize : 14.sp,
+                          bodyWeight: FontWeight.w500
                         ),
                         onTap: (){
                           if (widget.formKey.currentState!.validate()){

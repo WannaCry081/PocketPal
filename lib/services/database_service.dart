@@ -365,4 +365,38 @@ class PocketPalDatabase {
     return;
   }
 
+  Future<void> updateEnvelopeNote(
+      String docName,
+      String envelopeName,
+      Map<String,dynamic> newNote,
+      int index
+    ) async { 
+      final userUid = PocketPalAuthentication().getUserUID;
+
+      final collection = _db.collection(userUid)
+        .doc(docName)
+        .collection("$docName+Envelope")
+        .doc(envelopeName);
+
+      final snapshot = await collection.get();
+      if (!snapshot.exists) {
+        return;
+      }
+      final envelopeData = snapshot.data();
+      final notesData = envelopeData?["envelopeNotes"] as List<dynamic>;
+
+      if (notesData == null || notesData.length <= index) {
+        return;
+      }
+
+      final valueToUpdate = notesData[index];
+      valueToUpdate.addAll(newNote);
+
+      collection.update({
+        "envelopeNotes": notesData 
+      });
+
+      return;
+    }
+
 }

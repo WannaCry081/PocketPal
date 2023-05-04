@@ -109,6 +109,7 @@ flutter:
     - assets/images/Splash.png
     - assets/images/Profile.png
     - assets/images/envelope_bg.png
+    - assets/images/bg.png
 
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

@@ -4,9 +4,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
-import 'package:pocket_pal/screens/envelope/envelope%20notes/envelope_notes_content.dart';
-import 'package:pocket_pal/screens/envelope/envelope%20notes/widgets/dialog_box.dart';
-import 'package:pocket_pal/screens/envelope/envelope%20notes/widgets/new_notes.dart';
+import 'package:pocket_pal/screens/envelope/envelope%20notes/add_envelope_note_page.dart';
 import 'package:pocket_pal/screens/envelope/envelope%20notes/widgets/notes_card.dart';
 import 'package:pocket_pal/services/authentication_service.dart';
 import 'package:pocket_pal/services/database_service.dart';
@@ -14,6 +12,7 @@ import 'package:pocket_pal/utils/envelope_structure_util.dart';
 import 'package:pocket_pal/utils/folder_structure_util.dart';
 import 'package:pocket_pal/utils/note_structure_util.dart';
 import 'package:intl/intl.dart';
+import 'package:pocket_pal/widgets/pocket_pal_dialog_box.dart';
 
 class EnvelopeNotesPage extends StatefulWidget {
   final Folder folder;
@@ -30,45 +29,49 @@ class EnvelopeNotesPage extends StatefulWidget {
 
 class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
 
+  bool isEnabled = true; 
+
   final auth = PocketPalAuthentication();
   final userUid = PocketPalAuthentication().getUserUID;
   final db = PocketPalDatabase();
+  
+  String dateTime = "";
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final DateFormat formatter = DateFormat('MMM dd');
   final DateFormat formatterDateTime = DateFormat('MMMM d h:mm a E');
 
-  late final TextEditingController envelopeNoteName;
-  late final TextEditingController envelopeNoteContent;
+  late final TextEditingController envelopeNoteNameController;
+  late final TextEditingController envelopeNoteContentController;
 
   List<dynamic> notes = [];
 
   @override
   void initState(){
-    envelopeNoteName = TextEditingController(text : "");
-    envelopeNoteContent = TextEditingController(text : "");
+    envelopeNoteNameController = TextEditingController(text : "");
+    envelopeNoteContentController = TextEditingController(text : "");
     super.initState();
     return; 
   }
 
    void clearController(){
-    envelopeNoteName.clear();
-    envelopeNoteContent.clear();
+    envelopeNoteNameController.clear();
+    envelopeNoteContentController.clear();
     return;
   }
 
    @override
   void dispose(){
     super.dispose();
-    envelopeNoteName.dispose();
-    envelopeNoteContent.dispose();
+    envelopeNoteNameController.dispose();
+    envelopeNoteContentController.dispose();
     return; 
   } 
 
   void addNotes (String envelopeId) async {
     final data = EnvelopeNotes(
-      envelopeNoteContent: envelopeNoteContent.text.trim(),
-      envelopeNoteName: envelopeNoteName.text.trim(), 
+      envelopeNoteContent: envelopeNoteContentController.text.trim(),
+      envelopeNoteName: envelopeNoteNameController.text.trim(), 
       envelopeNoteUsername: auth.getUserDisplayName,
       ).toMap();
 
@@ -77,24 +80,55 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
         widget.envelope.envelopeId,
         data
       ); 
-
+      setState(() {
+          isEnabled = false;
+        });
+      FocusScopeNode currentFocus = FocusScope.of(context);
+      if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+      }
       Navigator.of(context).pop();
       clearController();
   }
 
+ void updateNotesFunction(String envelopeId, int index) async {
+  final newData = EnvelopeNotes(
+    envelopeNoteContent: envelopeNoteContentController.text.trim(),
+    envelopeNoteName: envelopeNoteNameController.text.trim(), 
+    envelopeNoteUsername: auth.getUserDisplayName,
+  ).toMap();
+
+  await PocketPalDatabase().updateEnvelopeNote(
+    widget.folder.folderId,
+    widget.envelope.envelopeId,
+    newData,
+    index,
+  );
+  print(envelopeNoteContentController.text);
+  print(envelopeNoteNameController.text);
+}
+
+
+
   void newNotes(){
-      showDialog(
-        barrierDismissible: false,
-        context: context, 
-        builder: (BuildContext context){
-          return MyNewNotesDialog(
-            fieldName: widget.envelope.envelopeId,
-            formKey: formKey,
-            envelopeNoteName: envelopeNoteName,
-            envelopeNoteContent: envelopeNoteContent,
-            addNotesFunction: addNotes,
-          );
-        });
+    setState((){
+      DateTime currentDateTime = DateTime.now();
+      dateTime = formatterDateTime.format(currentDateTime);
+    });
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder : (context) => AddEnvelopeNote(
+          fieldName: widget.envelope.envelopeId,
+          formKey: formKey,
+          envelopeNoteUsername: auth.getUserDisplayName,
+          envelopeNoteNameController: envelopeNoteNameController,
+          envelopeNoteContentController: envelopeNoteContentController,
+          addNotesFunction: addNotes,
+          dateTime: dateTime,
+          isEnabled: true,
+        )
+      )
+    );
   }
 
   @override
@@ -102,7 +136,6 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
     
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
       backgroundColor: ColorPalette.crimsonRed,
       foregroundColor: ColorPalette.white,
@@ -138,7 +171,7 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
                   child: notes.isEmpty
                   ? Center(
                     child: Text(
-                      "No Notes Yet",
+                      "No notes yet",
                       style: GoogleFonts.poppins(
                         fontSize: 14.sp
                     ),),
@@ -155,7 +188,11 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
                           noteItem['envelopeNoteUsername'] as String;
                       final envelopeNoteDate = noteItem['envelopeNoteDate'] as Timestamp;
                       final formattedDate = formatter.format(envelopeNoteDate.toDate());
-                      final formattedDateTime = formatterDateTime.format(envelopeNoteDate.toDate()); //for envelope contents page
+                      final formattedDateTime = formatterDateTime.format(envelopeNoteDate.toDate()); 
+                      final hasNotes = notes.isNotEmpty;
+
+                      late final TextEditingController envelopeNoteNameController = TextEditingController(text: envelopeNoteName);
+                      late final TextEditingController envelopeNoteContentController = TextEditingController(text: envelopeNoteContent);
                       return  
                           NotesCard(
                             width: 1,
@@ -166,19 +203,44 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
                             onTap: (){
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => EnvelopeContentsPage(
-                                    envelopeNoteName: envelopeNoteName,
-                                    envelopeNoteContent: envelopeNoteContent,
+                                  builder: (context) => AddEnvelopeNote(
+                                    noteIndex: index,
+                                    addNotesFunction: addNotes,
+                                    updateNoteFunction: (envelopeId) async {
+                                    final updatedNote = EnvelopeNotes(
+                                      envelopeNoteContent: envelopeNoteContentController.text.trim(),
+                                      envelopeNoteName: envelopeNoteNameController.text.trim(),
+                                      envelopeNoteUsername: auth.getUserDisplayName,
+                                    ).toMap();
+
+                                    await db.updateEnvelopeNote(
+                                      widget.folder.folderId,
+                                      widget.envelope.envelopeId,
+                                      updatedNote,
+                                      index,
+                                    );
+                                  },
+                                    isEnabled: true,
+                                    showDeleteIcon: hasNotes,
+                                    formKey: formKey,
+                                    fieldName: widget.envelope.envelopeId,
+                                    dateTime: formattedDateTime,
+                                    envelopeNoteNameController: envelopeNoteNameController,
+                                    envelopeNoteContentController: envelopeNoteContentController,
                                     envelopeNoteUsername: envelopeNoteUsername,
-                                    formattedDateTime: formattedDateTime,
+                                    //formattedDateTime: formattedDateTime,
                                     deleteNoteFunction: (){
                                         showDialog(
                                           context: context,
                                           barrierDismissible: false,
                                           builder: (context) {
-                                            return MyNoteDialogBoxWidget(
-                                              envelopeNoteName: envelopeNoteName,
-                                              noteDialogBoxOnTap: () async {
+                                            return PocketPalDialogBox(
+                                              pocketPalDialogTitle: "Confirm Deletion",
+                                              pocketPalDialogMessage: "Are you sure you want to delete $envelopeNoteName?",
+                                              pocketPalDialogOption1: "Yes",
+                                              pocketPalDialogOption2: "No",
+                                              pocketPalDialogOption1OnTap: () => Navigator.of(context).pop(),
+                                              pocketPalDialogOption2OnTap: () async {
                                                 db.deleteEnvelopeNote(
                                                   widget.folder.folderId, 
                                                   widget.envelope.envelopeId,

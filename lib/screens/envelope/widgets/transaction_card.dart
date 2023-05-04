@@ -5,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';  
 import 'package:intl/intl.dart';
+import 'package:pocket_pal/const/font_style.dart';
 
 class TransactionCard extends StatelessWidget {
 
@@ -43,10 +44,10 @@ class TransactionCard extends StatelessWidget {
     return Slidable(
       endActionPane: ActionPane(
         extentRatio: 0.3,
-        motion: StretchMotion(),
+        motion: const StretchMotion(),
         children: [
           SlidableAction(
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topRight: Radius.circular(20),
               bottomRight: Radius.circular(20)
             ),
@@ -59,7 +60,6 @@ class TransactionCard extends StatelessWidget {
       ),
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: 5.w,
           vertical: 10.h),
         width: width - 10,
         decoration: BoxDecoration(
@@ -70,28 +70,24 @@ class TransactionCard extends StatelessWidget {
           Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children:[
-            Text(
+            titleText(
               transactionName,
-              style: GoogleFonts.poppins(
-                fontSize: 18.sp,
-                color: ColorPalette.crimsonRed,
-                fontWeight: FontWeight.w600
-              )
+              titleColor: ColorPalette.crimsonRed,
+              titleWeight: FontWeight.w600,
+              titleSize: 16.sp,
             ),
-            Text( 
+            titleText( 
               (transactionType == "Expense" ? "-" : "+") + 
               transactionAmount,
-              style: GoogleFonts.poppins(
-                color: transactionType == "Expense" 
+              titleColor: transactionType == "Expense" 
                   ? Colors.red 
                   : Colors.green,
-                fontWeight: FontWeight.w600,
-                fontSize: 18.sp,
-              ),
+              titleWeight: FontWeight.w600,
+              titleSize: 16.sp,
             ),
           ],
         ),
-      
+        SizedBox(height: 2.h,),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -104,7 +100,7 @@ class TransactionCard extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                      vertical: 2.0.h,
+                      vertical: 1.0.h,
                       horizontal: 10.w),
                     child: Text(
                       transactionCategory.toUpperCase(),

@@ -6,7 +6,6 @@ import 'package:pie_chart/pie_chart.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/screens/envelope/envelope%20notes/widgets/graph_tab_bar.dart';
 import 'package:pocket_pal/screens/envelope/widgets/glassbox_widget.dart';
-import 'package:pocket_pal/screens/envelope/widgets/money_flow_card.dart';
 import 'package:pocket_pal/utils/envelope_structure_util.dart';
 
 class EnvelopeSummaryPieChart extends StatelessWidget {
@@ -82,23 +81,6 @@ class EnvelopeSummaryPieChart extends StatelessWidget {
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  MoneyFlowCard(
-                    name: "Income",
-                    width: screenWidth / 2 - 25.0,
-                    amount: incomeTotal.toStringAsFixed(2), 
-                    fontSize: incomeTotal.toString().length > 5 ? 22.sp : 26.sp
-                   ),
-                  MoneyFlowCard(
-                    name: "Expense",
-                    width: screenWidth / 2 - 25.0,
-                    amount: expenseTotal.toStringAsFixed(2), 
-                    fontSize: expenseTotal.toString().length > 5 ? 22.sp : 26.sp
-                    ),
-                ],
-              )
             ],
             ),
           ),

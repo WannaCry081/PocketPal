@@ -8,7 +8,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/const/font_style.dart';
 import 'package:pocket_pal/screens/envelope/widgets/add_transaction_bottomsheet.dart';
-import 'package:pocket_pal/screens/envelope/widgets/new_transaction_dialog.dart';
 import 'package:pocket_pal/screens/envelope/widgets/total_balance_card.dart';
 import 'package:pocket_pal/screens/envelope/widgets/transaction_card.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +19,7 @@ import 'package:pocket_pal/utils/envelope_structure_util.dart';
 import 'package:pocket_pal/utils/folder_structure_util.dart';
 import 'package:pocket_pal/utils/transaction_structure_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pocket_pal/screens/envelope/widgets/glassbox_widget.dart';
 
 
 
@@ -55,6 +55,7 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
   late final TextEditingController transactionAmount;
   late final TextEditingController transactionName;
   late final TextEditingController transactionCategory;
+  
 
   List<dynamic> transactions = [];
   List<dynamic> expenseTransactions = [];
@@ -150,36 +151,38 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
     final screenHeight = MediaQuery.of(context).size.height;
     
     return Scaffold(
+      extendBody: true,
+      extendBodyBehindAppBar: true,
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
-      backgroundColor: ColorPalette.crimsonRed,
-      foregroundColor: ColorPalette.white,
-      elevation: 12,
-      onPressed: (){
-        showModalBottomSheet(
-          context: context, 
-          isScrollControlled: true,
-          builder: (context){
-            return AddNewTransaction(
-              fieldName: widget.envelope.envelopeId,
-              formKey: formKey,
-              transactionTypeController: transactionType,
-              transactionNameController: transactionName,
-              transactionAmountController: transactionAmount,
-              transactionCategoryController: transactionCategory,
-              addTransactionFunction: addTransaction,
-              categories: categories,
-            );
-          });
-      },
-      child: const Icon(FeatherIcons.plus),
+        backgroundColor: ColorPalette.crimsonRed,
+        foregroundColor: ColorPalette.white,
+        elevation: 12,
+        onPressed: (){
+          showModalBottomSheet(
+            context: context, 
+            isScrollControlled: true,
+            isDismissible: false,
+            builder: (context){
+              return AddNewTransaction(
+                fieldName: widget.envelope.envelopeId,
+                formKey: formKey,
+                transactionTypeController: transactionType,
+                transactionNameController: transactionName,
+                transactionAmountController: transactionAmount,
+                transactionCategoryController: transactionCategory,
+                addTransactionFunction: addTransaction,
+                categories: categories,
+              );
+            });
+        },
+        child: const Icon(FeatherIcons.plus),
       ),
-      extendBodyBehindAppBar: true,
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
-              "assets/images/envelope_bg.png",
+              "assets/images/bg.png",
             ),
             fit: BoxFit.cover,
           )
@@ -203,19 +206,17 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                 
                 for (final transaction in transactions) {
                   final category = transaction['transactionCategory'] as String;
-
                   if (!categories.contains(category)) {
                     categories.add(category);
                   }
                 }
                 
-                return Column(
+                return Stack(
                   children: [
                     Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: 14.w,
                         vertical: 12.h),
-                      child: Container(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -237,38 +238,17 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                               )
                             ],
                           ),
-                          GestureDetector(
-                            onTap: _dashboardNavigateToEnvelopeNotes,
-                            child: titleText(
-                              "Add Note",
-                              titleSize: 16.sp,
-                              titleColor: ColorPalette.white,
-                              titleWeight: FontWeight.w600,
-                            ),
-                          )
-                          ]
-                        ),
-                      ),
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                         horizontal: 14.w ),
-                      child: TotalBalanceCard(
-                        width: screenWidth,
-                        balance: 
-                            (transactions == null || transactions.isEmpty) ? 
-                            startingBalance.toStringAsFixed(2) : 
-                            (startingBalance - expenseTotal + incomeTotal).toStringAsFixed(2),
-                      ),
-                    ),
-                    SizedBox( height: 12.h,),
-                    Padding(
-                      padding: EdgeInsets.only( right: 14.w),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: GestureDetector(
-                          onTap: (){
+                      Row(
+                        children: [
+                          Glassbox(
+                            height: 45,
+                            width: 45,
+                            borderRadius: 30,
+                            child: IconButton(
+                              icon: Icon(
+                                FeatherIcons.pieChart,
+                                color: ColorPalette.white,),
+                              onPressed: (){
                             Navigator.of(context).push(
                             MaterialPageRoute(
                               builder : (context) => EnvelopeSummaryPieChart(
@@ -284,125 +264,140 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                               )
                             )
                           );
-                          },
-                          child: Text(
-                            "View Summary",
-                            style: GoogleFonts.poppins(
-                              shadows: [
-                                const Shadow(
-                                  offset: Offset(0, -5), 
-                                  color: Colors.white
-                                  )],
-                              decoration: TextDecoration.underline,
-                              decorationColor: Colors.white,
-                              decorationThickness: 2,
-                              fontSize: 14.sp,
-                              color: Colors.transparent,
-                              fontWeight: FontWeight.bold,
-                            )
-                          ),
-                        ),
+                        },
                       ),
                     ),
-                SizedBox( height: 15.h,),
-                Expanded(
-                  child: Container(
-                    width: screenWidth,
-                     decoration: const BoxDecoration(
-                       color: Colors.white,
-                       borderRadius: BorderRadius.only(
+                    SizedBox(width: 5.w,),
+                    Glassbox(
+                      height: 45,
+                      width: 45,
+                      borderRadius: 30,
+                      child: IconButton(
+                      icon: Icon(
+                        FeatherIcons.fileText,
+                        color: ColorPalette.white,),
+                        onPressed: _dashboardNavigateToEnvelopeNotes,
+                    ),
+                    )
+                        ],
+                      ),
+                    ]
+                  ),
+                ),
+                Positioned(
+                  top: 75,
+                  width: screenWidth,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 14.w ),
+                    child: TotalBalanceCard(
+                      width: screenWidth,
+                      balance: 
+                        (transactions == null || transactions.isEmpty) ? 
+                        startingBalance.toStringAsFixed(2) : 
+                        (startingBalance - expenseTotal + incomeTotal).toStringAsFixed(2),
+                      income: incomeTotal.toStringAsFixed(2),
+                      expense: expenseTotal.toStringAsFixed(2),
+
+                    ),
+                  ),
+                ),
+                SizedBox.expand(
+                  child: DraggableScrollableSheet(
+                    minChildSize: 0.55,
+                    maxChildSize: 0.95,
+                    initialChildSize: 0.55,
+                    builder: (context, scrollController){
+                    return Container(
+                      width: screenWidth,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(25),
                         topRight: Radius.circular(25)
-                       )
-                    ),
+                        )
+                      ),
                     child: Padding(
                       padding: EdgeInsets.only(
-                        top: 20.h,
-                        left: 14,
-                        right: 14
-                        ),
+                      top: 25.h,
+                      left: 14.w,
+                      right: 14.w
+                      ),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children:[
-                                titleText(
-                                  "Recent Transactions",
-                                  titleSize: 16.sp,
-                                  titleWeight: FontWeight.w600,
-                                ),
-                                titleText(
-                                  "See All",
-                                  titleSize: 16.sp,
-                                  titleColor: ColorPalette.grey,
-                                  titleWeight: FontWeight.w500,
-                                ),
-                              ]
-                            ),
-                            SizedBox( height: screenHeight * 0.02,),
-                            Expanded(
-                              child: (transactions == null || transactions.isEmpty) ?
-                                Center(
-                                  child: Text(
-                                    "No Transactions Yet",
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 14.sp
-                                    ),
-                                  ),
-                                ) : 
-                              (snapshot.hasData) ?
-                              ListView.builder (
-                                itemCount: transactions.length,
-                                itemBuilder: ((context, index) {
-                                  final transaction = transactions[index];
-
-                                  final transactionName =
-                                      transaction['transactionName'] as String;
-                                  final transactionUsername =
-                                      transaction['transactionUsername'] as String;
-                                  final transactionType =
-                                      transaction['transactionType'] as String;
-                                  final transactionCategory =
-                                      transaction['transactionCategory'] as String;
-                                  final transactionAmount = (transaction['transactionAmount'] as num).toDouble();
-                                  final transactionDate = transaction['transactionDate'] as Timestamp;
-                                  final formattedDate = formatter.format(transactionDate.toDate());
-                                  Color? categoryColor = categoryColorMap[transactionCategory];
-
-                                  return TransactionCard(
-                                        width: screenWidth - 30,
-                                        dateCreated: formattedDate,
-                                        transactionAmount: transactionAmount.toDouble().toString(),
-                                        transactionName: transactionName,
-                                        transactionType: transactionType,
-                                        transactionCategory: transactionCategory,
-                                        categoryColor: categoryColor,
-                                        transactionUsername: transactionUsername,
-                                        onPressedDelete: (BuildContext context) async{
-                                          db.deleteEnvelopeTransaction(
-                                            widget.folder.folderId, 
-                                            widget.envelope.envelopeId,
-                                            index);
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(
-                                                content: Text("Successfully Deleted!"),
-                                                duration: Duration(seconds: 1),));
-                                        },
-                                        );
-                                    }),
-                                  )
-                                  : const Center(
-                                      child: CircularProgressIndicator(),
-                                    )
-                                )
-                              ],
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 5.h),
+                            child: titleText(
+                              "Recent Transactions",
+                              titleSize: 16.sp,
+                              titleWeight: FontWeight.w600,
                             ),
                           ),
-                        )
-                      )
-                  ],
-                );
-              }
+                          Expanded(
+                            child: (transactions == null || transactions.isEmpty) ?
+                              Center(
+                                child: bodyText(
+                                  "No Transactions Yet",
+                                  bodySize: 14.sp,
+                                ),
+                              ) : 
+                            (snapshot.hasData) ?
+                            ListView.builder (
+                              controller: scrollController,
+                              itemCount: transactions.length,
+                              itemBuilder: ((context, index) {
+                                final transaction = transactions[index];
+                
+                                final transactionName =
+                                    transaction['transactionName'] as String;
+                                final transactionUsername =
+                                    transaction['transactionUsername'] as String;
+                                final transactionType =
+                                    transaction['transactionType'] as String;
+                                final transactionCategory =
+                                    transaction['transactionCategory'] as String;
+                                final transactionAmount = (transaction['transactionAmount'] as num).toDouble();
+                                final transactionDate = transaction['transactionDate'] as Timestamp;
+                                final formattedDate = formatter.format(transactionDate.toDate());
+                                Color? categoryColor = categoryColorMap[transactionCategory];
+                
+                                return TransactionCard(
+                                      width: screenWidth - 30,
+                                      dateCreated: formattedDate,
+                                      transactionAmount: transactionAmount.toDouble().toString(),
+                                      transactionName: transactionName,
+                                      transactionType: transactionType,
+                                      transactionCategory: transactionCategory,
+                                      categoryColor: categoryColor,
+                                      transactionUsername: transactionUsername,
+                                      onPressedDelete: (BuildContext context) async{
+                                        db.deleteEnvelopeTransaction(
+                                          widget.folder.folderId, 
+                                          widget.envelope.envelopeId,
+                                          index);
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(
+                                              content: Text("Successfully Deleted!"),
+                                              duration: Duration(seconds: 1),));
+                                      },
+                                      );
+                                  }),
+                                )
+                                : const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                              )
+                            ],
+                        ),
+                      ),
+                    );
+                  },
+                )
+                )
+                ],
+              );
+            }
             )
               
           ),

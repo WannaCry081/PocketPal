@@ -56,6 +56,7 @@ class MyEnvelopeDialogBoxWidget extends StatelessWidget {
             PocketPalFormField(
               formController: envelopeAmountcontrollerName,
               formHintText: envelopeAmountHintText,
+              formKeyboardType: TextInputType.number,
               formValidator: (value){
                 if(value!.isEmpty){
                   return "Please enter a starting amount.";

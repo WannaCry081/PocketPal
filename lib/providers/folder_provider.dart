@@ -1,7 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:pocket_pal/services/database_service.dart";
-import "package:pocket_pal/utils/folder_structure_util.dart";
+import 'package:pocket_pal/utils/folder_util.dart';
 
 
 class FolderProvider with ChangeNotifier {

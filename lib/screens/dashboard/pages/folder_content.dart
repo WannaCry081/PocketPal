@@ -11,9 +11,11 @@ import "package:pocket_pal/screens/dashboard/widgets/envelope_widget.dart";
 import "package:pocket_pal/screens/envelope/envelope.dart";
 import "package:pocket_pal/screens/envelope/widgets/envelope_dialog_box.dart";
 
-import "package:pocket_pal/utils/folder_structure_util.dart";
+import "package:pocket_pal/utils/folder_util.dart";
+import "package:pocket_pal/utils/envelope_util.dart";
 
 import "package:pocket_pal/providers/envelope_provider.dart";
+
 
 
 class FolderContentPage extends StatefulWidget {

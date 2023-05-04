@@ -16,8 +16,8 @@ import 'package:pocket_pal/screens/envelope/graph/envelope_graph.dart';
 import 'package:pocket_pal/screens/envelope/envelope%20notes/envelope_notes.dart';
 import 'package:pocket_pal/services/authentication_service.dart';
 import 'package:pocket_pal/services/database_service.dart';
-import 'package:pocket_pal/utils/envelope_structure_util.dart';
-import 'package:pocket_pal/utils/folder_structure_util.dart';
+import 'package:pocket_pal/utils/envelope_util.dart';
+import 'package:pocket_pal/utils/folder_util.dart';
 import 'package:pocket_pal/utils/transaction_structure_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

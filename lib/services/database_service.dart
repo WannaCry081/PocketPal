@@ -1,7 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 import "package:pocket_pal/utils/chatbox_structure_util.dart";
-import "package:pocket_pal/utils/envelope_structure_util.dart";
+import 'package:pocket_pal/utils/envelope_util.dart';
 
 
 class PocketPalFirestore {

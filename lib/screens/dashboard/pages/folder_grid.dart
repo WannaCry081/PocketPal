@@ -7,7 +7,7 @@ import "package:pocket_pal/const/font_style.dart";
 import "package:pocket_pal/providers/folder_provider.dart";
 import "package:pocket_pal/screens/dashboard/pages/folder_content.dart";
 import "package:pocket_pal/screens/dashboard/widgets/folder_widget.dart";
-import "package:pocket_pal/utils/folder_structure_util.dart";
+import 'package:pocket_pal/utils/folder_util.dart';
 import "package:provider/provider.dart";
 
 class FolderGridPage extends StatefulWidget {

@@ -10,7 +10,7 @@ import "package:pocket_pal/services/authentication_service.dart";
 import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/services/storage_service.dart";
 import "package:pocket_pal/utils/chatbox_structure_util.dart";
-import "package:pocket_pal/utils/folder_structure_util.dart";
+import 'package:pocket_pal/utils/folder_util.dart';
 import "package:pocket_pal/widgets/pocket_pal_formfield.dart";
 
 

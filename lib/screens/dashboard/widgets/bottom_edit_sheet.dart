@@ -4,7 +4,7 @@ import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/const/font_style.dart";
-import "package:pocket_pal/utils/folder_structure_util.dart";
+import 'package:pocket_pal/utils/folder_util.dart';
 
 
 class MyBottomEditSheetWidget extends StatelessWidget { 

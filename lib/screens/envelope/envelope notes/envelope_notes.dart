@@ -10,8 +10,8 @@ import 'package:pocket_pal/screens/envelope/envelope%20notes/widgets/new_notes.d
 import 'package:pocket_pal/screens/envelope/envelope%20notes/widgets/notes_card.dart';
 import 'package:pocket_pal/services/authentication_service.dart';
 import 'package:pocket_pal/services/database_service.dart';
-import 'package:pocket_pal/utils/envelope_structure_util.dart';
-import 'package:pocket_pal/utils/folder_structure_util.dart';
+import 'package:pocket_pal/utils/envelope_util.dart';
+import 'package:pocket_pal/utils/folder_util.dart';
 import 'package:pocket_pal/utils/note_structure_util.dart';
 import 'package:intl/intl.dart';
 

@@ -15,7 +15,7 @@ import "package:pocket_pal/screens/dashboard/widgets/card_widget.dart";
 import "package:pocket_pal/screens/dashboard/widgets/title_option.dart";
 import "package:pocket_pal/screens/dashboard/widgets/folder_widget.dart";
 
-import "package:pocket_pal/utils/folder_structure_util.dart";
+import 'package:pocket_pal/utils/folder_util.dart';
 import "package:pocket_pal/widgets/pocket_pal_menu_button.dart";
 
 

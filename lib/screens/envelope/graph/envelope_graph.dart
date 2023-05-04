@@ -7,7 +7,7 @@ import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/screens/envelope/envelope%20notes/widgets/graph_tab_bar.dart';
 import 'package:pocket_pal/screens/envelope/widgets/glassbox_widget.dart';
 import 'package:pocket_pal/screens/envelope/widgets/money_flow_card.dart';
-import 'package:pocket_pal/utils/envelope_structure_util.dart';
+import 'package:pocket_pal/utils/envelope_util.dart';
 
 class EnvelopeSummaryPieChart extends StatelessWidget {
 

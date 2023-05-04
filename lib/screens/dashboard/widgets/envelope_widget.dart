@@ -4,7 +4,7 @@ import "package:flutter_svg/flutter_svg.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/const/font_style.dart";
-import "package:pocket_pal/utils/Envelope_structure_util.dart";
+import "package:pocket_pal/utils/envelope_util.dart";
 
 
 

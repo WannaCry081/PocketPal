@@ -12,11 +12,12 @@ Text titleText(
     double? titleLetterSpacing,
     double? titleWordSpacing,
     double? titleHeight,
-    TextAlign ? titleAlignment
-
+    TextAlign ? titleAlignment,
+    TextOverflow ? titleOverflow
 }) => Text(
   text,
   textAlign: titleAlignment,
+  overflow: titleOverflow,
   style : GoogleFonts.poppins(
     color : titleColor,
     fontSize : titleSize,
@@ -39,11 +40,12 @@ Text bodyText(
     double? bodyLetterSpacing,
     double? bodyWordSpacing,
     double? bodyHeight,
-    TextAlign ? bodyAlignment
-
+    TextAlign ? bodyAlignment,
+    TextOverflow ? bodyOverflow
 }) => Text(
   text,
   textAlign: bodyAlignment,
+  overflow: bodyOverflow,
   style : GoogleFonts.lato(
     color : bodyColor,
     fontSize : bodySize,

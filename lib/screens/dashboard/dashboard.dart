@@ -1,19 +1,21 @@
 import "package:flutter/material.dart";
-import "package:pocket_pal/screens/dashboard/pages/folder_content.dart";
+import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_sheet.dart";
 import "package:provider/provider.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/const/font_style.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 
+import "package:pocket_pal/screens/dashboard/pages/folder_content.dart";
 import "package:pocket_pal/providers/folder_provider.dart";
+
 import "package:pocket_pal/screens/dashboard/pages/folder_grid.dart";
 import "package:pocket_pal/screens/dashboard/widgets/dialog_box.dart";
 import "package:pocket_pal/screens/dashboard/widgets/card_widget.dart";
 import "package:pocket_pal/screens/dashboard/widgets/title_option.dart";
 import "package:pocket_pal/screens/dashboard/widgets/folder_widget.dart";
 
-import "package:pocket_pal/utils/folder_structure_util.dart";
+import 'package:pocket_pal/utils/folder_util.dart';
 import "package:pocket_pal/widgets/pocket_pal_menu_button.dart";
 
 
@@ -27,6 +29,13 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
 
   final TextEditingController _folderNameController = TextEditingController(text : "");
+
+  @override 
+  void initState(){
+    super.initState();
+    // create user info firestore
+    return;
+  }
 
   @override
   void didChangeDependencies(){
@@ -47,7 +56,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   Widget build(BuildContext context){
-    final FolderProvider folderProvider = Provider.of<FolderProvider>(context);
+    final FolderProvider folderProvider = context.watch<FolderProvider>();
     final List<Folder> folderItem = folderProvider.getFolderList;
     final int folderItemLength = folderItem.length;
 
@@ -68,7 +77,6 @@ class _DashboardViewState extends State<DashboardView> {
             children : [
               
               _dashboardCustomAppBar(),
-        
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 18.w,
@@ -92,7 +100,8 @@ class _DashboardViewState extends State<DashboardView> {
                     MaterialPageRoute(
                       builder : (context) => FolderGridPage(
                         folderNameController : _folderNameController,
-                        folderAddOnTap : _dashboardAddFolder
+                        folderAddOnTap : _dashboardAddFolder,
+                        folderEditOnHold : _dashboardFolderEdit
                       )
                     )
                   );
@@ -101,7 +110,7 @@ class _DashboardViewState extends State<DashboardView> {
 
               (folderItem.isEmpty) ?
                 SizedBox(
-                  height : 160.h + 20.w,
+                  height : 160.h + 30.w,
                   child : Center(
                     child : titleText(
                       "No Wall Added",
@@ -151,14 +160,18 @@ class _DashboardViewState extends State<DashboardView> {
     showDialog(
       context: context,
       builder: (context) {
+
         return MyDialogBoxWidget(
           controllerName: _folderNameController,
           dialogBoxHintText: "Untitled Wall",
           dialogBoxTitle: "Add Wall",
           dialogBoxErrorMessage: "Please enter a name for your Wall",
-          dialogBoxOnTap: (){
-            
-             Provider.of<FolderProvider>(
+          dialogBoxOnCancel: (){
+            _folderNameController.clear();
+            Navigator.of(context).pop();
+          },
+          dialogBoxOnCreate: (){
+            Provider.of<FolderProvider>(
               context, 
               listen: false
             ).addFolder(
@@ -166,7 +179,6 @@ class _DashboardViewState extends State<DashboardView> {
                 folderName: _folderNameController.text.trim(),
               ).toMap()
             );
-
             _folderNameController.clear();
             Navigator.of(context).pop();
           },
@@ -218,10 +230,13 @@ class _DashboardViewState extends State<DashboardView> {
                 left : 16.w,
                 top : 5.h,
                 bottom : 5.h,
-                right : (i == 2) ? 16.w : 0,
+                right : (i == ((folderItemLength < 10) ? folderItemLength-1 : 9)) ? 16.w : 0,
               ),
               child: MyFolderWidget(
                 folder : folderItem[i],
+                folderEditContents: () => _dashboardFolderEdit(
+                  folderItem[i]
+                ),
                 folderOpenContents: (){
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -235,6 +250,25 @@ class _DashboardViewState extends State<DashboardView> {
             )
         ]
       ),
+    );
+  }
+
+  void _dashboardFolderEdit(Folder folder){
+    showModalBottomSheet(
+      context: context, 
+      builder: (context){
+        return MyBottomEditSheetWidget(
+          folder : folder,
+          bottomSheetOnDelete: (){
+            Provider.of<FolderProvider>(
+              context, 
+              listen: false
+            ).deleteFolder(folder.folderId);
+            Navigator.of(context).pop();
+          },
+          bottomSheetOnEdit: (){},
+        );
+      }
     );
   }
 }

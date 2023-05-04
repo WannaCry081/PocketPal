@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:google_fonts/google_fonts.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/const/font_style.dart";
 import "package:pocket_pal/widgets/pocket_pal_formfield.dart";
 
 
@@ -13,7 +13,8 @@ class MyDialogBoxWidget extends StatelessWidget {
   final String dialogBoxHintText;
   final String dialogBoxTitle;
   final String dialogBoxErrorMessage;
-  final void Function() dialogBoxOnTap;
+  final void Function() dialogBoxOnCancel;
+  final void Function() dialogBoxOnCreate;
   
   MyDialogBoxWidget({ 
     super.key,
@@ -21,62 +22,54 @@ class MyDialogBoxWidget extends StatelessWidget {
     required this.dialogBoxHintText,
     required this.controllerName,
     required this.dialogBoxTitle,
-    required this.dialogBoxOnTap,
+    required this.dialogBoxOnCreate,
+    required this.dialogBoxOnCancel,
   });
 
   @override
   Widget build(BuildContext context){
     return AlertDialog(
       backgroundColor: ColorPalette.white,
-      title: Text(
+      title: titleText(
         dialogBoxTitle,
-        style : GoogleFonts.poppins(
-          fontSize : 14.sp,
-          fontWeight: FontWeight.w500
-        )
+        titleWeight: FontWeight.w600,
+        titleColor : ColorPalette.crimsonRed
       ),
       content : Form(
         key : _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            PocketPalFormField(
-              formController: controllerName,
-              formHintText: dialogBoxHintText,
-              formValidator: (value){
-                if (value == null || value.isEmpty){
-                  return dialogBoxErrorMessage;
-                } else {
-                  return null;
-                }
-              },
-            ),
-          ],
+        child: PocketPalFormField(
+          formController: controllerName,
+          formHintText: dialogBoxHintText,
+          formValidator: (value){
+            if (value == null || value.isEmpty){
+              return dialogBoxErrorMessage;
+            } else {
+              return null;
+            }
+          },
         ),
       ),
       actions: [
         GestureDetector(
-          onTap : () => Navigator.of(context).pop(),
-          child: Text(
+          onTap : dialogBoxOnCancel,
+          child: bodyText(
             "Cancel",
-            style : GoogleFonts.montserrat(
-              fontWeight : FontWeight.w600
-            )
+            bodyWeight : FontWeight.w500,
+            bodySize : 14.sp 
           ),
         ),
         GestureDetector(
           onTap : (){
             if (_formKey.currentState!.validate()){
               _formKey.currentState!.save();
-              dialogBoxOnTap();
+              dialogBoxOnCreate();
             }
           },
-          child: Text(
+          child: bodyText(
             "Create", 
-            style : GoogleFonts.montserrat(
-              color : ColorPalette.crimsonRed,
-              fontWeight : FontWeight.w600
-            )
+            bodyColor : ColorPalette.crimsonRed,
+            bodyWeight : FontWeight.w500,
+            bodySize : 14.sp 
           ),
         )
       ],

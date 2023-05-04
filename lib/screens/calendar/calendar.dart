@@ -69,7 +69,14 @@ class _CalendarViewState extends State<CalendarView> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar : AppBar(
-        leading: const PocketPalMenuButton(),
+        leading: PocketPalMenuButton(),
+        title: Text(
+            "Calendar",
+            style: GoogleFonts.poppins(
+              fontSize : 18.sp,
+              color: ColorPalette.black,
+            ),
+          ),
       ),
       body: Padding(
         padding:  EdgeInsets.symmetric(

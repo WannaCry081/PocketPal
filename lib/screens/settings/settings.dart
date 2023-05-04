@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:pocket_pal/const/font_style.dart";
 import "package:pocket_pal/screens/auth/auth_builder.dart";
 import "package:pocket_pal/screens/settings/pages/change_display_name.dart";
 import "package:pocket_pal/screens/settings/pages/change_password.dart";
@@ -96,7 +97,9 @@ class SettingsView extends StatelessWidget {
                           onTap: (){
                             PocketPalDialogBox(
                               pocketPalDialogTitle: "Confirm Deletion",
-                              pocketPalDialogMessage: "Are you sure you want to delete your account?",
+                              pocketPalDialogContent: bodyText(
+                                "Are you sure you want to delete your account?",
+                              ),
                               pocketPalDialogOption1: "No",
                               pocketPalDialogOption2: "Yes",
                               pocketPalDialogOption1OnTap: (){

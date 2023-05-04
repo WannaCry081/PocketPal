@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:pocket_pal/widgets/pocket_pal_menu_button.dart";
 
 
 class NotificationsView extends StatelessWidget {
@@ -7,7 +8,9 @@ class NotificationsView extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: PocketPalMenuButton(),
+      ),
     );
   }
 }

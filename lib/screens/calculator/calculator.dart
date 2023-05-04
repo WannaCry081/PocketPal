@@ -11,6 +11,7 @@ import 'package:pocket_pal/screens/calculator/widgets/textfield_widget.dart';
 import 'package:pocket_pal/screens/envelope/widgets/glassbox_widget.dart';
 import 'package:pocket_pal/widgets/pocket_pal_button.dart';
 import 'package:pocket_pal/widgets/pocket_pal_formfield.dart';
+import 'package:pocket_pal/widgets/pocket_pal_menu_button.dart';
 
 class CalculatorView extends StatefulWidget {
   const CalculatorView({super.key});
@@ -76,12 +77,7 @@ class _CalculatorViewState extends State<CalculatorView> {
       backgroundColor: Color(0xFFFEFEFE),
       appBar: AppBar(
         backgroundColor: Color(0xFFFEFEFE),
-        leading: GestureDetector(
-          onTap: () {
-            ZoomDrawer.of(context)!.toggle();
-          },
-          child: const Icon(FeatherIcons.arrowLeft)
-        ),
+        leading: PocketPalMenuButton(),
       ),
 
       body: SafeArea(

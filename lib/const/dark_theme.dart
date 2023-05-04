@@ -6,6 +6,7 @@ ThemeData darkTheme = ThemeData(
   useMaterial3: true,
   colorSchemeSeed: ColorPalette.crimsonRed,
   brightness: Brightness.dark,
+  scaffoldBackgroundColor: ColorPalette.crimsonRed
 
   
 

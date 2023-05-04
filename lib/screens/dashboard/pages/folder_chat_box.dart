@@ -5,13 +5,12 @@ import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:image_picker/image_picker.dart";
-import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_sheet.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/services/storage_service.dart";
 import "package:pocket_pal/utils/chatbox_structure_util.dart";
-import "package:pocket_pal/utils/folder_structure_util.dart";
+import 'package:pocket_pal/utils/folder_util.dart';
 import "package:pocket_pal/widgets/pocket_pal_formfield.dart";
 
 
@@ -253,20 +252,7 @@ class _FolderChatBoxState extends State<FolderChatBox> {
   }
 
   void _showBottomSheet(ChatBox chatBox){
-    showModalBottomSheet(
-      context : context, 
-      builder :(context) {
-        return MyBottomEditSheetWidget(
-          removeFunction: (){
-            _db.deleteMessage(
-              widget.folder.folderId,
-              chatBox.messageId
-            );
-            Navigator.of(context).pop();
-          },
-        );
-      },
-    );
+   
     return;
   }
 

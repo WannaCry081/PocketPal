@@ -30,7 +30,7 @@ class MyFolderWidget extends StatelessWidget {
         height : 160.h + 20.w,
         decoration : BoxDecoration(
           borderRadius: BorderRadius.circular(30.r),
-          color : ColorPalette.crimsonRed[50]
+          color : ColorPalette.salmonPink[50]
         ),
         child : Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -44,10 +44,16 @@ class MyFolderWidget extends StatelessWidget {
     
             SizedBox( height : 8.h ), 
     
-            titleText(
-              folder.folderName,
-              titleWeight: FontWeight.w600,
-              titleSize : 14.sp
+            SizedBox(
+              width : 100.w,
+              child: Center(
+                child: titleText(
+                  folder.folderName,
+                  titleOverflow: TextOverflow.ellipsis,
+                  titleWeight: FontWeight.w600,
+                  titleSize : 14.sp,
+                ),
+              ),
             ),
     
             SizedBox( height : 2.h ), 

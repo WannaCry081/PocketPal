@@ -6,6 +6,13 @@ import "package:pocket_pal/utils/folder_structure_util.dart";
 
 class FolderProvider with ChangeNotifier {
 
+  String ? _orderBy;
+
+  set setOrderBy(String ? orderBy){
+    _orderBy = orderBy;
+    notifyListeners();
+  }
+
   String ? _groupCode;
   String get getGroupCode => _groupCode ?? "";
 
@@ -15,6 +22,7 @@ class FolderProvider with ChangeNotifier {
   Future<void> fetchFolder({ String ? code }) async {
     QuerySnapshot querySnapshot = await PocketPalFirestore()
       .getFolderSnapshot(
+        orderBy: _orderBy ,
         code : code
       );
 

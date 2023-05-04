@@ -4,6 +4,7 @@ import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:google_fonts/google_fonts.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/const/font_style.dart";
 import "package:pocket_pal/screens/dashboard/pages/folder_chat_box.dart";
 import "package:pocket_pal/services/database_service.dart";
 
@@ -48,12 +49,11 @@ class _FolderContentPageState extends State<FolderContentPage> {
 
     return Scaffold(
       appBar : AppBar(
-        title : Text(
-          widget.folder.folderName,
-          style : GoogleFonts.poppins(
-            fontSize : 16.sp
-          )
+        title : titleText(
+          "${widget.folder.folderName} Wall",
+          titleWeight : FontWeight.w600
         ),
+        
 
         actions: [
           IconButton(
@@ -184,20 +184,7 @@ class _FolderContentPageState extends State<FolderContentPage> {
   }
 
   void _dashboardEditEnvelope(Envelope envelope) {
-    showModalBottomSheet(
-      context: context, 
-      builder: (context){
-        return MyBottomEditSheetWidget(
-          removeFunction: (){
-            PocketPalDatabase().deleteEnvelope(
-              widget.folder.folderId,
-              envelope.envelopeId
-            );
-            Navigator.of(context).pop();
-          },
-        );
-      }
-    );
+   
     return;
   }
 }

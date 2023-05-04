@@ -1,91 +1,189 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:google_fonts/google_fonts.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
-
+import "package:flutter_svg/flutter_svg.dart";
+import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/const/font_style.dart";
+import "package:pocket_pal/utils/folder_structure_util.dart";
 
 
 class MyBottomEditSheetWidget extends StatelessWidget { 
-  
-  final void Function() ? shareFunction;
-  final void Function() ? renameFunction;
-  final void Function() ? detailsFunction;
-  final void Function() ? removeFunction;
+
+  final Folder folder;
+  final void Function() ? bottomSheetOnEdit;
+  final void Function() ? bottomSheetOnDelete;
 
   const MyBottomEditSheetWidget({ 
-    super.key,
-    this.shareFunction,
-    this.renameFunction,
-    this.detailsFunction,
-    this.removeFunction,
-  });
+    Key ? key,
+    required this.folder,
+    this.bottomSheetOnEdit,
+    this.bottomSheetOnDelete
+  }) : super(key : key);
 
   @override
   Widget build(BuildContext context){
     return Padding(
       padding : EdgeInsets.only(
-        top : 20.h,
-        right : 26.w,
-        left : 26.w,
+        top : 4.h,
+        right : 10.w,
+        left : 10.w,
         bottom : MediaQuery.of(context).viewInsets.bottom
       ),
-      child : Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [ 
-          _bottomEditBarItem(
-            title : "Share",
-            icon : FeatherIcons.userPlus,
-            function : shareFunction,
-          ),
-          _bottomEditBarItem(
-            title : "Rename",
-            icon : FeatherIcons.edit,
-            function : renameFunction
-          ),
-          _bottomEditBarItem(
-            title : "Details and activity",
-            icon : FeatherIcons.info,
-            function : detailsFunction
-          ),
-          _bottomEditBarItem(
-            title : "Remove",
-            icon : FeatherIcons.trash2,
-            function : removeFunction 
-          ),
+      child : Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 16.w,
+          vertical: 20.h
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [ 
+            _bottomSheetAppBar(context),
 
-          SizedBox (height : 10.h )
-        ],
+            SizedBox( height : 10.h), 
+            Divider(
+              color : ColorPalette.midnightBlue
+            ),
+            SizedBox( height : 16.h), 
+            _bottomSheetDetails(context),
+            SizedBox( height : 16.h), 
+            Divider(
+              color : ColorPalette.midnightBlue
+            ),
+            _bottomSheetItem(
+              context,
+              FeatherIcons.edit,
+              ColorPalette.black!,
+              "Rename",
+              bottomSheetOnEdit
+            ),
+            _bottomSheetItem(
+              context,
+              FeatherIcons.trash2,
+              ColorPalette.crimsonRed, 
+              "Delete",
+              bottomSheetOnDelete
+            ),
+          ],
+        ),
       ) 
     );
   }
+  
+  Widget _bottomSheetAppBar(BuildContext context){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children : [
+        titleText(
+          folder.folderName,
+          titleSize : 14.sp,
+          titleWeight: FontWeight.w600,
+        ),
 
-  Widget _bottomEditBarItem({icon, title, void Function() ? function}){
-    return Column(
-      children: [
         GestureDetector(
-          onTap : function,
-          child : Row(
-            crossAxisAlignment : CrossAxisAlignment.center,
-            children : [
-              Icon(
-                icon
-              ),
+          onTap : () => Navigator.of(context).pop(),
+          child : const Center(
+            child: Icon(
+              FeatherIcons.x
+            ),
+          )
+        )
+      ]
+    );
+  }
 
-              SizedBox( width : 16.w),
-
-              Text(
-                title,
-                style : GoogleFonts.montserrat(
-                  fontSize : 14.sp,
-                  fontWeight : FontWeight.w500
-                )
-              )
-            ]
+  Widget _bottomSheetDetails(BuildContext context){
+    return Row(
+      children: [
+        Expanded(
+          flex : 4,
+          child : SvgPicture.asset(
+            "assets/icon/Folder.svg",
           )
         ),
 
-        SizedBox( height : 14.h)
+        Flexible(
+          flex : 5,
+          child : Padding(
+            padding: EdgeInsets.only( left : 20.w),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children :[
+
+                titleText(
+                  "ID",
+                  titleColor : ColorPalette.grey,
+                  titleWeight : FontWeight.w600
+                ),
+                SizedBox(
+                  width : 128.w,
+                  child: bodyText(
+                    folder.folderId,
+                    bodySize : 12.sp 
+                  ),
+                ),
+
+                SizedBox(height : 10.h ),
+                titleText(
+                  "Date Created",
+                  titleColor : ColorPalette.grey,
+                  titleWeight : FontWeight.w600
+                ),
+                bodyText(
+                  "${folder.folderDate.month}/${folder.folderDate.day}/${folder.folderDate.year}",
+                  bodySize : 12.sp
+                ),
+
+                SizedBox(height : 10.h ),
+                titleText(
+                  "Number of Envelope",
+                  titleColor : ColorPalette.grey,
+                  titleWeight : FontWeight.w600
+                ),
+                bodyText(
+                  "${folder.folderNumberOfEnvelopes}",
+                  bodySize : 12.sp
+                ),
+              ]
+            ),
+          )
+        )
       ],
+    );
+  }
+
+  Widget _bottomSheetItem(
+    BuildContext context, 
+    IconData icon, 
+    Color colorChoice,
+    String text,
+    void Function() ? onTap
+  ){
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: 8.h,
+        horizontal: 16.w
+      ),
+      child: GestureDetector(
+        onTap : onTap,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children : [
+            Icon(
+              icon,
+              color : colorChoice
+            ),
+    
+            SizedBox( width : 14.w ),
+            bodyText(
+              text,
+              bodySize : 16.sp,
+              bodyColor : colorChoice
+            )
+          ]
+        ),
+      ),
     );
   }
 }

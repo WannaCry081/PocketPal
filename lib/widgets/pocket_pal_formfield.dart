@@ -16,6 +16,7 @@ class PocketPalFormField extends StatelessWidget {
   final bool formIsReadOnly;
 
   final Widget ? formSuffixIcon;
+  final Widget ? formPrefixIcon;
 
   final String ? Function(String?) ? formValidator;
   final void Function() ? formOnTap;
@@ -25,6 +26,7 @@ class PocketPalFormField extends StatelessWidget {
   const PocketPalFormField({
     super.key,
     this.formController,
+    this.formPrefixIcon,
     this.formMaxLines = 1,
     this.formKeyboardType,
     required this.formHintText,
@@ -59,6 +61,7 @@ class PocketPalFormField extends StatelessWidget {
         ),
 
         suffixIcon: formSuffixIcon,
+        prefixIcon: formPrefixIcon
         
       ),
 

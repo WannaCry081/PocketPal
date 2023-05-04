@@ -14,11 +14,13 @@ class FolderGridPage extends StatefulWidget {
 
   final TextEditingController folderNameController;
   final void Function() folderAddOnTap;
+  final void Function(Folder) folderEditOnHold;
 
   const FolderGridPage({ 
     Key ? key,
     required this.folderNameController,
     required this.folderAddOnTap,
+    required this.folderEditOnHold
   }) : super(key : key);
 
   @override
@@ -47,7 +49,8 @@ class _FolderGridPageState extends State<FolderGridPage> {
     return Scaffold(
       appBar : AppBar(
         title : titleText(
-          "My Wall",
+          "Personal Wall",
+          titleWeight : FontWeight.w600
         )
       ),
 
@@ -64,6 +67,7 @@ class _FolderGridPageState extends State<FolderGridPage> {
       body : GridView.builder(
         itemCount : folderItemLength,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          childAspectRatio: 1.6/2,
           crossAxisCount: 2,
         ),
         itemBuilder : (context, index){
@@ -78,6 +82,9 @@ class _FolderGridPageState extends State<FolderGridPage> {
             ),
             child: MyFolderWidget(
               folder: folderItem[index],
+              folderEditContents: () => widget.folderEditOnHold(
+                folderItem[index]
+              ),
               folderOpenContents: (){
                 Navigator.of(context).push(
                   MaterialPageRoute(

@@ -2,12 +2,13 @@ import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/const/font_style.dart";
 
 
 class PocketPalDialogBox extends StatelessWidget {
 
   final String pocketPalDialogTitle;
-  final String pocketPalDialogMessage;
+  final Widget ? pocketPalDialogContent;
   final String pocketPalDialogOption1;
   final String pocketPalDialogOption2;
 
@@ -17,7 +18,7 @@ class PocketPalDialogBox extends StatelessWidget {
   const PocketPalDialogBox({ 
     Key ? key,
     required this.pocketPalDialogTitle, 
-    required this.pocketPalDialogMessage, 
+    required this.pocketPalDialogContent, 
     required this.pocketPalDialogOption1, 
     required this.pocketPalDialogOption2, 
 
@@ -28,40 +29,29 @@ class PocketPalDialogBox extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return AlertDialog(
-      title : Text(
+      title : titleText(
         pocketPalDialogTitle,
-        style : GoogleFonts.poppins(
-          fontWeight: FontWeight.w600,
-          color : ColorPalette.crimsonRed
-        )
+        titleWeight: FontWeight.w600,
+        titleColor : ColorPalette.crimsonRed
       ),
-      content : Text(
-        pocketPalDialogMessage,
-        style : GoogleFonts.montserrat(
-          fontSize: 14.sp
-        )
-      ),
+      content : pocketPalDialogContent,
       actions : [
         GestureDetector(
           onTap : pocketPalDialogOption1OnTap,
-          child : Text(
+          child : bodyText(
             pocketPalDialogOption1,
-            style : GoogleFonts.poppins(
-              fontWeight : FontWeight.w500,
-              fontSize : 14.sp
-            )
+            bodyWeight : FontWeight.w500,
+            bodySize : 14.sp
           )
         ),
 
         GestureDetector(
           onTap : pocketPalDialogOption2OnTap, 
-          child : Text(
+          child : bodyText(
             pocketPalDialogOption2,
-            style : GoogleFonts.poppins(
-              color : ColorPalette.crimsonRed,
-              fontWeight : FontWeight.w500,
-              fontSize : 14.sp
-            )
+            bodyColor : ColorPalette.crimsonRed,
+            bodyWeight : FontWeight.w500,
+            bodySize : 14.sp
           )
         )
       ]

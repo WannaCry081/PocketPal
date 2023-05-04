@@ -5,7 +5,6 @@ class Folder {
   late DateTime folderDate;
 
   late int folderNumberOfMembers;
-  late int folderNumberOfFolder;
   late int folderNumberOfEnvelopes;
 
   bool folderIsShared;
@@ -19,7 +18,6 @@ class Folder {
   
     folderNumberOfEnvelopes = 0;
     folderNumberOfMembers = 0;
-    folderNumberOfFolder = 0; 
   }
 
   Map<String, dynamic> toMap(){
@@ -28,7 +26,6 @@ class Folder {
       "folderName" : folderName,
       "folderDate" : folderDate,
       "folderNumberOfMembers" : folderNumberOfMembers,
-      "folderNumberOfFolder" : folderNumberOfFolder,
       "folderNumberOfEnvelopes" : folderNumberOfEnvelopes,
       "folderIsShared" : folderIsShared,
     };

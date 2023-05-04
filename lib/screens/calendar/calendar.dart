@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
+import 'package:pocket_pal/widgets/pocket_pal_menu_button.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 
@@ -31,12 +32,7 @@ class _CalendarViewState extends State<CalendarView> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar : AppBar(
-        leading: GestureDetector(
-          onTap: () {
-          ZoomDrawer.of(context)!.toggle();
-        },
-          child: const Icon(FeatherIcons.arrowLeft)
-        ),
+        leading: PocketPalMenuButton(),
         title: Text(
             "Calendar",
             style: GoogleFonts.poppins(

@@ -10,8 +10,10 @@ class PocketPalFirestore {
   final _userUid = PocketPalAuthentication().getUserUID;
 
   // Folders ======================================================
-  Future<QuerySnapshot> getFolderSnapshot({String ? code}) async {
-    final collectionSnapshot = _db.collection(code ??_userUid);
+  Future<QuerySnapshot> getFolderSnapshot({String ? orderBy, String ? code}) async {
+    final collectionSnapshot = _db.collection(code ??_userUid).orderBy(
+      orderBy ?? "folderDate", descending: true
+    );
     return await collectionSnapshot.get();
   } 
 

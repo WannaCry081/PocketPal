@@ -236,7 +236,7 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
                                           builder: (context) {
                                             return PocketPalDialogBox(
                                               pocketPalDialogTitle: "Confirm Deletion",
-                                              pocketPalDialogMessage: "Are you sure you want to delete $envelopeNoteName?",
+                                              pocketPalDialogContent: Text("Are you sure you want to delete $envelopeNoteName?"),
                                               pocketPalDialogOption1: "Yes",
                                               pocketPalDialogOption2: "No",
                                               pocketPalDialogOption1OnTap: () => Navigator.of(context).pop(),

@@ -159,12 +159,22 @@ class PocketPalDatabase {
     return;
   }
    
+
+//===========================================================================
   Future<void> createEnvelopeTransaction(
     String docName,
     String envelopeName,
-    Map<String, dynamic> data) async { 
-    final collection = _db.collection(_userUid).doc(
-      docName).collection("$docName+Envelope").doc(envelopeName);
+    Map<String, dynamic> data,
+    {String ? orderBy, String ? code}
+    ) async { 
+
+    final collection = _db
+        .collection(code ??_userUid)
+        .doc("${code ?? _userUid}+Wall")
+        .collection(code ?? _userUid)
+        .doc(docName)
+        .collection("$docName+Envelope")
+        .doc(envelopeName);
 
     collection.set({
         "envelopeTransaction" : FieldValue.arrayUnion([data])
@@ -177,9 +187,16 @@ class PocketPalDatabase {
    Future<void> createEnvelopeNotes(
     String docName, 
     String envelopeName,
-    Map<String, dynamic> data) async {  
-    final collection = _db.collection(_userUid).doc(
-      docName).collection("$docName+Envelope").doc(envelopeName);
+    Map<String, dynamic> data, 
+    {String ? orderBy, String ? code}
+    ) async {  
+    final collection = _db
+      .collection(code ??_userUid)
+        .doc("${code ?? _userUid}+Wall")
+        .collection(code ?? _userUid)
+        .doc(docName)
+        .collection("$docName+Envelope")
+        .doc(envelopeName);
 
      collection.set({
         "envelopeNotes" : FieldValue.arrayUnion([data])
@@ -190,22 +207,16 @@ class PocketPalDatabase {
     return;
   }
 
-  Stream<List<Envelope>> getEnvelope(String docName){
-    final collection = _db.collection(_userUid).doc(docName).collection("$docName+Envelope");
-
-    return collection.snapshots().map(
-      (snapshot) => snapshot.docs.map(
-        (doc) => Envelope.fromMap(doc.data())
-      ).toList()
-    );
-  }
-
+  
   Stream<Map<String, dynamic>> getEnvelopeTransactions(
       String docName, 
       String envelopeName,
-  ) {
-      final documentRef = FirebaseFirestore.instance
-        .collection(_userUid)
+      {String ? orderBy, String ? code}
+    ){
+      final documentRef = _db
+        .collection(code ??_userUid)
+        .doc("${code ?? _userUid}+Wall")
+        .collection(code ?? _userUid)
         .doc(docName)
         .collection("$docName+Envelope")
         .doc(envelopeName);
@@ -280,9 +291,12 @@ class PocketPalDatabase {
   Stream<Map<String, dynamic>> getEnvelopeNotes(
       String docName, 
       String envelopeName,
+      {String ? orderBy, String ? code}
     ){
       final documentRef = FirebaseFirestore.instance
-        .collection(_userUid)
+        .collection(code ??_userUid)
+        .doc("${code ?? _userUid}+Wall")
+        .collection(code ?? _userUid)
         .doc(docName)
         .collection("$docName+Envelope")
         .doc(envelopeName);
@@ -309,11 +323,18 @@ class PocketPalDatabase {
   Future<void> deleteEnvelopeTransaction(
       String docName,
       String envelopeName,
-      int index) async { 
-    final collection = _db.collection(_userUid)
-      .doc(docName)
-      .collection("$docName+Envelope")
-      .doc(envelopeName);
+      int index,
+      {String ? orderBy, String ? code}
+    ) async { 
+
+    final collection = _db
+        .collection(code ??_userUid)
+        .doc("${code ?? _userUid}+Wall")
+        .collection(code ?? _userUid)
+        .doc(docName)
+        .collection("$docName+Envelope")
+        .doc(envelopeName);
+
 
     final snapshot = await collection.get();
     if (!snapshot.exists) {
@@ -336,11 +357,17 @@ class PocketPalDatabase {
   Future<void> deleteEnvelopeNote(
       String docName,
       String envelopeName,
-      int index) async { 
-    final collection = _db.collection(_userUid)
-      .doc(docName)
-      .collection("$docName+Envelope")
-      .doc(envelopeName);
+      int index, 
+      {String ? orderBy, String ? code}
+    ) async { 
+
+    final collection = _db
+        .collection(code ??_userUid)
+        .doc("${code ?? _userUid}+Wall")
+        .collection(code ?? _userUid)
+        .doc(docName)
+        .collection("$docName+Envelope")
+        .doc(envelopeName);
 
     final snapshot = await collection.get();
     if (!snapshot.exists) {
@@ -364,11 +391,15 @@ class PocketPalDatabase {
       String docName,
       String envelopeName,
       Map<String,dynamic> newNote,
-      int index
+      int index,
+       {String ? orderBy, String ? code}
     ) async { 
       final userUid = PocketPalAuthentication().getUserUID;
 
-      final collection = _db.collection(userUid)
+      final collection = _db
+        .collection(code ??_userUid)
+        .doc("${code ?? _userUid}+Wall")
+        .collection(code ?? _userUid)
         .doc(docName)
         .collection("$docName+Envelope")
         .doc(envelopeName);

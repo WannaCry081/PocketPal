@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
+import 'package:pocket_pal/const/font_style.dart';
 import 'package:pocket_pal/services/authentication_service.dart';
 import 'package:pocket_pal/widgets/pocket_pal_button.dart';
 import 'package:pocket_pal/widgets/pocket_pal_formfield.dart';
@@ -28,7 +29,6 @@ class _ChangeDisplayNameViewState extends State<ChangeDisplayNameView> {
     return;
   }
 
-
   @override
   Widget build(BuildContext context) {
     
@@ -38,12 +38,9 @@ class _ChangeDisplayNameViewState extends State<ChangeDisplayNameView> {
 
     return Scaffold(
       appBar : AppBar(
-        title: Text(
+        title: titleText(
           "Change Display Name",
-            style: GoogleFonts.poppins(
-              fontSize : 18.sp,
-              color: ColorPalette.black,
-            ),
+          titleSize: 18.sp,
           ),
       ),
       body: SafeArea(
@@ -112,14 +109,13 @@ class _ChangeDisplayNameViewState extends State<ChangeDisplayNameView> {
                      buttonHeight: 50.h, 
                      buttonColor: ColorPalette.crimsonRed, 
                      buttonBorderRadius: 10, 
-                     buttonChild: Text(
-                        "Save Changes",
-                      style : GoogleFonts.poppins(
-                        fontSize : 16.sp,
-                        fontWeight : FontWeight.w700,
-                        color : ColorPalette.white
+                     buttonChild: bodyText(
+                        "Save changes",
+                        bodySize : 16.sp,
+                        bodyWeight : FontWeight.w600,
+                        bodyColor : ColorPalette.white
                       )
-                    ),),
+                     ),
                 ],
               ) 
             )

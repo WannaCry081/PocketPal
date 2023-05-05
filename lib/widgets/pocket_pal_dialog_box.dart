@@ -41,7 +41,7 @@ class PocketPalDialogBox extends StatelessWidget {
           child : bodyText(
             pocketPalDialogOption1,
             bodyWeight : FontWeight.w500,
-            bodySize : 14.sp
+            bodySize : 16.sp,
           )
         ),
 
@@ -51,7 +51,7 @@ class PocketPalDialogBox extends StatelessWidget {
             pocketPalDialogOption2,
             bodyColor : ColorPalette.crimsonRed,
             bodyWeight : FontWeight.w500,
-            bodySize : 14.sp
+            bodySize : 16.sp
           )
         )
       ]

@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/const/font_style.dart";
 import "package:pocket_pal/screens/auth/auth_builder.dart";
 import "package:pocket_pal/screens/settings/pages/change_display_name.dart";
@@ -15,14 +14,16 @@ import "package:pocket_pal/providers/settings_provider.dart";
 import "package:pocket_pal/const/color_palette.dart";
 
 import "package:pocket_pal/widgets/pocket_pal_menu_button.dart";
-import "package:pocket_pal/screens/settings/widgets/container_widget.dart";
-import "package:pocket_pal/screens/settings/widgets/settings_items_widget.dart";
-import "package:pocket_pal/screens/settings/widgets/settings_header_widget.dart";
 
 
-class SettingsView extends StatelessWidget {
+class SettingsView extends StatefulWidget {
   const SettingsView({ super.key });
 
+  @override
+  State<SettingsView> createState() => _SettingsViewState();
+}
+
+class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context){
 
@@ -35,17 +36,13 @@ class SettingsView extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Color(0xFFF9F8FD),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: const PocketPalMenuButton(),
-        title:  Text(
+        title:  titleText(
           "Settings",
-           style: GoogleFonts.poppins(
-              fontSize : 18.sp,
-              color: ColorPalette.black,
-          ),
+          titleSize: 18.sp,
         )
       ),
       body: SafeArea(
@@ -54,7 +51,30 @@ class SettingsView extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox( height: screenHeight * 0.05),
-                SettingsContainerWidget(
+                Container(height: 500, 
+                    width: screenWidth - (screenWidth * 0.10),
+                    padding: EdgeInsets.only(
+                      top : 10.h,
+                      left: 14.w,
+                      right: 14.w
+                    ),
+                    //margin: const EdgeInsets.only (top: 45.0),
+                    decoration: BoxDecoration(
+                      color: ColorPalette.white,
+                      border: Border.all(
+                        color: ColorPalette.lightGrey!,
+                        width: 0.5
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: const [
+                        BoxShadow(
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                            blurRadius: 4,
+                            color: Color.fromRGBO(0, 0, 0, 0.25),
+                        )
+                      ]
+                    ),
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                       vertical: 20.h, 
@@ -62,13 +82,11 @@ class SettingsView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SettingsHeaderWidget(
-                          headerName: "PROFILE"
-                        ),
-                        SettingsItemsWidget(
-                          prefixIcon: FeatherIcons.user,
-                          itemName: "Change display name",
-                          onTap: (){
+                        settingsHeader("PROFILE"),
+                        settingsItem(
+                          FeatherIcons.user, 
+                        "Change display name", 
+                        (){
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder : (context) => const ChangeDisplayNameView()
@@ -77,13 +95,11 @@ class SettingsView extends StatelessWidget {
                           }
                         ),
                         SizedBox( height: screenHeight * 0.035),
-                        const SettingsHeaderWidget(
-                          headerName: "ACCOUNTS"
-                        ),
-                        SettingsItemsWidget(
-                          prefixIcon: FeatherIcons.lock,
-                          itemName: "Change password",
-                          onTap: (){
+                        settingsHeader("ACCOUNTS"),
+                        settingsItem(
+                          FeatherIcons.lock, 
+                          "Change password", 
+                          (){
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder : (context) => const ChangePasswordView()
@@ -91,14 +107,18 @@ class SettingsView extends StatelessWidget {
                             );
                           }
                         ),
-                        SettingsItemsWidget(
-                          prefixIcon: FeatherIcons.trash2,
-                          itemName: "Delete Account",
-                          onTap: (){
-                            PocketPalDialogBox(
+                        settingsItem(
+                          FeatherIcons.trash2, 
+                          "Delete account", 
+                          (){
+                            showDialog(
+                              context: context, 
+                              builder: (context){
+                                return PocketPalDialogBox(
                               pocketPalDialogTitle: "Confirm Deletion",
                               pocketPalDialogContent: bodyText(
                                 "Are you sure you want to delete your account?",
+                                bodySize: 15.sp
                               ),
                               pocketPalDialogOption1: "No",
                               pocketPalDialogOption2: "Yes",
@@ -115,52 +135,23 @@ class SettingsView extends StatelessWidget {
                                 Navigator.of(context).pop();
                               },
                             );
+                          });
                           }
                         ),
                         SizedBox( height: screenHeight * 0.035),
-                        const SettingsHeaderWidget(
-                          headerName: "APP SETTINGS"
-                        ),
-                        Row(
-                          children:[
-                            const Icon(FeatherIcons.moon,
-                              size: 26),
-                            SizedBox( width: 15.w ),
-                            Text(
-                              "Dark Mode",
-                              style: GoogleFonts.poppins(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w500
-                              )
-                            ),
-                            const Spacer(),
-                            Switch(
-                              value: wSettings.getIsLightMode,
-                              activeColor: ColorPalette.crimsonRed,
-                              onChanged: rSettings.setIsLightMode
-                            )
-                          ]
-                        ), 
-                        Row(
-                          children:[
-                            const Icon(FeatherIcons.bell,
-                              size: 26),
-                            SizedBox( width: 15.w ),
-                            Text(
-                              "Push Notifications",
-                              style: GoogleFonts.poppins(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w500
-                              )
-                            ),
-                            const Spacer(),
-                            Switch(
-                              value: true,
-                              activeColor: ColorPalette.crimsonRed,
-                              onChanged: (value) => false,
-                            )
-                          ]
-                        ), 
+                        
+                        settingsHeader("APP SETTINGS"),
+                        settingsItemSwitch(
+                          FeatherIcons.moon, 
+                          "Dark Mode", 
+                          wSettings.getIsLightMode, 
+                          rSettings.setIsLightMode),
+                        settingsItemSwitch(
+                          FeatherIcons.bell, 
+                          "Push notifications", 
+                          false, 
+                          rSettings.setIsLightMode //temp
+                          ),
                       ],
                     ),
                   )
@@ -172,4 +163,61 @@ class SettingsView extends StatelessWidget {
       )
     );
   }
+
+  Widget settingsHeader (headerName) => 
+  Column(
+    children: [
+      titleText(
+        headerName,
+        titleSize: 16.sp,
+        titleColor: ColorPalette.grey,
+        titleWeight: FontWeight.w500
+      ),
+    ],
+  );
+
+  Widget settingsItem (prefixIcon, itemName, onTap) =>
+  Padding(
+      padding: EdgeInsets.symmetric(vertical: 10.h),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Row(
+          children:[
+            Icon(prefixIcon,
+              size: 26),
+            SizedBox( width: 15.w),
+            titleText(
+              itemName,
+              titleSize: 16.sp,
+              titleWeight: FontWeight.w500
+            ),
+            const Spacer(),
+            Icon(Icons.arrow_forward_ios_rounded,
+              size: 24,
+              color: ColorPalette.grey)
+          ]
+        ),
+      ),
+  );
+
+  Widget settingsItemSwitch (prefixIcon, itemName, value, onChanged) =>
+  Row(
+    children:[
+      Icon(
+        prefixIcon,
+        size: 26),
+      SizedBox( width: 15.w ),
+      titleText(
+        itemName,
+        titleSize: 16.sp,
+        titleWeight: FontWeight.w500
+      ),
+      const Spacer(),
+      Switch(
+        value: value,
+        activeColor: ColorPalette.crimsonRed,
+        onChanged: onChanged,
+      )
+    ]
+  );
 }

@@ -3,6 +3,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
+import 'package:pocket_pal/const/font_style.dart';
 import 'package:pocket_pal/screens/auth/auth_builder.dart';
 import 'package:pocket_pal/services/authentication_service.dart';
 // import 'package:pocket_pal/screens/auth/widgets/password_bottom_sheet_widget.dart';
@@ -151,7 +152,6 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                             }
                           );
                         } catch (e){
-
                         }
                       }
                     },
@@ -159,17 +159,15 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                      buttonHeight: 50.h, 
                      buttonColor: ColorPalette.crimsonRed, 
                      buttonBorderRadius: 10, 
-                     buttonChild: Text(
-                        "Save Changes",
-                        style : GoogleFonts.poppins(
-                          fontSize : 16.sp,
-                          fontWeight : FontWeight.w700,
-                          color : ColorPalette.white
-                        )
-                      ),),
+                     buttonChild: bodyText(
+                        "Save changes",
+                        bodySize : 16.sp,
+                        bodyWeight : FontWeight.w600,
+                        bodyColor : ColorPalette.white
+                      )
+                    ),
 
                   SizedBox (height: screenHeight * 0.04),
-
                 ],
               )
             )

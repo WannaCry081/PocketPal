@@ -129,7 +129,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                       ),
                     ]),
                 ),
-                  
+                SizedBox( height: 5.h),  
                 PocketPalFormField(
                   formHintText: "Amount",
                   formKeyboardType: TextInputType.number,

@@ -164,7 +164,8 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
                 ),
                builder: (context, snapshot) {
               if (!snapshot.hasData || snapshot.data == null) {
-                return const CircularProgressIndicator();
+                return const Center(
+                  child: CircularProgressIndicator());
               }
               final notes = snapshot.data!['notesData'];
               return Expanded(

@@ -10,12 +10,9 @@ import "package:google_fonts/google_fonts.dart";
 import "package:image_picker/image_picker.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
-import "package:pocket_pal/screens/profile/widgets/overview_widget.dart";
-import "package:pocket_pal/screens/profile/widgets/profile_widget.dart";
+import "package:pocket_pal/const/font_style.dart";
 import "package:pocket_pal/services/authentication_service.dart";
-import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/services/storage_service.dart";
-import 'package:pocket_pal/utils/folder_util.dart';
 import "package:pocket_pal/widgets/pocket_pal_menu_button.dart";
 
 
@@ -47,12 +44,9 @@ class _ProfileViewState extends State<ProfileView> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: const PocketPalMenuButton(),
-        title:  Text(
+        title:  titleText(
           "Profile",
-           style: GoogleFonts.poppins(
-              fontSize : 18.sp,
-              color: ColorPalette.black,
-          ),
+          titleSize: 18.sp,
         )
       ),
       body: Stack(
@@ -86,16 +80,12 @@ class _ProfileViewState extends State<ProfileView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    MyProfileWidget(
-                      profilePicture: auth.getUserPhotoUrl, 
-                      profileName: auth.getUserDisplayName, 
-                      profileEmail: auth.getUserEmail, 
+                    myProfileContent(
+                      auth.getUserPhotoUrl,
+                      auth.getUserDisplayName, 
+                      auth.getUserEmail,
+                      0, 0, 0
                     ),
-                    SizedBox(height: screenHeight * 0.03),
-                     MyProfileOverview(
-                      folderNumber: 0, 
-                      envelopeNumber: 0, 
-                      groupNumber: 0)
                   ]
                 )
             ),
@@ -110,13 +100,11 @@ class _ProfileViewState extends State<ProfileView> {
                     FeatherIcons.edit3,
                     color: ColorPalette.crimsonRed ),
                   SizedBox (width: 10.w),
-                  Text(
+                  titleText(
                     "Edit profile avatar",
-                    style: GoogleFonts.poppins(
-                      fontSize: 16.sp,
-                      color: ColorPalette.crimsonRed,
-                      fontWeight: FontWeight.w600
-                    )
+                    titleColor: ColorPalette.crimsonRed,
+                    titleSize: 16.sp,
+                    titleWeight: FontWeight.w600,
                   ),
                 ],
               ),
@@ -126,6 +114,98 @@ class _ProfileViewState extends State<ProfileView> {
       )
     );
   }
+
+  Widget myProfileContent (
+    profilePicture, profileName, profileEmail,
+    folderNumber, envelopeNumber, groupNumber
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        CircleAvatar(
+          radius: 55,
+          backgroundColor: ColorPalette.midnightBlue,
+          backgroundImage: NetworkImage(profilePicture),
+        ),
+        SizedBox(height: 20.h),
+        RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: "$profileName\n",
+                style: GoogleFonts.poppins(
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w600,
+                  color: ColorPalette.black,
+                ),
+              ),
+              TextSpan(text: profileEmail)
+            ],
+            style: GoogleFonts.poppins(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
+              color: ColorPalette.grey,
+              height: 1.5
+            )
+          ),
+        ),
+        SizedBox(height: 10.h,),
+        SizedBox(
+        height: 60.h,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children:[
+            overviewCountWidget( folderNumber, "folders"),
+            VerticalDivider(
+              thickness: 2.5,
+              color: ColorPalette.lightGrey,
+              indent: 5,
+              endIndent: 5,
+              width: 45,
+            ),
+            overviewCountWidget(envelopeNumber,  "envelopes",),
+            VerticalDivider(
+              thickness: 2.5,
+              color: ColorPalette.lightGrey,
+              indent: 5,
+              endIndent: 5,
+              width: 45,
+            ),
+            overviewCountWidget( envelopeNumber, "groups",),
+          ]
+        ),
+      )
+    ],
+  );
+
+  }
+
+  Widget overviewCountWidget (count, countTitle) =>
+    RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text: "$count\n",
+              style: GoogleFonts.poppins(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w600,
+              color: ColorPalette.crimsonRed,
+              )
+            ),
+            TextSpan(
+              text: countTitle,
+              style: GoogleFonts.poppins(
+                fontSize: 15.sp,
+                fontWeight: FontWeight.w500,
+                color: ColorPalette.grey
+              )
+            )
+          ]
+        ),
+      );
+  
 
   Future<void> _profilePageUpdateProfilePicture() async {
     final newPicture = await ImagePicker().pickImage(
@@ -146,12 +226,6 @@ class _ProfileViewState extends State<ProfileView> {
     }      
     return;
   }
-  
-
-
-
-
-
 }
 
  

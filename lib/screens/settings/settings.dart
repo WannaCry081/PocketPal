@@ -6,6 +6,7 @@ import "package:pocket_pal/screens/auth/auth_builder.dart";
 import "package:pocket_pal/screens/settings/pages/change_display_name.dart";
 import "package:pocket_pal/screens/settings/pages/change_password.dart";
 import "package:pocket_pal/services/authentication_service.dart";
+import "package:pocket_pal/widgets/pocket_pal_appbar.dart";
 import "package:pocket_pal/widgets/pocket_pal_dialog_box.dart";
 import "package:provider/provider.dart";
 
@@ -13,7 +14,6 @@ import "package:pocket_pal/providers/settings_provider.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
 
-import "package:pocket_pal/widgets/pocket_pal_menu_button.dart";
 
 
 class SettingsView extends StatefulWidget {
@@ -36,20 +36,15 @@ class _SettingsViewState extends State<SettingsView> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: const PocketPalMenuButton(),
-        title:  titleText(
-          "Settings",
-          titleSize: 18.sp,
-        )
-      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
             child: Column(
               children: [
+                const PocketPalAppBar(
+                  pocketPalTitle: "Settings",
+                ),
+
                 SizedBox( height: screenHeight * 0.05),
                 Container(height: 500, 
                     width: screenWidth - (screenWidth * 0.10),
@@ -122,13 +117,11 @@ class _SettingsViewState extends State<SettingsView> {
                                 ),
                                 pocketPalDialogOption1: "No",
                                 pocketPalDialogOption2: "Yes",
-                                pocketPalDialogOption1OnTap: (){
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder : (context) => const AuthViewBuilder() 
-                                    )
-                                  );
-                                }
+                                pocketPalDialogOption1OnTap: () => Navigator.of(context).pop(),
+                                pocketPalDialogOption2OnTap : () {
+                                  auth.authenticationDeleteAccount();
+                                  Navigator.of(context).pop();
+                                },
                               );
                             });
                           }

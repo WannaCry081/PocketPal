@@ -1,4 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:firebase_auth/firebase_auth.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 import "package:pocket_pal/utils/chatbox_structure_util.dart";
 import 'package:pocket_pal/utils/envelope_util.dart';
@@ -7,7 +8,8 @@ import 'package:pocket_pal/utils/envelope_util.dart';
 class PocketPalFirestore {
 
   final _db = FirebaseFirestore.instance;
-  final _userUid = PocketPalAuthentication().getUserUID;
+  final String _userUid = PocketPalAuthentication().getUserUID;
+  final String _email = PocketPalAuthentication().getUserEmail;
 
   // Folders ======================================================
   Future<QuerySnapshot> getFolderSnapshot({String ? orderBy, String ? code}) async {
@@ -109,6 +111,30 @@ class PocketPalFirestore {
     final collection = _db.collection(code ?? _userUid).doc("${code ?? _userUid}+Wall")
       .collection(code ?? _userUid).doc(docName).collection("$docName+ChatBox").doc(docId);
     await collection.delete();
+    return;
+  }
+
+  // User ======================================================
+  Future<DocumentSnapshot> getUserCredential() async {
+    final collectionSnapshot = _db.collection(_userUid).doc("$_userUid+$_email");
+    return await collectionSnapshot.get();
+  } 
+
+  Future<void> addUserCredential(Map<String, dynamic> data) async {
+    final collection = _db.collection(_userUid).doc("$_userUid+$_email");
+    await collection.set(data);
+    return;
+  }
+
+  Future<void> updateUserCredential(Map<String, dynamic> data) async {
+    final collection = _db.collection(_userUid).doc("$_userUid+$_email");
+    await collection.update(data);
+    return;
+  }
+
+  Future<void> createGroupCollection(String code, Map<String, dynamic> data) async{
+    final collection = _db.collection(code).doc("$code+Information");
+    await collection.set(data);
     return;
   }
   

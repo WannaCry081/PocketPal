@@ -13,7 +13,7 @@ import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/const/font_style.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 import "package:pocket_pal/services/storage_service.dart";
-import "package:pocket_pal/widgets/pocket_pal_menu_button.dart";
+import "package:pocket_pal/widgets/pocket_pal_appbar.dart";
 
 
 class ProfileView extends StatefulWidget {
@@ -39,16 +39,6 @@ class _ProfileViewState extends State<ProfileView> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: Color(0xFFF9F8FD),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: const PocketPalMenuButton(),
-        title:  titleText(
-          "Profile",
-          titleSize: 18.sp,
-        )
-      ),
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -60,7 +50,7 @@ class _ProfileViewState extends State<ProfileView> {
               "assets/svg/profile_page_bg.svg",
               fit: BoxFit.fitHeight),
           ),
-
+      
           Align(
             child: Container(
                 width: screenWidth - 80,
@@ -109,7 +99,16 @@ class _ProfileViewState extends State<ProfileView> {
                 ],
               ),
             ),
-          )
+          ),
+
+          Positioned(
+            top : 24,
+            child: SizedBox(
+              width : MediaQuery.of(context).size.width,
+              height : 50.h,
+              child: PocketPalAppBar()
+            )
+          ),
         ],
       )
     );

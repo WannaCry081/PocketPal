@@ -8,8 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/screens/calendar/widgets/event_tile.dart';
 import 'package:pocket_pal/utils/event_structure_util.dart';
+import 'package:pocket_pal/widgets/pocket_pal_appbar.dart';
 import 'package:pocket_pal/widgets/pocket_pal_formfield.dart';
-import 'package:pocket_pal/widgets/pocket_pal_menu_button.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -67,22 +67,13 @@ class _CalendarViewState extends State<CalendarView> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar : AppBar(
-        leading: PocketPalMenuButton(),
-        title: Text(
-            "Calendar",
-            style: GoogleFonts.poppins(
-              fontSize : 18.sp,
-              color: ColorPalette.black,
-            ),
-          ),
-      ),
-      body: Padding(
-        padding:  EdgeInsets.symmetric(
-          horizontal: 8.w,),
+      body: SafeArea(
         child: Column(
           children: [
+            const PocketPalAppBar(
+              pocketPalTitle: "Calendar",
+            ),
+      
             Container(
               height: screenHeight * 0.45,
               child: TableCalendar(
@@ -159,7 +150,7 @@ class _CalendarViewState extends State<CalendarView> {
                 
               ),
             ),
-
+      
             Expanded(
               child: _buildEventList()
             )

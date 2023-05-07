@@ -45,6 +45,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
     super.initState();
     isExpenseClicked = true;
   }  
+  
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;

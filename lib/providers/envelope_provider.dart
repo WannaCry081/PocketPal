@@ -7,14 +7,19 @@ import "package:pocket_pal/utils/envelope_util.dart";
 class EnvelopeProvider with ChangeNotifier {
 
   String ? _orderBy;
-
-  set setOrderBy(String ? orderBy){
+  String get getOrderBy => _orderBy ?? "envelopeDate";
+  set setOrderBy(String orderBy){
     _orderBy = orderBy;
     notifyListeners();
   }
 
   String ? _groupCode;
   String get getGroupCode => _groupCode ?? "";
+  set setGroupCode(String value){
+    _groupCode = value;
+    notifyListeners();
+    return;
+  }
 
   List<Envelope> _envelopeList = [];
   List<Envelope> get getEnvelopeList => _envelopeList;
@@ -23,7 +28,7 @@ class EnvelopeProvider with ChangeNotifier {
     QuerySnapshot querySnapshot = await PocketPalFirestore()
       .getEnvelopeSnapshot(
         docName,
-        orderBy: _orderBy ,
+        orderBy: _orderBy ?? "envelopeDate",
         code : code
       );
 

@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:pocket_pal/providers/envelope_provider.dart";
-import "package:pocket_pal/screens/auth/pages/error_page.dart";
+import "package:pocket_pal/providers/user_provider.dart";
 import "package:pocket_pal/screens/auth/pages/loading_dart.dart";
 import "package:pocket_pal/screens/onboard/onboard.dart";
 import "package:provider/provider.dart";
@@ -16,8 +16,6 @@ import "package:pocket_pal/providers/folder_provider.dart";
 
 import "package:pocket_pal/const/dark_theme.dart";
 import "package:pocket_pal/const/light_theme.dart";
-
-import 'package:pocket_pal/screens/calendar/calendar.dart';
 
 
 Future<void> main() async {
@@ -45,6 +43,9 @@ Future<void> main() async {
           create : (context) => SettingsProvider()
         ),
         
+        ChangeNotifierProvider(
+          create : (context) => UserProvider() 
+        )
       ],
       child : const PocketPalApp()
     )

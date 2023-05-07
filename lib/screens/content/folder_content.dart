@@ -5,9 +5,9 @@ import "package:flutter_feather_icons/flutter_feather_icons.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/const/font_style.dart";
-import "package:pocket_pal/screens/dashboard/pages/folder_chat_box.dart";
+import 'package:pocket_pal/screens/content/folder_chat_box.dart';
 
-import "package:pocket_pal/screens/dashboard/widgets/envelope_widget.dart";
+import "package:pocket_pal/widgets/pocket_pal_envelope.dart";
 import "package:pocket_pal/screens/envelope/envelope.dart";
 import "package:pocket_pal/screens/envelope/widgets/envelope_dialog_box.dart";
 
@@ -21,9 +21,11 @@ import "package:pocket_pal/providers/envelope_provider.dart";
 class FolderContentPage extends StatefulWidget {
   
   final Folder folder;
+  final String ? code;
   const FolderContentPage({
     Key ? key,
-    required this.folder
+    required this.folder,
+    this.code
   }) : super( key : key );
 
   @override
@@ -35,13 +37,17 @@ class _FolderContentPageState extends State<FolderContentPage>{
 
   final TextEditingController _enevelopeAmountController = TextEditingController(text : "");
   final TextEditingController _enevelopeNameController = TextEditingController(text : "");
+  
   @override 
   void didChangeDependencies(){
     super.didChangeDependencies();
     Provider.of<EnvelopeProvider>(
       context,
       listen : true
-    ).fetchEnvelope(widget.folder.folderId);
+    ).fetchEnvelope(
+      widget.folder.folderId,
+      code : widget.code,
+    );
     return;
   }
 
@@ -111,7 +117,7 @@ class _FolderContentPageState extends State<FolderContentPage>{
               right : (index%2==0) ? 
                 8.w : 16.w,
             ),
-            child: MyEnvelopeWidget(
+            child: PocketPalEnvelope(
               envelope: envelopeItem[index],
               envelopeOpenContents: (){
                 Navigator.of(context).push(
@@ -119,6 +125,7 @@ class _FolderContentPageState extends State<FolderContentPage>{
                     builder : (context) => EnvelopeContentPage(
                       folder: widget.folder,
                       envelope: envelopeItem[index] , 
+                      code : widget.code
                     )
                   )
                 );
@@ -153,7 +160,8 @@ class _FolderContentPageState extends State<FolderContentPage>{
                 listen : false
               ).addEnvelope(
                 envelope.toMap(), 
-                widget.folder.folderId
+                widget.folder.folderId,
+                code : widget.code,
               );
 
               _enevelopeNameController.clear();

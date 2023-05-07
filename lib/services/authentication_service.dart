@@ -37,7 +37,7 @@ class PocketPalAuthentication {
     return;
   }
 
-  Future<void> authenticationGoogle() async { 
+  Future<List<String>> authenticationGoogle() async { 
     final googleUser = await GoogleSignIn().signIn();
     final googleAuth = await googleUser?.authentication;
 
@@ -47,7 +47,10 @@ class PocketPalAuthentication {
     );
 
     await _auth.signInWithCredential(credential);
-    return;
+    return [
+      googleUser?.displayName ?? "",
+      googleUser?.email ?? ""
+    ];
   }
 
   Future<void> authenticationLogout() async {

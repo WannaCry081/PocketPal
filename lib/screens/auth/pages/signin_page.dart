@@ -3,8 +3,9 @@ import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/flutter_svg.dart";
-import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/const/font_style.dart";
+import "package:pocket_pal/providers/user_provider.dart";
+import 'package:pocket_pal/utils/pal_user_util.dart';
 import "package:provider/provider.dart";
 
 import "package:pocket_pal/screens/auth/pages/forgot_password_page.dart";
@@ -259,12 +260,24 @@ class _SignInPageState extends State<SignInPage>{
   }
 
   Future<void> _signInPageGoogleAuth() async {
-    await PocketPalAuthentication()
-            .authenticationGoogle();
+
+    final userProvider = Provider.of<UserProvider>(context, listen : false);
+
+    List<String> data = await PocketPalAuthentication()
+                  .authenticationGoogle();
+
+    // Add Checker if collection not exists run this code below
+    await userProvider.addUserCredential(
+      PalUser(
+        palUserName : data[0],
+        palUserEmail : data[1]  
+      ).toMap()
+    );
     return;
   }
 
   Future<void> _signInPageEmailAndPasswordAuth() async {
+
     try {
       await PocketPalAuthentication()
               .authenticationSignInEmailAndPassword(

@@ -1,13 +1,13 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:pocket_pal/services/database_service.dart";
-import 'package:pocket_pal/utils/folder_util.dart';
+import "package:pocket_pal/utils/folder_util.dart";
 
 
 class FolderProvider with ChangeNotifier {
 
   String ? _orderBy;
-
+  String get getOrderBy => _orderBy ?? "folderDate"; 
   set setOrderBy(String ? orderBy){
     _orderBy = orderBy;
     notifyListeners();
@@ -15,6 +15,11 @@ class FolderProvider with ChangeNotifier {
 
   String ? _groupCode;
   String get getGroupCode => _groupCode ?? "";
+  set setGroupCode(String value){
+    _groupCode = value;
+    notifyListeners();
+    return;
+  }
 
   List<Folder> _folderList = [];
   List<Folder> get getFolderList => _folderList;
@@ -22,7 +27,7 @@ class FolderProvider with ChangeNotifier {
   Future<void> fetchFolder({ String ? code }) async {
     QuerySnapshot querySnapshot = await PocketPalFirestore()
       .getFolderSnapshot(
-        orderBy: _orderBy ,
+        orderBy: _orderBy ?? "folderDate",
         code : code
       );
 

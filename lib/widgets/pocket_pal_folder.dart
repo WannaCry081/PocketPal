@@ -1,31 +1,30 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/flutter_svg.dart";
-
 import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/const/font_style.dart";
-import "package:pocket_pal/utils/envelope_util.dart";
+
+import 'package:pocket_pal/utils/folder_util.dart';
 
 
-
-class MyEnvelopeWidget extends StatelessWidget {
+class PocketPalFolder extends StatelessWidget {
   
-  final Envelope envelope;
-  final void Function() ? envelopeOpenContents;
-  final void Function() ? envelopeEditContents;
+  final Folder folder;
+  final void Function() ? folderOpenContents;
+  final void Function() ? folderEditContents;
 
-  const MyEnvelopeWidget({ 
+  const PocketPalFolder({ 
     Key ? key,
-    required this.envelope,
-    this.envelopeOpenContents,
-    this.envelopeEditContents
+    required this.folder,
+    this.folderOpenContents,
+    this.folderEditContents
   }) : super(key : key);
 
   @override
   Widget build(BuildContext context){
     return GestureDetector(
-      onTap : envelopeOpenContents,
-      onLongPress : envelopeEditContents,
+      onTap : folderOpenContents,
+      onLongPress : folderEditContents,
       child: Container(
         width : 140.w,
         height : 160.h + 20.w,
@@ -38,7 +37,7 @@ class MyEnvelopeWidget extends StatelessWidget {
           children : [
     
             SvgPicture.asset(
-              "assets/icon/Envelope.svg",
+              "assets/icon/Folder.svg",
               width : 90.h,
               height : 90.h
             ),
@@ -49,14 +48,20 @@ class MyEnvelopeWidget extends StatelessWidget {
               width : 100.w,
               child: Center(
                 child: titleText(
-                  envelope.envelopeName,
+                  folder.folderName,
                   titleOverflow: TextOverflow.ellipsis,
                   titleWeight: FontWeight.w600,
                   titleSize : 14.sp,
                 ),
               ),
             ),
-  
+    
+            SizedBox( height : 2.h ), 
+            bodyText( 
+              "${folder.folderNumberOfEnvelopes} Envelopes",
+              bodySize : 12.sp,
+              bodyColor: ColorPalette.grey
+            )
           ]
         )
       ),

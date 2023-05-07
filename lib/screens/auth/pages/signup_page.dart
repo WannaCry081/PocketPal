@@ -2,11 +2,12 @@ import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:google_fonts/google_fonts.dart";
-import "package:pocket_pal/const/font_style.dart";
-import "package:pocket_pal/screens/auth/widgets/auth_title.dart";
 import "package:provider/provider.dart";
 
+import "package:pocket_pal/providers/user_provider.dart";
+import 'package:pocket_pal/utils/pal_user_util.dart';
+import "package:pocket_pal/const/font_style.dart";
+import "package:pocket_pal/screens/auth/widgets/auth_title.dart";
 import "package:pocket_pal/screens/auth/widgets/dialog_box.dart";
 import "package:pocket_pal/screens/auth/widgets/bottom_hyperlink.dart";
 
@@ -36,7 +37,7 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage>{
 
   bool _isButtonEnable = false;
-  List<bool> _isObsecure = [true, true];
+  final List<bool> _isObsecure = [true, true];
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -243,11 +244,20 @@ class _SignUpPageState extends State<SignUpPage>{
   }
 
   Future<void> _signUpPageEmailAndPasswordAuth() async {
+    final userProvider = Provider.of<UserProvider>(context, listen : false);
+
     try {
       await PocketPalAuthentication().authenticationSignUpEmailAndPassword(
         _name.text.trim(), 
         _email.text.trim(), 
         _password.text.trim()
+      );
+
+      await userProvider.addUserCredential(
+        PalUser(
+          palUserName: _name.text.trim(), 
+          palUserEmail: _email.text.trim()
+        ).toMap()
       );
     } on FirebaseAuthException catch(e){
       showDialog(

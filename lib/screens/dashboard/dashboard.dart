@@ -1,22 +1,23 @@
 import "package:flutter/material.dart";
-import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_sheet.dart";
 import "package:provider/provider.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
-import "package:pocket_pal/const/color_palette.dart";
-import "package:pocket_pal/const/font_style.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 
-import "package:pocket_pal/screens/dashboard/pages/folder_content.dart";
-import "package:pocket_pal/providers/folder_provider.dart";
+import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/const/font_style.dart";
 
-import "package:pocket_pal/screens/dashboard/pages/folder_grid.dart";
+import "package:pocket_pal/widgets/pocket_pal_folder.dart";
+import "package:pocket_pal/widgets/pocket_pal_appbar.dart";
+
+import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_sheet.dart";
+import "package:pocket_pal/screens/content/folder_content.dart";
+import 'package:pocket_pal/screens/content/folder_grid.dart';
 import "package:pocket_pal/screens/dashboard/widgets/dialog_box.dart";
 import "package:pocket_pal/screens/dashboard/widgets/card_widget.dart";
 import "package:pocket_pal/screens/dashboard/widgets/title_option.dart";
-import "package:pocket_pal/screens/dashboard/widgets/folder_widget.dart";
 
 import 'package:pocket_pal/utils/folder_util.dart';
-import "package:pocket_pal/widgets/pocket_pal_menu_button.dart";
+import "package:pocket_pal/providers/folder_provider.dart";
 
 
 class DashboardView extends StatefulWidget {
@@ -29,13 +30,6 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
 
   final TextEditingController _folderNameController = TextEditingController(text : "");
-
-  @override 
-  void initState(){
-    super.initState();
-    // create user info firestore
-    return;
-  }
 
   @override
   void didChangeDependencies(){
@@ -56,7 +50,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   Widget build(BuildContext context){
-    final FolderProvider folderProvider = context.watch<FolderProvider>();
+    final FolderProvider folderProvider = Provider.of<FolderProvider>(context);
     final List<Folder> folderItem = folderProvider.getFolderList;
     final int folderItemLength = folderItem.length;
 
@@ -75,8 +69,12 @@ class _DashboardViewState extends State<DashboardView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children : [
-              
-              _dashboardCustomAppBar(),
+
+              PocketPalAppBar(
+                pocketPalSearchButton: true,
+                pocketPalSearchFunction: (){},
+              ),
+
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 18.w,
@@ -98,11 +96,7 @@ class _DashboardViewState extends State<DashboardView> {
                 folderTitleOnTap: (){
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder : (context) => FolderGridPage(
-                        folderNameController : _folderNameController,
-                        folderAddOnTap : _dashboardAddFolder,
-                        folderEditOnHold : _dashboardFolderEdit
-                      )
+                      builder : (context) => const FolderGridPage()
                     )
                   );
                 },
@@ -188,33 +182,6 @@ class _DashboardViewState extends State<DashboardView> {
     return;
   }
 
-  Widget _dashboardCustomAppBar(){
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 16.w,
-        vertical: 6.h
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children : [
-          const PocketPalMenuButton(),
-
-          GestureDetector(
-            onTap : (){},
-            child : CircleAvatar(
-              radius: 20.r,
-              backgroundColor: ColorPalette.lightGrey,
-              child: Icon(
-                FeatherIcons.search,
-                color : ColorPalette.black
-              ),
-            )
-          )         
-        ]
-      ),
-    );
-  }
-
   Widget _dashboardFolderView({ 
     required int folderItemLength,
     required List<Folder> folderItem
@@ -232,7 +199,7 @@ class _DashboardViewState extends State<DashboardView> {
                 bottom : 5.h,
                 right : (i == ((folderItemLength < 10) ? folderItemLength-1 : 9)) ? 16.w : 0,
               ),
-              child: MyFolderWidget(
+              child: PocketPalFolder(
                 folder : folderItem[i],
                 folderEditContents: () => _dashboardFolderEdit(
                   folderItem[i]

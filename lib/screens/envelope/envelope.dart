@@ -26,11 +26,14 @@ import 'package:pocket_pal/screens/envelope/widgets/glassbox_widget.dart';
 class EnvelopeContentPage extends StatefulWidget {
   final Envelope envelope;
   final Folder folder;
+  String ? code;
 
-  const EnvelopeContentPage({
+  EnvelopeContentPage({
+    Key ? key,
     required this.envelope,
     required this.folder,
-    super.key});
+    this.code
+  }) : super(key : key);
 
   @override
   State<EnvelopeContentPage> createState() => _EnvelopeContentPageState();

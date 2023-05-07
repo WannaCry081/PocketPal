@@ -29,6 +29,7 @@ class PocketPalDialogBox extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return AlertDialog(
+      backgroundColor: ColorPalette.white,
       title : titleText(
         pocketPalDialogTitle,
         titleWeight: FontWeight.w600,

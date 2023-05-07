@@ -8,9 +8,9 @@ import 'package:pie_chart/pie_chart.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/const/font_style.dart';
 import 'package:pocket_pal/screens/envelope/widgets/glassbox_widget.dart';
+import 'package:pocket_pal/widgets/pocket_pal_appbar.dart';
 import 'package:pocket_pal/widgets/pocket_pal_button.dart';
 import 'package:pocket_pal/widgets/pocket_pal_formfield.dart';
-import 'package:pocket_pal/widgets/pocket_pal_menu_button.dart';
 import 'package:pocket_pal/screens/calculator/widgets/textfield_widget.dart';
 
 class CalculatorView extends StatefulWidget {
@@ -74,18 +74,17 @@ class _CalculatorViewState extends State<CalculatorView> {
   final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Color(0xFFFEFEFE),
-      appBar: AppBar(
-        backgroundColor: Color(0xFFFEFEFE),
-        leading: const PocketPalMenuButton(),
-      ),
-
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+
+                const PocketPalAppBar(
+                  pocketPalTitle: "Calculator",
+                ),
+
                 SizedBox(height: 10.h,),
                 titleText(
                   " 50/30/20 Budget Calculator",

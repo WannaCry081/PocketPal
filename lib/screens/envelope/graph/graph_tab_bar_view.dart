@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:pocket_pal/const/color_palette.dart';
+import 'package:pocket_pal/const/font_style.dart';
 
 class MyPieChart extends StatelessWidget {
   final double screenHeight;
@@ -23,7 +24,7 @@ class MyPieChart extends StatelessWidget {
   Widget build(BuildContext context) {
     
     return Padding(
-      padding:  const EdgeInsets.only(top: 10.0),
+      padding:  const EdgeInsets.only(top: 20.0),
       child: Container(
         padding:  const EdgeInsets.only(top: 10.0),
         decoration: BoxDecoration(
@@ -43,13 +44,10 @@ class MyPieChart extends StatelessWidget {
         ), 
         child: dataMap.isEmpty ?
         Container(
-            width: screenWidth * 0.6,
-            height: screenWidth * 0.6,
             alignment: Alignment.center,
-            child: Text(
+            child: bodyText(
               'No data available',
-              style: GoogleFonts.poppins(
-                fontSize: 14.sp),
+              bodySize: 14.sp,
             ),
           )
         : PieChart(
@@ -62,7 +60,7 @@ class MyPieChart extends StatelessWidget {
           chartValuesOptions: ChartValuesOptions(
             showChartValuesInPercentage: true,
             chartValueBackgroundColor: ColorPalette.midnightBlue,
-            chartValueStyle: GoogleFonts.poppins(
+            chartValueStyle: GoogleFonts.lato(
               fontSize: 12.sp,
             ),
             showChartValuesOutside: true
@@ -70,8 +68,8 @@ class MyPieChart extends StatelessWidget {
           legendOptions: LegendOptions(
             showLegendsInRow: true,
             legendPosition: LegendPosition.bottom,
-            legendTextStyle: GoogleFonts.poppins(
-              fontSize: 12.sp,
+            legendTextStyle: GoogleFonts.lato(
+              fontSize: 14.sp,
             )
           ),
         ),

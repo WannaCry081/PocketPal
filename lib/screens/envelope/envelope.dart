@@ -72,7 +72,7 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
   ];
 
   final Map<String, Color> categoryColorMap = {
-    "Food": ColorPalette.crimsonRed.shade200,
+    "Food": ColorPalette.crimsonRed,
     "School": ColorPalette.midnightBlue.shade500,
     "Transport": Colors.red.shade200,
     "Grocery": Colors.orange.shade200,
@@ -86,7 +86,8 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
    
   @override
   void initState(){
-    transactionType = TextEditingController(text : "");
+    print(expenseTotal);
+    transactionType = TextEditingController(text : "Expense");
     transactionAmount = TextEditingController(text : "");
     transactionName = TextEditingController(text : "");
     transactionCategory = TextEditingController(text : "");

@@ -104,8 +104,6 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
     newData,
     index,
   );
-  print(envelopeNoteContentController.text);
-  print(envelopeNoteNameController.text);
 }
 
 

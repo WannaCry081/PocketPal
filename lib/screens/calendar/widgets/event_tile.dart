@@ -2,16 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/const/font_style.dart';
+import 'package:pocket_pal/utils/event_structure_util.dart';
+import 'package:intl/intl.dart';
+import 'package:pocket_pal/utils/folder_util.dart';
 
 class MyEventListTile  extends StatelessWidget {
-  final String eventDay;
+
+  //final Event ? event;
+  final List<String> eventNames;
   final String eventMonth;
-  final String eventTitle;
+  final String eventDay;
+
+  final bool isToday;
 
   const MyEventListTile ({
-    required this.eventDay,
+    //this.event,
+    required this.eventNames,
     required this.eventMonth,
-    required this.eventTitle,
+    required this.eventDay,
+    this.isToday = false,
     super.key});
 
   @override
@@ -19,8 +28,8 @@ class MyEventListTile  extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: ColorPalette.pearlWhite,
-        borderRadius: BorderRadius.circular(12)
+        color: isToday ? Color.fromARGB(255, 255, 237, 237) : ColorPalette.pearlWhite,
+        borderRadius: BorderRadius.circular(10)
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -28,10 +37,10 @@ class MyEventListTile  extends StatelessWidget {
           Container(
             width: 5.w,
             decoration: BoxDecoration(
-              color: ColorPalette.crimsonRed,
+              color: isToday ? ColorPalette.crimsonRed : Colors.greenAccent,
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(12),
-                bottomLeft: Radius.circular(12)
+                topLeft: Radius.circular(10),
+                bottomLeft: Radius.circular(10)
               )
             ),
           ),
@@ -45,16 +54,22 @@ class MyEventListTile  extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   titleText(
+                    //event?.eventDate != null ? DateFormat('dd').format(event!.eventDate) : '',
+                    //DateFormat('dd').format(eventDate),
                     eventDay,
-                    titleWeight: FontWeight.w500,
+                    titleWeight: FontWeight.w600,
                     titleAlignment: TextAlign.center,
                     titleSize: 22.sp,
-                    titleHeight: 1 
+                    titleHeight: 1,
+                    titleColor: isToday ? ColorPalette.crimsonRed : ColorPalette.black
+                    
                   ),
                   bodyText(
+                    //event?.eventDate != null ? DateFormat('MMM').format(event!.eventDate) : '',
                     eventMonth,
                     bodyAlignment: TextAlign.center,
                     bodySize: 14.sp,
+                    bodyColor: isToday ? ColorPalette.salmonPink :  ColorPalette.grey
                   ),
                 ],
               ),
@@ -67,11 +82,20 @@ class MyEventListTile  extends StatelessWidget {
             endIndent: 8,
             width: 60.w,
           ),
-          titleText(
-            eventTitle,
-            titleColor: ColorPalette.black,
-            titleSize: 16.sp,
-            titleWeight: FontWeight.w400
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children:
+                eventNames.map((eventName){
+                  return titleText(
+                  eventName,
+                  titleColor: ColorPalette.black,
+                  titleSize: (eventNames.length) <= 3 ? 16.sp : 12.sp,
+                  titleWeight: FontWeight.w400
+                );
+                }).toList()
+            ),
           )
 
         ],

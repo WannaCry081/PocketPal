@@ -55,6 +55,34 @@ class PocketPalFirestore {
     return;
   }
 
+  //Events =================
+  Future<void> addEvent (
+      Map<String, dynamic> data, 
+      {String ? orderBy}
+    ) async{
+
+      final collection = _db
+        .collection(_userUid)
+        .doc("$_userUid+Event")
+        .collection(_userUid)
+        .doc();
+
+      data["eventId"] = collection.id;
+      await collection.set(data);
+      getEventSnapshot();
+      return;
+    }
+
+  Future<QuerySnapshot> getEventSnapshot({String ? orderBy,}) async {
+    final collectionSnapshot = _db
+        .collection(_userUid)
+        .doc("$_userUid+Event")
+        .collection(_userUid).orderBy(
+      orderBy ?? "eventDate", descending: false
+    );
+    return await collectionSnapshot.get();
+  }  
+
   // Envelope ======================================================
   Future<void> addEnvelope(Map<String, dynamic> data, String docName, {String ? code}) async {
     final collection = _db.collection(code ?? _userUid).doc("${code ?? _userUid}+Wall")
@@ -160,7 +188,7 @@ class PocketPalDatabase {
   }
    
 
-//===========================================================================
+// Envelope Transactions ===========================================================================
   Future<void> createEnvelopeTransaction(
     String docName,
     String envelopeName,
@@ -183,30 +211,6 @@ class PocketPalDatabase {
       ));
     return;
   }
-
-   Future<void> createEnvelopeNotes(
-    String docName, 
-    String envelopeName,
-    Map<String, dynamic> data, 
-    {String ? orderBy, String ? code}
-    ) async {  
-    final collection = _db
-      .collection(code ??_userUid)
-        .doc("${code ?? _userUid}+Wall")
-        .collection(code ?? _userUid)
-        .doc(docName)
-        .collection("$docName+Envelope")
-        .doc(envelopeName);
-
-     collection.set({
-        "envelopeNotes" : FieldValue.arrayUnion([data])
-      }, SetOptions(
-        merge: true
-      ));
-    
-    return;
-  }
-
   
   Stream<Map<String, dynamic>> getEnvelopeTransactions(
       String docName, 
@@ -214,7 +218,7 @@ class PocketPalDatabase {
       {String ? orderBy, String ? code}
     ){
       final documentRef = _db
-        .collection(code ??_userUid)
+        .collection(code ?? _userUid)
         .doc("${code ?? _userUid}+Wall")
         .collection(code ?? _userUid)
         .doc(docName)
@@ -287,6 +291,64 @@ class PocketPalDatabase {
           };
       });
     }
+
+    Future<void> deleteEnvelopeTransaction(
+      String docName,
+      String envelopeName,
+      int index,
+      {String ? orderBy, String ? code}
+    ) async { 
+
+    final collection = _db
+        .collection(code ??_userUid)
+        .doc("${code ?? _userUid}+Wall")
+        .collection(code ?? _userUid)
+        .doc(docName)
+        .collection("$docName+Envelope")
+        .doc(envelopeName);
+
+
+    final snapshot = await collection.get();
+    if (!snapshot.exists) {
+      return;
+    }
+    final envelopeData = snapshot.data();
+    final transactions = envelopeData?["envelopeTransaction"] as List<dynamic>;
+
+    if (transactions == null || transactions.length <= index) {
+      return;
+    }
+
+    final valueToRemove = transactions[index];
+    collection.update({
+        "envelopeTransaction": FieldValue.arrayRemove([valueToRemove])
+    });
+    return;
+  }
+
+  // Envelope Notes ======================================
+  Future<void> createEnvelopeNotes(
+    String docName, 
+    String envelopeName,
+    Map<String, dynamic> data, 
+    {String ? orderBy, String ? code}
+    ) async {  
+    final collection = _db
+      .collection(code ??_userUid)
+      .doc("${code ?? _userUid}+Wall")
+      .collection(code ?? _userUid)
+      .doc(docName)
+      .collection("$docName+Envelope")
+      .doc(envelopeName);
+
+     collection.set({
+        "envelopeNotes" : FieldValue.arrayUnion([data])
+      }, SetOptions(
+        merge: true
+      ));
+    
+    return;
+  }
     
   Stream<Map<String, dynamic>> getEnvelopeNotes(
       String docName, 
@@ -320,39 +382,6 @@ class PocketPalDatabase {
       });
   }
 
-  Future<void> deleteEnvelopeTransaction(
-      String docName,
-      String envelopeName,
-      int index,
-      {String ? orderBy, String ? code}
-    ) async { 
-
-    final collection = _db
-        .collection(code ??_userUid)
-        .doc("${code ?? _userUid}+Wall")
-        .collection(code ?? _userUid)
-        .doc(docName)
-        .collection("$docName+Envelope")
-        .doc(envelopeName);
-
-
-    final snapshot = await collection.get();
-    if (!snapshot.exists) {
-      return;
-    }
-    final envelopeData = snapshot.data();
-    final transactions = envelopeData?["envelopeTransaction"] as List<dynamic>;
-
-    if (transactions == null || transactions.length <= index) {
-      return;
-    }
-
-    final valueToRemove = transactions[index];
-    collection.update({
-        "envelopeTransaction": FieldValue.arrayRemove([valueToRemove])
-    });
-    return;
-  }
 
   Future<void> deleteEnvelopeNote(
       String docName,
@@ -424,5 +453,9 @@ class PocketPalDatabase {
 
       return;
     }
+
+
+    // Calendar Events =========================
+  
 
 }

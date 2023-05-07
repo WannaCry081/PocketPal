@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:pocket_pal/providers/envelope_provider.dart";
 import "package:pocket_pal/screens/auth/pages/error_page.dart";
 import "package:pocket_pal/screens/auth/pages/loading_dart.dart";
 import "package:pocket_pal/screens/onboard/onboard.dart";
@@ -13,6 +12,8 @@ import "package:pocket_pal/screens/auth/auth_builder.dart";
 
 import "package:pocket_pal/providers/settings_provider.dart";
 import "package:pocket_pal/providers/folder_provider.dart";
+import "package:pocket_pal/providers/envelope_provider.dart";
+import "package:pocket_pal/providers/event_provider.dart";
 
 import "package:pocket_pal/const/dark_theme.dart";
 import "package:pocket_pal/const/light_theme.dart";
@@ -44,6 +45,10 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create : (context) => SettingsProvider()
         ),
+
+        ChangeNotifierProvider(
+          create : (context) => EventProvider()
+        ) 
         
       ],
       child : const PocketPalApp()

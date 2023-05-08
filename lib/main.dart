@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:pocket_pal/providers/envelope_provider.dart";
 import "package:pocket_pal/providers/user_provider.dart";
+import "package:pocket_pal/providers/wall_provider.dart";
 import "package:pocket_pal/screens/auth/pages/loading_dart.dart";
 import "package:pocket_pal/screens/onboard/onboard.dart";
 import "package:provider/provider.dart";
@@ -31,6 +32,10 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+
+        ChangeNotifierProvider(
+          create : (context) => WallProvider()
+        ), 
 
         ChangeNotifierProvider(
           create : (context) => EnvelopeProvider()

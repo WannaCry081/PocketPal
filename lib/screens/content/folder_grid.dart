@@ -7,11 +7,11 @@ import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/const/font_style.dart";
 
 import "package:pocket_pal/providers/folder_provider.dart";
-import 'package:pocket_pal/utils/folder_util.dart';
+import "package:pocket_pal/utils/folder_util.dart";
 import "package:pocket_pal/widgets/pocket_pal_folder.dart";
 
-import 'package:pocket_pal/screens/dashboard/widgets/folder_bottom_edit_sheet.dart';
-import 'package:pocket_pal/screens/content/folder_content.dart';
+import "package:pocket_pal/screens/dashboard/widgets/folder_bottom_edit_sheet.dart";
+import "package:pocket_pal/screens/content/folder_content.dart";
 import "package:pocket_pal/screens/dashboard/widgets/dialog_box.dart";
 
 
@@ -153,7 +153,10 @@ class _FolderGridPageState extends State<FolderGridPage> {
         return MyFolderBottomEditSheetWidget(
           folder : folder,
           bottomSheetOnDelete: (){
-            folderProvider.deleteFolder(folder.folderId);
+            folderProvider.deleteFolder(
+              folder.folderId,
+              code : widget.code
+            );
             Navigator.of(context).pop();
           },
           bottomSheetOnEdit: (){
@@ -174,7 +177,8 @@ class _FolderGridPageState extends State<FolderGridPage> {
                   dialogBoxOnCreate: (){
                     folderProvider.updateFolder(
                       folder.folderId,
-                      { "folderName" : _folderNameController.text.trim() }
+                      { "folderName" : _folderNameController.text.trim() },
+                      code: widget.code
                     );
                     _folderNameController.clear();
                     Navigator.of(context).pop();

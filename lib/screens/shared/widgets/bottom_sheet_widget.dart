@@ -131,14 +131,14 @@ class _MyBottomSheetWidgetState extends State<MyBottomSheetWidget> {
         children : [
           AnimatedPositioned(
             left : (_buttonState) ? 5.w : (switchWidth-5.w), 
-            duration: const Duration(milliseconds: 200),
+            duration: const Duration(milliseconds: 400),
             curve: Curves.fastLinearToSlowEaseIn,
             child : Container(
               height : 42.h, 
               width : switchWidth,
               decoration: BoxDecoration(
                 color : ColorPalette.crimsonRed, 
-                borderRadius: BorderRadius.circular(10)
+                borderRadius: BorderRadius.circular(14)
               ),
             )
           ),

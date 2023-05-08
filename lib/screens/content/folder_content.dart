@@ -1,6 +1,4 @@
 import "package:flutter/material.dart";
-import "package:pocket_pal/screens/dashboard/widgets/envelope_bottom_edit_sheet.dart";
-import 'package:pocket_pal/screens/dashboard/widgets/folder_bottom_edit_sheet.dart';
 import "package:provider/provider.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
@@ -17,6 +15,8 @@ import "package:pocket_pal/utils/folder_util.dart";
 import "package:pocket_pal/utils/envelope_util.dart";
 
 import "package:pocket_pal/providers/envelope_provider.dart";
+import "package:pocket_pal/screens/dashboard/widgets/envelope_bottom_edit_sheet.dart";
+import "package:pocket_pal/screens/dashboard/widgets/dialog_box.dart";
 
 
 
@@ -180,19 +180,47 @@ class _FolderContentPageState extends State<FolderContentPage>{
   void _folderContentEditEnvelope(EnvelopeProvider envelopeProvider, Envelope envelope){
     showModalBottomSheet(
       context: context, 
+      isDismissible: false,
       builder: (context){
         return MyEnvelopeBottomEditSheetWidget(
           envelope: envelope,
           bottomSheetOnDelete: (){
             envelopeProvider.deleteEnvelope(
               widget.folder.folderId,
-              envelope.envelopeId
+              envelope.envelopeId,
+              code : widget.code
             );
             Navigator.of(context).pop();
           },
           bottomSheetOnEdit: (){
             Navigator.of(context).pop();
 
+             showDialog(
+              context : context,
+              builder : (context) {
+                return MyDialogBoxWidget(
+                  controllerName: _enevelopeNameController,
+                  dialogBoxHintText: envelope.envelopeName,
+                  dialogBoxConfirmMessage : "Rename",
+                  dialogBoxTitle: "Rename Envelope",
+                  dialogBoxErrorMessage: "Please enter a name for your Envelope",
+                  dialogBoxOnCancel: (){
+                    _enevelopeNameController.clear();
+                    Navigator.of(context).pop();
+                  },
+                  dialogBoxOnCreate: (){
+                    envelopeProvider.updateEnvelope(
+                      { "envelopeName" : _enevelopeNameController.text.trim() },
+                      widget.folder.folderId, 
+                      envelope.envelopeId,
+                      code : widget.code
+                    );
+                    _enevelopeNameController.clear();
+                    Navigator.of(context).pop();
+                  },
+                );
+              }
+            );
           },
         );
       }

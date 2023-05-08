@@ -131,7 +131,7 @@ class MyEnvelopeBottomEditSheetWidget extends StatelessWidget {
                   titleWeight : FontWeight.w600
                 ),
                 bodyText(
-                  envelope.envelopeStartingAmount.toStringAsFixed(2),
+                  "Php ${envelope.envelopeStartingAmount.toStringAsFixed(2)}",
                   bodySize : 12.sp 
                 ),
 

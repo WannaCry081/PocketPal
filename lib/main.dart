@@ -13,7 +13,6 @@ import "package:pocket_pal/screens/auth/auth_builder.dart";
 
 import "package:pocket_pal/providers/settings_provider.dart";
 import "package:pocket_pal/providers/folder_provider.dart";
-import "package:pocket_pal/providers/envelope_provider.dart";
 import "package:pocket_pal/providers/event_provider.dart";
 
 import "package:pocket_pal/const/dark_theme.dart";

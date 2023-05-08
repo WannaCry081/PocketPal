@@ -143,25 +143,17 @@ class _CalendarViewState extends State<CalendarView> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar : AppBar(
-        title: Text(
-            "Calendar",
-            style: GoogleFonts.poppins(
-              fontSize : 18.sp,
-              color: ColorPalette.black,
-            ),
-          ),
-      ),
-      body: Padding(
-        padding:  EdgeInsets.symmetric(
-          horizontal: 8.w,),
+      body: SafeArea(
         child: Column(
           children: [
             const PocketPalAppBar(
               pocketPalTitle: "Calendar",
             ),
-      
+        
             Container(
+              padding : EdgeInsets.symmetric(
+                horizontal: 10.w,
+              ),
               height: screenHeight * 0.45,
               child: TableCalendar(
                 shouldFillViewport: true,
@@ -208,7 +200,7 @@ class _CalendarViewState extends State<CalendarView> {
                 selectedDayPredicate: (DateTime date){
                   return isSameDay(selectedDay, date);
                 },
-
+      
                 onFormatChanged: (CalendarFormat _format){
                   setState(() {
                     format = _format;
@@ -239,7 +231,7 @@ class _CalendarViewState extends State<CalendarView> {
                 
               ),
             ),
-
+      
             Expanded(
               child: 
               _eventListView(
@@ -247,7 +239,7 @@ class _CalendarViewState extends State<CalendarView> {
                 eventItemLength: eventItemLength
               )
             )
-
+      
             // Column(
             //   children: [
             //     ..._getEventfromDay(selectedDay)

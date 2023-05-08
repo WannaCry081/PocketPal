@@ -19,7 +19,7 @@ class EventProvider with ChangeNotifier {
   List<Event> get getEventList => _eventList;
   Map<DateTime, List<Event>>  get getEventMap => _eventMap;
 
-  Future<void> fetchEvent() async {
+  Future<void>  fetchEvent() async {
     QuerySnapshot querySnapshot = await PocketPalFirestore()
       .getEventSnapshot(
         orderBy: _orderBy ,
@@ -29,18 +29,31 @@ class EventProvider with ChangeNotifier {
       (doc) => Event.fromMap(doc.data() as Map<String, dynamic>)
     ).toList();
 
+    // _eventMap = {};
+    // for (Event event in _eventList) {
+    //   DateTime date = event.eventDate;
+    //   if (_eventMap.containsKey(date)) {
+    //     _eventMap[date]!.add(event);
+    //   } else {
+    //     _eventMap[date] = [event];
+    //   }
+    // }
+
     _eventMap = {};
-    for (Event event in _eventList) {
-      DateTime date = event.eventDate;
-      if (_eventMap.containsKey(date)) {
-        _eventMap[date]!.add(event);
-      } else {
-        _eventMap[date] = [event];
-      }
-    }
+    querySnapshot.docs.forEach((document) {
+      DateTime eventDate = (document.get("eventDate") as Timestamp).toDate();
+      String eventName = document.get("eventName") as String;
 
-     _eventList = _eventMap.values.expand((events) => events).toList();
+      final event = Event(eventName: eventName, eventDate: eventDate);
+        if (_eventMap.containsKey(eventDate)){
+          _eventMap[eventDate]!.add(event);
+        } else {
+          _eventMap[eventDate] = [event];
+        }
+     });
 
+    // _eventList = _eventMap.values.expand((events) => events).toList();
+    
     notifyListeners();
     return; 
   } 

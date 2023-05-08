@@ -34,22 +34,12 @@ class _CalendarViewState extends State<CalendarView> {
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
   CalendarFormat format = CalendarFormat.month;
-  
-
+   
   TextEditingController _eventController = TextEditingController(text: "");
 
-  // final eventMap = EventProvider().getEventMap;
-
   late Map<DateTime, List<Event>> selectedEvents = {};
-  List<Event>  _getEventfromDay(DateTime date){
-    return selectedEvents[date] ?? [];
-  }
-
-  void _onDaySelected(DateTime selectDay, DateTime focusDay){
-    setState(() {
-      selectedDay = selectDay;
-      focusedDay = focusDay;
-    });
+  List<Event> getEventfromDay(DateTime date){
+      return selectedEvents[date] ?? [];
   }
 
   @override
@@ -104,25 +94,28 @@ class _CalendarViewState extends State<CalendarView> {
             );
             Navigator.of(context).pop();
 
-            if(_eventController.text.isEmpty){
-              return;
-            } else {
-              if(selectedEvents[selectedDay]!=null){
-                selectedEvents[selectedDay]!.add(
-                  Event(
-                    eventDate: selectedDay,
-                    eventName: _eventController.text.trim(),
-                  )
-                );
-              } else{
-                selectedEvents[selectedDay] = [
-                  Event(
-                    eventName: _eventController.text.trim(),
-                    eventDate: selectedDay
-                  )
-                ];
-              }
-            }
+            // if(_eventController.text.isEmpty){
+            //   return;
+            // } else {
+            //   if(selectedEvents[selectedDay]!=null){
+            //     selectedEvents[selectedDay]!.add(
+            //       Event(
+            //         eventDate: selectedDay,
+            //         eventName: _eventController.text.trim(),
+            //       )
+            //     );
+            //   } else{
+            //     selectedEvents[selectedDay] = [
+            //       Event(
+            //         eventName: _eventController.text.trim(),
+            //         eventDate: selectedDay
+            //       )
+            //     ];
+            //   }
+            // }
+            setState(() {
+              
+            });
           },
         );
       });
@@ -138,30 +131,26 @@ class _CalendarViewState extends State<CalendarView> {
 
     final EventProvider eventProvider = context.watch<EventProvider>();
     final List<Event> eventItem = eventProvider.getEventList;
-    final Map<DateTime, List<Event>> eventMap = eventProvider.getEventMap;
     final int eventItemLength = eventItem.length;
+
+    Map<DateTime, List<Event>> eventMap = eventProvider.getEventMap;
+
+    List<DateTime> decoratedDays = eventMap.keys.toList();
+
+    eventMap.forEach((date, events) {
+      selectedEvents[date] = List<Event>.from(events);
+    });
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar : AppBar(
-        title: Text(
-            "Calendar",
-            style: GoogleFonts.poppins(
-              fontSize : 18.sp,
-              color: ColorPalette.black,
-            ),
-          ),
-      ),
-      body: Padding(
-        padding:  EdgeInsets.symmetric(
-          horizontal: 8.w,),
+      body: SafeArea(
         child: Column(
           children: [
             const PocketPalAppBar(
-              pocketPalTitle: "Calendar",
+              pocketPalTitle: "",
             ),
-      
             Container(
+              padding: EdgeInsets.symmetric(horizontal : 14.w),
               height: screenHeight * 0.45,
               child: TableCalendar(
                 shouldFillViewport: true,
@@ -208,16 +197,18 @@ class _CalendarViewState extends State<CalendarView> {
                 selectedDayPredicate: (DateTime date){
                   return isSameDay(selectedDay, date);
                 },
-
+      
                 onFormatChanged: (CalendarFormat _format){
                   setState(() {
                     format = _format;
                   });
                 },
           
-          
-                eventLoader: (DateTime date) => eventMap[date] ?? [],
-          
+               //eventLoader: (DateTime date) => eventMap[date] ?? [],
+               eventLoader: (date) {
+                  return eventMap[date] ?? [];
+                },
+
                 calendarStyle: CalendarStyle(
                   markerSizeScale: 1,
                   todayDecoration: BoxDecoration(
@@ -236,36 +227,40 @@ class _CalendarViewState extends State<CalendarView> {
                   ),
                   markerSize: 10,
                 ),
-                
+
+                calendarBuilders: CalendarBuilders(
+                   markerBuilder: (context, date, events) {
+                     final hasEvents = decoratedDays.contains(date);
+                      final children = <Widget>[];
+                      if (hasEvents) {
+                        children.add(
+                          Positioned(
+                            bottom: 1,
+                            child: _buildMarkers(eventItem),
+                          ),
+                        );
+                      }
+                      return Container();
+                    },
+              ),
               ),
             ),
+          
+      
+           
+          
+           ...getEventfromDay(selectedDay).map((Event event) =>
+           ListTile(title: Text(event.eventName),)).toList(),
 
-            Expanded(
+
+
+             Expanded(
               child: 
               _eventListView(
                 eventItem: eventItem,
                 eventItemLength: eventItemLength
               )
             )
-
-            // Column(
-            //   children: [
-            //     ..._getEventfromDay(selectedDay)
-            //     .map((Event event) => SizedBox(
-            //       height: 70.h,
-            //       child: Padding(
-            //         padding: const EdgeInsets.all(8.0),
-            //         child: MyEventListTile(
-            //     event: event,
-            //     eventDay:  DateFormat('d').format(event.eventDate),
-            //     eventMonth: DateFormat('MMM').format(event.eventDate),
-            //     eventName: event.eventName,
-            //         ),
-            //       ),
-            //     ))
-            //     .toList(),
-            //   ],
-            // )
           
             
           ],
@@ -274,7 +269,61 @@ class _CalendarViewState extends State<CalendarView> {
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         backgroundColor: ColorPalette.crimsonRed,
-        onPressed: _addCalendarEvent,
+        onPressed: (){
+           showDialog(
+              context: context,
+              builder: (context){
+                return MyDialogBoxWidget(
+                  controllerName: _eventController,
+                  dialogBoxHintText: "Event name",
+                  dialogBoxTitle: "Add Event",
+                  dialogBoxErrorMessage: "Please enter a name for your Event",
+                  dialogBoxOnCancel: (){
+                    _eventController.clear();
+                    Navigator.of(context).pop();
+                  },
+                  dialogBoxOnCreate: (){
+                    Provider.of<EventProvider>(
+                      context,
+                      listen: false
+                    ).addEvent(
+                      Event(
+                        eventName: _eventController.text.trim(),
+                        eventDate: selectedDay
+                      ).toMap()
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Event added!"))
+                    );
+                    Navigator.of(context).pop();
+                     _eventController.clear();
+                    setState(() { });
+                    return;
+
+                    // if(_eventController.text.isEmpty){
+                    //   return;
+                    // } else {
+                    //   if(selectedEvents[selectedDay]!=null){
+                    //     selectedEvents[selectedDay]!.add(
+                    //       Event(
+                    //         eventDate: selectedDay,
+                    //         eventName: _eventController.text.trim(),
+                    //       )
+                    //     );
+                    //   } else{
+                    //     selectedEvents[selectedDay] = [
+                    //       Event(
+                    //         eventName: _eventController.text.trim(),
+                    //         eventDate: selectedDay
+                    //       )
+                    //     ];
+                    //   }
+                    // }
+                  },
+                );
+      });
+        },
         child: Icon(
           FeatherIcons.plus,
           color: ColorPalette.white,),
@@ -313,7 +362,7 @@ Widget _eventListView({
       List<String> eventNames = entry.value;
 
       return Padding(
-        padding: EdgeInsets.symmetric(vertical: 5.h),
+        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 14.w),
         child: SizedBox(
           height: (eventNames.length <= 4) ? 90.h : 120.h,
           child: MyEventListTile(
@@ -327,6 +376,30 @@ Widget _eventListView({
     }).toList(),
   );
 }
+
+
+Widget _buildMarkers(List<Event> events) {
+  // Customize the appearance of the marker widget based on your requirements
+  return Container(
+    width: 10,
+    height: 10,
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      color: Colors.red,
+    ),
+    child: Center(
+      child: Text(
+        events.length.toString(),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 8,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+  );
+}
+
 
 
 

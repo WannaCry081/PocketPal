@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Event {
   String eventId;
-   String eventName; 
+  String eventName; 
   DateTime eventDate;
 
   Event({
@@ -11,6 +11,10 @@ class Event {
     required this.eventName,
     required this.eventDate
   });
+
+  @override
+  String toString() => this.eventName;
+
 
    
 

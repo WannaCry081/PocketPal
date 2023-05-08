@@ -1,4 +1,6 @@
+import "package:animations/animations.dart";
 import "package:flutter/material.dart";
+import "package:pocket_pal/screens/dashboard/search.dart";
 import "package:provider/provider.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -69,13 +71,21 @@ class _DashboardViewState extends State<DashboardView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children : [
+            OpenContainer(
+              closedElevation: 0,
+               transitionType: ContainerTransitionType.fadeThrough,
+               transitionDuration: const Duration(milliseconds: 500),
+                closedBuilder: ( context, VoidCallback openContainer){
+                  return PocketPalAppBar(
+                  pocketPalSearchButton: true,
+                  pocketPalSearchFunction: openContainer);
+                },
+                openBuilder: (context, VoidCallback __){
+                    return SearchView();
+                }
+            ),
 
-              PocketPalAppBar(
-                pocketPalSearchButton: true,
-                pocketPalSearchFunction: (){},
-              ),
-
-              Padding(
+            Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 18.w,
                   vertical: 14.h

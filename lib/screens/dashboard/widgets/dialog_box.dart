@@ -12,6 +12,7 @@ class MyDialogBoxWidget extends StatelessWidget {
   final TextEditingController controllerName;
   final String dialogBoxHintText;
   final String dialogBoxTitle;
+  final String dialogBoxConfirmMessage;
   final String dialogBoxErrorMessage;
   final void Function() dialogBoxOnCancel;
   final void Function() dialogBoxOnCreate;
@@ -24,12 +25,12 @@ class MyDialogBoxWidget extends StatelessWidget {
     required this.dialogBoxTitle,
     required this.dialogBoxOnCreate,
     required this.dialogBoxOnCancel,
+    required this.dialogBoxConfirmMessage
   });
 
   @override
   Widget build(BuildContext context){
     return AlertDialog(
-      backgroundColor: ColorPalette.white,
       title: titleText(
         dialogBoxTitle,
         titleWeight: FontWeight.w600,
@@ -66,7 +67,7 @@ class MyDialogBoxWidget extends StatelessWidget {
             }
           },
           child: bodyText(
-            "Create", 
+            dialogBoxConfirmMessage, 
             bodyColor : ColorPalette.crimsonRed,
             bodyWeight : FontWeight.w500,
             bodySize : 14.sp 

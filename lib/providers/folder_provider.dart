@@ -20,7 +20,7 @@ class FolderProvider with ChangeNotifier {
     notifyListeners();
     return;
   }
-
+  
   List<Folder> _folderList = [];
   List<Folder> get getFolderList => _folderList;
 

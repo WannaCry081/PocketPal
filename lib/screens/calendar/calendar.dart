@@ -69,6 +69,7 @@ class _CalendarViewState extends State<CalendarView> {
       context: context,
       builder: (context){
         return MyDialogBoxWidget(
+          dialogBoxConfirmMessage: "Create",
           controllerName: _eventController,
           dialogBoxHintText: "Event name",
           dialogBoxTitle: "Add Event",
@@ -149,8 +150,11 @@ class _CalendarViewState extends State<CalendarView> {
             const PocketPalAppBar(
               pocketPalTitle: "",
             ),
+        
             Container(
-              padding: EdgeInsets.symmetric(horizontal : 14.w),
+              padding : EdgeInsets.symmetric(
+                horizontal: 10.w,
+              ),
               height: screenHeight * 0.45,
               child: TableCalendar(
                 shouldFillViewport: true,
@@ -245,22 +249,33 @@ class _CalendarViewState extends State<CalendarView> {
               ),
               ),
             ),
-          
       
-           
-          
-           ...getEventfromDay(selectedDay).map((Event event) =>
-           ListTile(title: Text(event.eventName),)).toList(),
-
-
-
-             Expanded(
+            Expanded(
               child: 
               _eventListView(
                 eventItem: eventItem,
                 eventItemLength: eventItemLength
               )
             )
+      
+            // Column(
+            //   children: [
+            //     ..._getEventfromDay(selectedDay)
+            //     .map((Event event) => SizedBox(
+            //       height: 70.h,
+            //       child: Padding(
+            //         padding: const EdgeInsets.all(8.0),
+            //         child: MyEventListTile(
+            //     event: event,
+            //     eventDay:  DateFormat('d').format(event.eventDate),
+            //     eventMonth: DateFormat('MMM').format(event.eventDate),
+            //     eventName: event.eventName,
+            //         ),
+            //       ),
+            //     ))
+            //     .toList(),
+            //   ],
+            // )
           
             
           ],
@@ -278,6 +293,7 @@ class _CalendarViewState extends State<CalendarView> {
                   dialogBoxHintText: "Event name",
                   dialogBoxTitle: "Add Event",
                   dialogBoxErrorMessage: "Please enter a name for your Event",
+                  dialogBoxConfirmMessage: "Create",
                   dialogBoxOnCancel: (){
                     _eventController.clear();
                     Navigator.of(context).pop();

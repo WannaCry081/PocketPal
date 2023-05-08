@@ -17,10 +17,12 @@ import 'package:pocket_pal/widgets/pocket_pal_dialog_box.dart';
 class EnvelopeNotesPage extends StatefulWidget {
   final Folder folder;
   final Envelope envelope;
+  String ? code;
 
-  const EnvelopeNotesPage({
+  EnvelopeNotesPage({
     required this.envelope,
     required this.folder,
+    this.code,
     super.key});
 
   @override
@@ -78,7 +80,8 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
       PocketPalDatabase().createEnvelopeNotes(
         widget.folder.folderId,
         widget.envelope.envelopeId,
-        data
+        data,
+        code: widget.code
       ); 
       setState(() {
           isEnabled = false;
@@ -90,21 +93,6 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
       Navigator.of(context).pop();
       clearController();
   }
-
- void updateNotesFunction(String envelopeId, int index) async {
-  final newData = EnvelopeNotes(
-    envelopeNoteContent: envelopeNoteContentController.text.trim(),
-    envelopeNoteName: envelopeNoteNameController.text.trim(), 
-    envelopeNoteUsername: auth.getUserDisplayName,
-  ).toMap();
-
-  await PocketPalDatabase().updateEnvelopeNote(
-    widget.folder.folderId,
-    widget.envelope.envelopeId,
-    newData,
-    index,
-  );
-}
 
 
 
@@ -158,7 +146,8 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
              StreamBuilder<Map<String, dynamic>>(
                stream: db.getEnvelopeNotes(
                   widget.folder.folderId, 
-                  widget.envelope.envelopeId
+                  widget.envelope.envelopeId,
+                  code: widget.code
                 ),
                builder: (context, snapshot) {
               if (!snapshot.hasData || snapshot.data == null) {
@@ -217,6 +206,7 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
                                       widget.envelope.envelopeId,
                                       updatedNote,
                                       index,
+                                      code: widget.code
                                     );
                                   },
                                     isEnabled: true,
@@ -243,7 +233,9 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
                                                 db.deleteEnvelopeNote(
                                                   widget.folder.folderId, 
                                                   widget.envelope.envelopeId,
-                                                  index );
+                                                  index,
+                                                  code: widget.code
+                                                   );
                                                 ScaffoldMessenger.of(context).showSnackBar(
                                                   const SnackBar(
                                                     content: Text("Successfully Deleted!"),
@@ -254,6 +246,7 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
                                                   MaterialPageRoute(builder: (context) => EnvelopeNotesPage(
                                                     folder: widget.folder,
                                                     envelope: widget.envelope,
+                                                    code: widget.code,
                                                   )),
                                                   ModalRoute.withName('/'),
                                                 );

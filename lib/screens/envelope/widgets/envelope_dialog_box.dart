@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
+import 'package:pocket_pal/const/font_style.dart';
 import 'package:pocket_pal/widgets/pocket_pal_formfield.dart';
 
 class MyEnvelopeDialogBoxWidget extends StatelessWidget {
    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController controllerName;
+  final TextEditingController controllerAmount;
   final String dialogBoxHintText;
   final String dialogBoxTitle;
   final String dialogBoxErrorMessage;
-  final TextEditingController envelopeAmountcontrollerName;
   final String  envelopeAmountHintText;
   final void Function() dialogBoxOnTap;
 
@@ -22,20 +23,17 @@ class MyEnvelopeDialogBoxWidget extends StatelessWidget {
     required this.dialogBoxTitle,
     required this.dialogBoxOnTap,
     required this.envelopeAmountHintText,
-    required this.envelopeAmountcontrollerName,
+    required this.controllerAmount,
     super.key
   });
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: ColorPalette.white,
-      title: Text(
+      title: titleText(
         dialogBoxTitle,
-        style : GoogleFonts.poppins(
-          fontSize : 14.sp,
-          fontWeight: FontWeight.w500
-        )
+        titleWeight: FontWeight.w600,
+        titleColor : ColorPalette.crimsonRed
       ),
       content : Form(
         key : _formKey,
@@ -54,7 +52,7 @@ class MyEnvelopeDialogBoxWidget extends StatelessWidget {
               },
             ),
             PocketPalFormField(
-              formController: envelopeAmountcontrollerName,
+              formController: controllerAmount,
               formHintText: envelopeAmountHintText,
               formKeyboardType: TextInputType.number,
               formValidator: (value){
@@ -72,12 +70,15 @@ class MyEnvelopeDialogBoxWidget extends StatelessWidget {
       ),
       actions: [
         GestureDetector(
-          onTap : () => Navigator.of(context).pop(),
-          child: Text(
+          onTap : (){
+            controllerName.clear();
+            controllerAmount.clear();
+            Navigator.of(context).pop();
+          }, 
+          child:  bodyText(
             "Cancel",
-            style : GoogleFonts.montserrat(
-              fontWeight : FontWeight.w500
-            )
+            bodyWeight : FontWeight.w500,
+            bodySize : 14.sp 
           ),
         ),
         GestureDetector(
@@ -87,12 +88,11 @@ class MyEnvelopeDialogBoxWidget extends StatelessWidget {
               dialogBoxOnTap();
             }
           },
-          child: Text(
+          child: bodyText(
             "Create", 
-            style : GoogleFonts.montserrat(
-              color : ColorPalette.crimsonRed,
-              fontWeight : FontWeight.w500
-            )
+            bodyColor : ColorPalette.crimsonRed,
+            bodyWeight : FontWeight.w500,
+            bodySize : 14.sp 
           ),
         )
       ],

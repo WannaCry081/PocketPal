@@ -21,7 +21,7 @@ class MenuItems {
       FeatherIcons.home
   );
   static const sharedFolders = MenuItem(
-      "Shared Folders", 
+      "Shared Wall", 
       FeatherIcons.folderPlus
   );
   static const profile = MenuItem(

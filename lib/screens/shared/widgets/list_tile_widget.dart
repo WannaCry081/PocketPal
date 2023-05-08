@@ -8,12 +8,16 @@ import "package:pocket_pal/const/font_style.dart";
 class MyListTileWidget extends StatelessWidget {
 
   final String listTileName;
+  final String listTileCode;
   final void Function() listTileWallNavigation;
+  final void Function() listTileWallOnDelete;
 
   const MyListTileWidget({ 
     Key ? key,
     required this.listTileName,
-    required this.listTileWallNavigation
+    required this.listTileCode,
+    required this.listTileWallNavigation, 
+    required this.listTileWallOnDelete
   }) : super(key : key);
 
   @override
@@ -25,7 +29,7 @@ class MyListTileWidget extends StatelessWidget {
           motion: const ScrollMotion(), 
           children: [
             SlidableAction(
-              onPressed : (context){},
+              onPressed : (context) => listTileWallOnDelete,
               icon : FeatherIcons.trash2, 
             )
           ]
@@ -70,10 +74,21 @@ class MyListTileWidget extends StatelessWidget {
               ),
 
               Expanded(
-                child : titleText(
-                  listTileName,
-                  titleSize: 14.sp,
-                  titleWeight : FontWeight.w600
+                child : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children : [
+                    titleText(
+                      listTileName,
+                      titleSize: 14.sp,
+                      titleWeight : FontWeight.w600
+                    ),
+                    bodyText(
+                      listTileCode, 
+                      bodySize : 12.sp,
+                      bodyColor: ColorPalette.grey
+                    )
+                  ]
                 )
               )
             ]

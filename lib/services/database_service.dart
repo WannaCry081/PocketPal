@@ -1,8 +1,6 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:firebase_auth/firebase_auth.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 import "package:pocket_pal/utils/chatbox_structure_util.dart";
-import 'package:pocket_pal/utils/envelope_util.dart';
 
 
 class PocketPalFirestore {
@@ -105,6 +103,7 @@ class PocketPalFirestore {
     return await collectionSnapshot.get();
   } 
 
+
   Future<void> updateEnvelope(String docName, String docId, Map<String, dynamic> data, {String ? code}) async {
     final collection = _db.collection(code ?? _userUid).doc("${code ?? _userUid}+Wall")
       .collection(code ?? _userUid).doc(docName).collection("$docName+Envelope").doc(docId);
@@ -131,7 +130,6 @@ class PocketPalFirestore {
   }
 
   Future<void> updateMessage() async {
-    
     return;
   }
 
@@ -143,7 +141,7 @@ class PocketPalFirestore {
   }
 
   // User ======================================================
-  Future<DocumentSnapshot> getUserCredential() async {
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUserCredential() async {
     final collectionSnapshot = _db.collection(_userUid).doc("$_userUid+$_email");
     return await collectionSnapshot.get();
   } 
@@ -160,9 +158,26 @@ class PocketPalFirestore {
     return;
   }
 
+
+  // Wall Manipulation ==========================================
+  Future<DocumentSnapshot<Map<String, dynamic>>> getGroupCollecton(String code) async {
+    final collectionSnapshot = _db.collection(code).doc("$code+Information");
+    return await collectionSnapshot.get();
+  } 
+
   Future<void> createGroupCollection(String code, Map<String, dynamic> data) async{
     final collection = _db.collection(code).doc("$code+Information");
     await collection.set(data);
+    return;
+  }
+  
+  Future<void> deleteGroupCollection(String code) async{
+    
+    return;
+  }
+  Future<void> updateGroupCollection(String code, Map<String, dynamic> data) async {
+    final collection = _db.collection(code).doc("$code+Information");
+    await collection.update(data);
     return;
   }
   

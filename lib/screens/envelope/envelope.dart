@@ -89,7 +89,6 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
    
   @override
   void initState(){
-    print(expenseTotal);
     transactionType = TextEditingController(text : "Expense");
     transactionAmount = TextEditingController(text : "");
     transactionName = TextEditingController(text : "");
@@ -122,7 +121,8 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
       PocketPalDatabase().createEnvelopeTransaction(
         widget.folder.folderId,
         widget.envelope.envelopeId,
-        data
+        data,
+        code: widget.code
       ); 
 
       Navigator.of(context).pop();
@@ -142,6 +142,7 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
         builder : (context) => EnvelopeNotesPage(
           folder: widget.folder,
           envelope: widget.envelope,
+          code: widget.code
         )
       )
     );
@@ -196,7 +197,9 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
             child: StreamBuilder<Map<String, dynamic>>(
               stream: db.getEnvelopeTransactions(
                     widget.folder.folderId, 
-                    widget.envelope.envelopeId),
+                    widget.envelope.envelopeId,
+                    code: widget.code,
+                    ),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data == null) {
                   return const CircularProgressIndicator();
@@ -236,8 +239,9 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                               ),
                               SizedBox( width: 10.h,),
                               titleText(
-                                widget.envelope.envelopeName,
+                                "${widget.envelope.envelopeName} Envelope",
                                 titleSize: 18.sp,
+                                titleOverflow: TextOverflow.ellipsis,
                                 titleColor: ColorPalette.white,
                               )
                             ],
@@ -379,7 +383,9 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                                         db.deleteEnvelopeTransaction(
                                           widget.folder.folderId, 
                                           widget.envelope.envelopeId,
-                                          index);
+                                          index,
+                                          code: widget.code
+                                          );
                                           ScaffoldMessenger.of(context).showSnackBar(
                                             const SnackBar(
                                               content: Text("Successfully Deleted!"),

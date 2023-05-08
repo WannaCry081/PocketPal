@@ -106,7 +106,9 @@ class _ProfileViewState extends State<ProfileView> {
             child: SizedBox(
               width : MediaQuery.of(context).size.width,
               height : 50.h,
-              child: PocketPalAppBar()
+              child: const PocketPalAppBar(
+                pocketPalTitle: "Profile",
+              )
             )
           ),
         ],

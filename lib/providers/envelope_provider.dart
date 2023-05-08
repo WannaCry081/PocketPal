@@ -35,6 +35,7 @@ class EnvelopeProvider with ChangeNotifier {
     _envelopeList = querySnapshot.docs.map(
       (doc) => Envelope.fromMap(doc.data() as Map<String, dynamic>)
     ).toList();
+    print(_envelopeList);
     notifyListeners();
     return; 
   }  

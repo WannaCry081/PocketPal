@@ -25,7 +25,7 @@ class MyTitleOptionWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children : [
           titleText(
-            "My Wall",
+            folderTitleText,
             titleWeight: FontWeight.w600,
             titleSize : 16.sp
           ),

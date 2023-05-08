@@ -2,20 +2,21 @@ import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_svg/flutter_svg.dart";
+
 import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/const/font_style.dart";
-import 'package:pocket_pal/utils/folder_util.dart';
+import "package:pocket_pal/utils/envelope_util.dart";
 
 
-class MyBottomEditSheetWidget extends StatelessWidget { 
+class MyEnvelopeBottomEditSheetWidget extends StatelessWidget { 
 
-  final Folder folder;
+  final Envelope envelope;
   final void Function() ? bottomSheetOnEdit;
   final void Function() ? bottomSheetOnDelete;
 
-  const MyBottomEditSheetWidget({ 
+  const MyEnvelopeBottomEditSheetWidget({ 
     Key ? key,
-    required this.folder,
+    required this.envelope,
     this.bottomSheetOnEdit,
     this.bottomSheetOnDelete
   }) : super(key : key);
@@ -53,14 +54,14 @@ class MyBottomEditSheetWidget extends StatelessWidget {
               context,
               FeatherIcons.edit,
               ColorPalette.black!,
-              "Rename",
+              "Rename Envelope",
               bottomSheetOnEdit
             ),
             _bottomSheetItem(
               context,
               FeatherIcons.trash2,
               ColorPalette.crimsonRed, 
-              "Delete",
+              "Delete Envelope",
               bottomSheetOnDelete
             ),
           ],
@@ -75,7 +76,7 @@ class MyBottomEditSheetWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children : [
         titleText(
-          folder.folderName,
+          "${envelope.envelopeName} Envelope",
           titleSize : 14.sp,
           titleWeight: FontWeight.w600,
         ),
@@ -98,7 +99,7 @@ class MyBottomEditSheetWidget extends StatelessWidget {
         Expanded(
           flex : 4,
           child : SvgPicture.asset(
-            "assets/icon/Folder.svg",
+            "assets/icon/Envelope.svg",
           )
         ),
 
@@ -119,9 +120,19 @@ class MyBottomEditSheetWidget extends StatelessWidget {
                 SizedBox(
                   width : 128.w,
                   child: bodyText(
-                    folder.folderId,
+                    envelope.envelopeId,
                     bodySize : 12.sp 
                   ),
+                ),
+                SizedBox(height : 10.h ),
+                titleText(
+                  "Starting Amount",
+                  titleColor : ColorPalette.grey,
+                  titleWeight : FontWeight.w600
+                ),
+                bodyText(
+                  envelope.envelopeStartingAmount.toStringAsFixed(2),
+                  bodySize : 12.sp 
                 ),
 
                 SizedBox(height : 10.h ),
@@ -131,18 +142,7 @@ class MyBottomEditSheetWidget extends StatelessWidget {
                   titleWeight : FontWeight.w600
                 ),
                 bodyText(
-                  "${folder.folderDate.month}/${folder.folderDate.day}/${folder.folderDate.year}",
-                  bodySize : 12.sp
-                ),
-
-                SizedBox(height : 10.h ),
-                titleText(
-                  "Number of Envelope",
-                  titleColor : ColorPalette.grey,
-                  titleWeight : FontWeight.w600
-                ),
-                bodyText(
-                  "${folder.folderNumberOfEnvelopes}",
+                  "${envelope.envelopeDate.month}/${envelope.envelopeDate.day}/${envelope.envelopeDate.year}",
                   bodySize : 12.sp
                 ),
               ]

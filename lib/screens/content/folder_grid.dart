@@ -10,7 +10,7 @@ import "package:pocket_pal/providers/folder_provider.dart";
 import 'package:pocket_pal/utils/folder_util.dart';
 import "package:pocket_pal/widgets/pocket_pal_folder.dart";
 
-import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_sheet.dart";
+import 'package:pocket_pal/screens/dashboard/widgets/folder_bottom_edit_sheet.dart';
 import 'package:pocket_pal/screens/content/folder_content.dart';
 import "package:pocket_pal/screens/dashboard/widgets/dialog_box.dart";
 
@@ -35,11 +35,11 @@ class _FolderGridPageState extends State<FolderGridPage> {
   final TextEditingController _folderNameController = TextEditingController(text : "");
   
   @override
-  void didChangeDependencies(){
-    super.didChangeDependencies();
+  void initState(){
+    super.initState();
     Provider.of<FolderProvider>(
       context, 
-      listen : true
+      listen : false
     ).fetchFolder(code : widget.code);
     return;
   } 
@@ -53,86 +53,84 @@ class _FolderGridPageState extends State<FolderGridPage> {
 
   @override
   Widget build(BuildContext context){
-
-    final FolderProvider folderProvider = Provider.of<FolderProvider>(context);
-    final List<Folder> folderItem = folderProvider.getFolderList;
-    final int folderItemLength = folderItem.length;
-
-    return Scaffold(
-      appBar : AppBar(
-        title : titleText(
-          (widget.code!.isEmpty) ? "Personal Wall" : "${widget.wallName} Wall" ,
-          titleWeight : FontWeight.w600
-        )
-      ),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: _dashboardAddFolder,
-        backgroundColor: ColorPalette.crimsonRed,
-        shape: const CircleBorder(),
-        child : Icon(
-          FeatherIcons.plus, 
-          color : ColorPalette.white
-        ),
-      ),
-      
-      body : GridView.builder(
-        itemCount : folderItemLength,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 1.6/2,
-          crossAxisCount: 2,
-        ),
-        itemBuilder : (context, index){
-          return Padding(
-            padding: EdgeInsets.only(
-              top : 4.h, 
-              bottom : 16.h,
-              left : (index%2==0) ? 
-                16.w : 8.w,
-              right : (index%2==0) ? 
-                8.w : 16.w,
+    return Consumer<FolderProvider>(
+      builder: (context, folderProvider, child) {
+        return Scaffold(
+          appBar : AppBar(
+            title : titleText(
+              (widget.wallName.isEmpty) ? "Personal Folder" : "${widget.wallName} Folder" , 
+              titleWeight : FontWeight.w600
+            )
+          ),
+    
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => _dashboardAddFolder(folderProvider),
+            backgroundColor: ColorPalette.crimsonRed,
+            shape: const CircleBorder(),
+            child : Icon(
+              FeatherIcons.plus, 
+              color : ColorPalette.white
             ),
-            child: PocketPalFolder(
-              folder: folderItem[index],
-              folderEditContents: () => _dashboardFolderEdit(
-                folderItem[index]
-              ),
-              folderOpenContents: (){
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder : (context) => FolderContentPage(
-                      folder: folderItem[index],
-                      code: widget.code,
-                    )
-                  )
-                );
-              },
+          ),
+          
+          body : GridView.builder(
+            itemCount : folderProvider.getFolderList.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: 1.6/2,
+              crossAxisCount: 2,
             ),
-          );
-        }
-      )
+            itemBuilder : (context, index){
+              return Padding(
+                padding: EdgeInsets.only(
+                  top : 4.h, 
+                  bottom : 16.h,
+                  left : (index%2==0) ? 
+                    16.w : 8.w,
+                  right : (index%2==0) ? 
+                    8.w : 16.w,
+                ),
+                child: PocketPalFolder(
+                  folder: folderProvider.getFolderList[index],
+                  folderEditContents: () => _dashboardFolderEdit(
+                    folderProvider, 
+                    folderProvider.getFolderList[index]
+                  ),
+                  folderOpenContents: (){
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder : (context) => FolderContentPage(
+                          folder: folderProvider.getFolderList[index],
+                          code: widget.code,
+                        )
+                      )
+                    );
+                  },
+                ),
+              );
+            }
+          )
+        );
+      }
     );
   }
 
-  void _dashboardAddFolder(){
+  void _dashboardAddFolder(FolderProvider folderProvider){
     showDialog(
       context: context,
       builder: (context) {
 
         return MyDialogBoxWidget(
           controllerName: _folderNameController,
-          dialogBoxHintText: "Untitled Wall",
-          dialogBoxTitle: "Add Wall",
-          dialogBoxErrorMessage: "Please enter a name for your Wall",
+          dialogBoxConfirmMessage : "Create",
+          dialogBoxHintText: "Untitled Folder",
+          dialogBoxTitle: "Add Folder",
+          dialogBoxErrorMessage: "Please enter a name for your Folder",
           dialogBoxOnCancel: (){
             _folderNameController.clear();
             Navigator.of(context).pop();
           },
           dialogBoxOnCreate: (){
-            Provider.of<FolderProvider>(
-              context, 
-              listen: false
-            ).addFolder(
+            folderProvider.addFolder(
               Folder(
                 folderName: _folderNameController.text.trim(),
               ).toMap(),
@@ -147,23 +145,44 @@ class _FolderGridPageState extends State<FolderGridPage> {
     return;
   }
 
-   void _dashboardFolderEdit(Folder folder){
+  void _dashboardFolderEdit(FolderProvider folderProvider, Folder folder){
     showModalBottomSheet(
+      isDismissible: false,
       context: context, 
       builder: (context){
-        return MyBottomEditSheetWidget(
+        return MyFolderBottomEditSheetWidget(
           folder : folder,
           bottomSheetOnDelete: (){
-            Provider.of<FolderProvider>(
-              context, 
-              listen: false
-            ).deleteFolder(
-              folder.folderId,
-              code : widget.code,
-            );
+            folderProvider.deleteFolder(folder.folderId);
             Navigator.of(context).pop();
           },
-          bottomSheetOnEdit: (){},
+          bottomSheetOnEdit: (){
+            Navigator.of(context).pop();
+            showDialog(
+              context : context,
+              builder : (context) {
+                return MyDialogBoxWidget(
+                  controllerName: _folderNameController,
+                  dialogBoxHintText: folder.folderName,
+                  dialogBoxConfirmMessage : "Rename",
+                  dialogBoxTitle: "Rename Folder",
+                  dialogBoxErrorMessage: "Please enter a name for your Folder",
+                  dialogBoxOnCancel: (){
+                    _folderNameController.clear();
+                    Navigator.of(context).pop();
+                  },
+                  dialogBoxOnCreate: (){
+                    folderProvider.updateFolder(
+                      folder.folderId,
+                      { "folderName" : _folderNameController.text.trim() }
+                    );
+                    _folderNameController.clear();
+                    Navigator.of(context).pop();
+                  },
+                );
+              }
+            );
+          },
         );
       }
     );

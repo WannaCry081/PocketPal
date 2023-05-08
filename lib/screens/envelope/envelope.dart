@@ -236,8 +236,9 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
                               ),
                               SizedBox( width: 10.h,),
                               titleText(
-                                widget.envelope.envelopeName,
+                                "${widget.envelope.envelopeName} Envelope",
                                 titleSize: 18.sp,
+                                titleOverflow: TextOverflow.ellipsis,
                                 titleColor: ColorPalette.white,
                               )
                             ],

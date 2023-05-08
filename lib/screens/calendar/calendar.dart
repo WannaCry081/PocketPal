@@ -79,6 +79,7 @@ class _CalendarViewState extends State<CalendarView> {
       context: context,
       builder: (context){
         return MyDialogBoxWidget(
+          dialogBoxConfirmMessage: "Create",
           controllerName: _eventController,
           dialogBoxHintText: "Event name",
           dialogBoxTitle: "Add Event",

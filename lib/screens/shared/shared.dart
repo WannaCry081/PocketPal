@@ -27,11 +27,11 @@ class _SharedWallViewState extends State<SharedWallView> {
 
 
   @override
-  void didChangeDependencies(){
-    super.didChangeDependencies();
+  void initState(){
+    super.initState();
     Provider.of<UserProvider>(
       context,
-      listen: true
+      listen: false
     ).fetchGroupWall();
     return;
   }
@@ -46,49 +46,50 @@ class _SharedWallViewState extends State<SharedWallView> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
-    final List<Map<String, dynamic>> userWall = userProvider.getGroupWall;
-    final int userWallLength = userWall.length;
 
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: _sharedWallCreateGroup, 
-        shape :  const CircleBorder(),
-        backgroundColor: ColorPalette.crimsonRed,
-        child : Icon(
-          FeatherIcons.plus,
-          color : ColorPalette.white
-        )
-      ),
-
-      body : SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children : [
-              
-              const PocketPalAppBar(
-                pocketPalTitle: "Shared Walls",
-              ),
-
-              for (int i=0; i<userWallLength ; i++)
-                MyListTileWidget(
-                  listTileName : userWall[i]["wallName"],
-                  listTileWallNavigation: (){
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder : (context) => FolderGridPage(
-                          code : userWall[i]["wallId"],
-                          wallName: userWall[i]["wallName"],
-                        )
-                      )
-                    );
-                  },
-                )
-
-            ]
+    return Consumer<UserProvider>(
+      builder: (context, userProvider, child) {
+        return Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: _sharedWallCreateGroup, 
+            shape :  const CircleBorder(),
+            backgroundColor: ColorPalette.crimsonRed,
+            child : Icon(
+              FeatherIcons.plus,
+              color : ColorPalette.white
+            )
           ),
-        ),
-      )
+    
+          body : SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children : [
+                  
+                  const PocketPalAppBar(
+                    pocketPalTitle: "Shared Wall",
+                  ),
+    
+                  for (int i=0; i<userProvider.getGroupWall.length ; i++)
+                    MyListTileWidget(
+                      listTileName : userProvider.getGroupWall[i]["wallName"],
+                      listTileWallNavigation: (){
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder : (context) => FolderGridPage(
+                              code : userProvider.getGroupWall[i]["wallId"],
+                              wallName: userProvider.getGroupWall[i]["wallName"],
+                            )
+                          )
+                        );
+                      },
+                    )
+    
+                ]
+              ),
+            ),
+          )
+        );
+      }
     );
   }
 

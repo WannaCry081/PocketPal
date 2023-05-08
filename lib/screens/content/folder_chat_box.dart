@@ -5,7 +5,7 @@ import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:image_picker/image_picker.dart";
-import "package:pocket_pal/screens/dashboard/widgets/bottom_edit_sheet.dart";
+import 'package:pocket_pal/screens/dashboard/widgets/folder_bottom_edit_sheet.dart';
 import "package:pocket_pal/services/authentication_service.dart";
 import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/services/storage_service.dart";

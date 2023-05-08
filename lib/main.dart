@@ -64,39 +64,38 @@ class PocketPalApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
-
-    final SettingsProvider wSettings = context.watch<SettingsProvider>();
-    final bool isLightMode = wSettings.getIsLightMode;
-    final bool isFirstInstall = wSettings.getIsFirstInstall;
-
     return ScreenUtilInit(
       designSize: const Size(360, 640),
       builder : (context, child) {
-        return MaterialApp(
-          title : "Pocket Pal",
-          debugShowCheckedModeBanner: false,
-
-          theme : lightTheme,
-          darkTheme : darkTheme,
-
-          themeMode : (isLightMode) ? 
-            ThemeMode.light : 
-            ThemeMode.dark,
-
-          home : FutureBuilder(
-            future : Firebase.initializeApp(),
-            builder : (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (isFirstInstall) {
-                  return const OnboardView();
-                } else {
-                  return const AuthViewBuilder();
+        return Consumer<SettingsProvider>(
+          builder: (context, settingsProvider, child) {
+            return MaterialApp(
+              title : "Pocket Pal",
+              debugShowCheckedModeBanner: false,
+                
+              theme : lightTheme,
+              darkTheme : darkTheme,
+                
+              themeMode : (settingsProvider.getIsLightMode) ? 
+                ThemeMode.light : 
+                ThemeMode.dark,
+                
+              home : FutureBuilder(
+                future : Firebase.initializeApp(),
+                builder : (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (settingsProvider.getIsFirstInstall) {
+                      return const OnboardView();
+                    } else {
+                      return const AuthViewBuilder();
+                    }
+                  } else {
+                    return const LoadingPage();
+                  }
                 }
-              } else {
-                return const LoadingPage();
-              }
-            }
-          )
+              )
+            );
+          }
         );
       }
     );

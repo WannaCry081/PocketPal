@@ -159,7 +159,6 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
       extendBody: true,
       extendBodyBehindAppBar: true,
       floatingActionButton: FloatingActionButton(
-        shape: const CircleBorder(),
         backgroundColor: ColorPalette.crimsonRed,
         foregroundColor: ColorPalette.white,
         elevation: 12,

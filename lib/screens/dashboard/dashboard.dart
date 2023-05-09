@@ -55,7 +55,6 @@ class _DashboardViewState extends State<DashboardView> {
             onPressed: () => 
               _dashboardAddFolder(folderProvider),
             backgroundColor: ColorPalette.crimsonRed,
-            shape: const CircleBorder(),
             child : Icon(
               FeatherIcons.plus, 
               color : ColorPalette.white

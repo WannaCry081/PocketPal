@@ -67,160 +67,164 @@ class _SignInPageState extends State<SignInPage>{
   
   @override
   Widget build(BuildContext context){
-
-    final wSettings = context.watch<SettingsProvider>();
-    final rSettings = context.read<SettingsProvider>();
-
-    return Scaffold(
-      body : SafeArea(
-        child: Center(
-          child : SingleChildScrollView(
-            child : Form(
-              key : _formKey, 
-              child : Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 20.h,
-                  horizontal: 16.w
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children : [
-                    MyAuthTitleWidget(
-                      authTitleTitle: "Let's Get Going!",
-                      authTitleMessage: "Sign in to access your saved items and\npersonalized recommendations.",
-                      authTitleTitleSize: 30.sp,
-                      authTitleTitleMessageSize: 14.sp,
-                    ),
-
-                    SizedBox( height : 32.h),
-                    SizedBox(
-                      height : 50.h,
-                      child: PocketPalFormField(
-                        formController: _email,
-                        formHintText: "Email Address",
-                        formValidator: (value){
-                          if (value == null || value.isEmpty){
-                            return "Please enter an Email Address";
-                          } else if (!isEmailAddress(value)) {
-                            return "Please enter a valid Email Address";
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                    ),
-
-                    SizedBox( height : 10.h ),
-                    SizedBox(
-                      height : 50.h,
-                      child: PocketPalFormField(
-                        formController: _password,
-                        formIsObsecure: _isObsecure,
-                        formHintText: "Password",
-                        formSuffixIcon: IconButton(
-                          icon : Icon(
-                            (_isObsecure) ? 
-                              FeatherIcons.eye : 
-                              FeatherIcons.eyeOff
-                          ),
-                          onPressed: () => setState(() => _isObsecure = !_isObsecure),
+    return Consumer<SettingsProvider>(
+      builder: (context, settingsProvider, child) {
+        return Consumer<UserProvider>(
+          builder: (context, userProvider, child) {
+            return Scaffold(
+              body : SafeArea(
+                child: Center(
+                  child : SingleChildScrollView(
+                    child : Form(
+                      key : _formKey, 
+                      child : Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 20.h,
+                          horizontal: 16.w
                         ),
-                        formValidator: (value){
-                          if (value == null || value.isEmpty){
-                            return "Please enter your password";
-                          } else if (value.length < 8){
-                            return "Password must be at least 8 characters long";
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                    ),
-                    SizedBox( height : 6.h ),
-                    GestureDetector(
-                      onTap : _navigateToForgotPassword, 
-                      child: bodyText(
-                        "Forgot Password?",
-                        bodyAlignment: TextAlign.end,
-                        bodySize : 14.sp,
-                      ),
-                    ),
-
-                    SizedBox( height : 40.h),
-                    PocketPalButton(
-                      buttonOnTap: (!_isButtonEnable) ? null : (){
-                        if (_formKey.currentState!.validate()){
-                          _formKey.currentState!.save();
-                          
-                          _signInPageEmailAndPasswordAuth();
-                          if (wSettings.getIsFirstInstall){
-                            rSettings.setIsFirstInstall(
-                              !wSettings.getIsFirstInstall
-                            );
-                          }
-                        }
-                      }, 
-                      buttonWidth: double.infinity, 
-                      buttonHeight: 50.h, 
-                      buttonColor: (!_isButtonEnable) ? 
-                        ColorPalette.black :
-                        ColorPalette.crimsonRed,
-                      buttonChild: bodyText(
-                        "Sign In",
-                        bodySize : 16.sp,
-                        bodyWeight : FontWeight.w600,
-                        bodyColor : ColorPalette.white, 
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children : [
+                            MyAuthTitleWidget(
+                              authTitleTitle: "Let's Get Going!",
+                              authTitleMessage: "Sign in to access your saved items and\npersonalized recommendations.",
+                              authTitleTitleSize: 30.sp,
+                              authTitleTitleMessageSize: 14.sp,
+                            ),
+            
+                            SizedBox( height : 32.h),
+                            SizedBox(
+                              height : 50.h,
+                              child: PocketPalFormField(
+                                formController: _email,
+                                formHintText: "Email Address",
+                                formValidator: (value){
+                                  if (value == null || value.isEmpty){
+                                    return "Please enter an Email Address";
+                                  } else if (!isEmailAddress(value)) {
+                                    return "Please enter a valid Email Address";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                            ),
+            
+                            SizedBox( height : 10.h ),
+                            SizedBox(
+                              height : 50.h,
+                              child: PocketPalFormField(
+                                formController: _password,
+                                formIsObsecure: _isObsecure,
+                                formHintText: "Password",
+                                formSuffixIcon: IconButton(
+                                  icon : Icon(
+                                    (_isObsecure) ? 
+                                      FeatherIcons.eye : 
+                                      FeatherIcons.eyeOff
+                                  ),
+                                  onPressed: () => setState(() => _isObsecure = !_isObsecure),
+                                ),
+                                formValidator: (value){
+                                  if (value == null || value.isEmpty){
+                                    return "Please enter your password";
+                                  } else if (value.length < 8){
+                                    return "Password must be at least 8 characters long";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                            ),
+                            SizedBox( height : 6.h ),
+                            GestureDetector(
+                              onTap : _navigateToForgotPassword, 
+                              child: bodyText(
+                                "Forgot Password?",
+                                bodyAlignment: TextAlign.end,
+                                bodySize : 14.sp,
+                              ),
+                            ),
+            
+                            SizedBox( height : 40.h),
+                            PocketPalButton(
+                              buttonOnTap: (!_isButtonEnable) ? null : (){
+                                if (_formKey.currentState!.validate()){
+                                  _formKey.currentState!.save();
+                                  
+                                  _signInPageEmailAndPasswordAuth();
+                                  if (settingsProvider.getIsFirstInstall){
+                                    settingsProvider.setIsFirstInstall(
+                                      !settingsProvider.getIsFirstInstall
+                                    );
+                                  }
+                                }
+                              }, 
+                              buttonWidth: double.infinity, 
+                              buttonHeight: 50.h, 
+                              buttonColor: (!_isButtonEnable) ? 
+                                ColorPalette.black :
+                                ColorPalette.crimsonRed,
+                              buttonChild: bodyText(
+                                "Sign In",
+                                bodySize : 16.sp,
+                                bodyWeight : FontWeight.w600,
+                                bodyColor : ColorPalette.white, 
+                              )
+                            ),
+            
+                            SizedBox( height : 20.h ),
+                            _signInDivider(),
+            
+                            SizedBox( height : 20.h ),
+                            PocketPalButton(
+                              buttonOnTap: (){
+                                _signInPageGoogleAuth();
+                                if (settingsProvider.getIsFirstInstall){
+                                  settingsProvider.setIsFirstInstall(
+                                    !settingsProvider.getIsFirstInstall
+                                  );
+                                }
+                              }, 
+                              buttonWidth: double.infinity, 
+                              buttonHeight: 50.h, 
+                              buttonColor: ColorPalette.lightGrey, 
+                              buttonChild: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children :[
+                                  SvgPicture.asset(
+                                    "assets/icon/Google.svg"
+                                  ),
+            
+                                  SizedBox( width : 10.w),
+                                  bodyText(
+                                    "Continue with Google",
+                                    bodySize : 14.sp,
+                                    bodyWeight: FontWeight.w600,
+                                    bodyColor : ColorPalette.black,
+                                  )
+                                ]
+                              )
+                            ),
+            
+                            SizedBox(height : 18.h),
+                            MyBottomHyperlinkWidget(
+                              hyperlinkOnTap: widget.changeStateIsFirstInstall, 
+                              hyperlinkText: "Don't have an account? ", 
+                              hyperlinkLink: "Sign Up"
+                            )
+                          ]
+                        ),
                       )
-                    ),
-
-                    SizedBox( height : 20.h ),
-                    _signInDivider(),
-
-                    SizedBox( height : 20.h ),
-                    PocketPalButton(
-                      buttonOnTap: (){
-                        _signInPageGoogleAuth();
-                        if (wSettings.getIsFirstInstall){
-                          rSettings.setIsFirstInstall(
-                            !wSettings.getIsFirstInstall
-                          );
-                        }
-                      }, 
-                      buttonWidth: double.infinity, 
-                      buttonHeight: 50.h, 
-                      buttonColor: ColorPalette.lightGrey, 
-                      buttonChild: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children :[
-                          SvgPicture.asset(
-                            "assets/icon/Google.svg"
-                          ),
-
-                          SizedBox( width : 10.w),
-                          bodyText(
-                            "Continue with Google",
-                            bodySize : 14.sp,
-                            bodyWeight: FontWeight.w600,
-                            bodyColor : ColorPalette.black,
-                          )
-                        ]
-                      )
-                    ),
-
-                    SizedBox(height : 18.h),
-                    MyBottomHyperlinkWidget(
-                      hyperlinkOnTap: widget.changeStateIsFirstInstall, 
-                      hyperlinkText: "Don't have an account? ", 
-                      hyperlinkLink: "Sign Up"
                     )
-                  ]
+                  )
                 ),
               )
-            )
-          )
-        ),
-      )
+            );
+          }
+        );
+      }
     );
   }
 

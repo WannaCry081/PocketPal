@@ -49,7 +49,7 @@ class PocketPalAppBar extends StatelessWidget {
 
           const Spacer(),
 
-          (pocketPalSearchButton) ?
+          if (pocketPalSearchButton) ... [
             GestureDetector(
               onTap : pocketPalSearchFunction,
               child : CircleAvatar(
@@ -60,9 +60,8 @@ class PocketPalAppBar extends StatelessWidget {
                   color : ColorPalette.black
                 ),
               )
-            ) : Container(),
-
-          
+            )
+          ]          
         ]
       ),
     );

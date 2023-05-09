@@ -66,7 +66,6 @@ class _FolderGridPageState extends State<FolderGridPage> {
           floatingActionButton: FloatingActionButton(
             onPressed: () => _dashboardAddFolder(folderProvider),
             backgroundColor: ColorPalette.crimsonRed,
-            shape: const CircleBorder(),
             child : Icon(
               FeatherIcons.plus, 
               color : ColorPalette.white

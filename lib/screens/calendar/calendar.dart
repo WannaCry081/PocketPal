@@ -231,53 +231,16 @@ class _CalendarViewState extends State<CalendarView> {
                   ),
                   markerSize: 10,
                 ),
-
-                calendarBuilders: CalendarBuilders(
-                   markerBuilder: (context, date, events) {
-                     final hasEvents = decoratedDays.contains(date);
-                      final children = <Widget>[];
-                      if (hasEvents) {
-                        children.add(
-                          Positioned(
-                            bottom: 1,
-                            child: _buildMarkers(eventItem),
-                          ),
-                        );
-                      }
-                      return Container();
-                    },
-              ),
               ),
             ),
-      
+
+            SizedBox( height: 10.h,),
             Expanded(
-              child: 
-              _eventListView(
-                eventItem: eventItem,
-                eventItemLength: eventItemLength
-              )
+              child: _eventListView(
+                  eventItem: eventItem,
+                  eventItemLength: eventItemLength
+                ),
             )
-      
-            // Column(
-            //   children: [
-            //     ..._getEventfromDay(selectedDay)
-            //     .map((Event event) => SizedBox(
-            //       height: 70.h,
-            //       child: Padding(
-            //         padding: const EdgeInsets.all(8.0),
-            //         child: MyEventListTile(
-            //     event: event,
-            //     eventDay:  DateFormat('d').format(event.eventDate),
-            //     eventMonth: DateFormat('MMM').format(event.eventDate),
-            //     eventName: event.eventName,
-            //         ),
-            //       ),
-            //     ))
-            //     .toList(),
-            //   ],
-            // )
-          
-            
           ],
         ),
       ),
@@ -376,11 +339,11 @@ Widget _eventListView({
     children: groupedEvents.entries.map((entry) {
       DateTime dateTime = entry.key;
       List<String> eventNames = entry.value;
-
+  
       return Padding(
         padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 14.w),
         child: SizedBox(
-          height: (eventNames.length <= 4) ? 90.h : 120.h,
+         height: (eventNames.length <= 4) ? 90.h : 120.h,
           child: MyEventListTile(
             eventMonth: DateFormat('MMM').format(dateTime),
             eventDay: DateFormat('dd').format(dateTime),

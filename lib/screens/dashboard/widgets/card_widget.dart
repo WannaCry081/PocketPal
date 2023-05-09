@@ -47,7 +47,7 @@ class MyCardWidget extends StatelessWidget {
             ),
           ),
           Positioned(
-            right: -18,
+            right: -50,
             bottom: -5,
             child: SvgPicture.asset(
               "assets/svg/dashboard_card.svg",

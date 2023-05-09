@@ -33,8 +33,8 @@ class AddNewTransaction extends StatefulWidget {
 }
 
 class _AddNewTransactionState extends State<AddNewTransaction> {
-    bool isExpenseClicked = false;
-    bool isIncomeClicked = false;
+
+    bool _buttonState = true;
 
     String dropdownValue = "School";
     final GlobalKey<FormState> formKey1 = GlobalKey<FormState>();
@@ -43,7 +43,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
   @override 
   void initState(){
     super.initState();
-    isExpenseClicked = true;
+    widget.transactionTypeController.text = "Expense";
   }  
   
   @override
@@ -71,79 +71,34 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                  titleWeight: FontWeight.w500
                 ),
                 SizedBox( height: 10.h),
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  decoration: BoxDecoration(
-                    color: ColorPalette.white,
-                    borderRadius: BorderRadius.circular(15)
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      GestureDetector(
-                        onTap: (){
-                          setState(() {
-                            isExpenseClicked = !isExpenseClicked;
-                            isIncomeClicked = false;
-                            widget.transactionTypeController.text = "Expense";
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(12.0),
-                          width: (screenWidth * .50) - 35,
-                          decoration: BoxDecoration( 
-                            color: isExpenseClicked ? ColorPalette.crimsonRed : Colors.transparent,
-                            borderRadius: BorderRadius.circular(15)
-                          ),
-                          child: titleText(
-                            "Expense",
-                            titleSize: 14.sp,
-                            titleAlignment: TextAlign.center,
-                            titleColor: !isExpenseClicked ?
-                             ColorPalette.grey : ColorPalette.white
-                          )
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: (){
-                          setState(() {
-                            isIncomeClicked = !isIncomeClicked;
-                            isExpenseClicked = false;
-                            widget.transactionTypeController.text = "Income";
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(12.0),
-                          width: (screenWidth * .50) - 40,
-                          decoration: BoxDecoration(  
-                            color: isIncomeClicked ? ColorPalette.crimsonRed : Colors.transparent,
-                            borderRadius: BorderRadius.circular(15)
-                          ),
-                          child: titleText(
-                            "Income ",
-                            titleSize: 14.sp,
-                            titleAlignment: TextAlign.center,
-                            titleColor: !isIncomeClicked ?
-                             ColorPalette.grey : ColorPalette.white
-                          )
-                        ),
-                      ),
-                    ]),
-                ),
+                _customSwitchButton(context),
                 SizedBox( height: 5.h),  
-                PocketPalFormField(
-                  formHintText: "Amount",
-                  formKeyboardType: TextInputType.number,
-                  formController: widget.transactionAmountController,
-                  formValidator: (value){
-                    if(value!.isEmpty){
-                      return "Please enter a transaction amount.";
-                    }
-                    if(int.tryParse(value) == null){
-                      return "Please enter a valid amount.";
-                    }
-                    return null;
-                  },
+                Row(
+                  children: [
+                    bodyText(
+                      "Php",
+                      bodyWeight : FontWeight.w600,
+                      bodySize : 15.sp,
+                      bodyColor: ColorPalette.grey
+                    ),
+                    SizedBox( width: 5.w,),
+                    Expanded(
+                      child: PocketPalFormField(
+                        formHintText: "Amount",
+                        formKeyboardType: TextInputType.number,
+                        formController: widget.transactionAmountController,
+                        formValidator: (value){
+                          if(value!.isEmpty){
+                            return "Please enter a transaction amount.";
+                          }
+                          if(int.tryParse(value) == null){
+                            return "Please enter a valid amount.";
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ],
                 ),
           
                 SizedBox( height: 10.h),
@@ -171,7 +126,7 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                     }
                   },
                   onChanged: (value){
-                    if (value == 'User-defined') {
+                    if (value == 'Custom') {
                       String newCategory = '';
                       showDialog(
                         context: context,
@@ -294,4 +249,79 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
     Colors.blue.shade200,
     Colors.purple.shade200,
   ];
+
+
+    Widget _customSwitchButton(BuildContext context){
+    final double switchWidth = (MediaQuery.of(context).size.width/2) - 26.w;
+    return Container(
+      height : 50.h,
+      decoration : BoxDecoration(
+        color : ColorPalette.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child : Stack(
+        alignment : Alignment.center,
+        children : [
+          AnimatedPositioned(
+            left : (_buttonState) ? 5.w : (switchWidth+4.w), 
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.fastLinearToSlowEaseIn,
+            child : Container(
+              height : 42.h, 
+              width : switchWidth,
+              decoration: BoxDecoration(
+                color : ColorPalette.crimsonRed, 
+                borderRadius: BorderRadius.circular(14)
+              ),
+            )
+          ),
+
+          Row(
+            children : [
+              Expanded(
+                child: GestureDetector(
+                  onTap :() => _updateButtonState(true),
+                  child: Center(
+                    child: titleText(
+                      "Expense",
+                      titleSize : 14.sp,
+                      titleColor: (_buttonState) ? 
+                        ColorPalette.white: 
+                        ColorPalette.grey,
+                    ),
+                  ),
+                ),
+              ),
+
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => _updateButtonState(false),
+                  child: Center(
+                    child: titleText(
+                      "Income",
+                      titleSize : 14.sp,
+                       titleColor: (_buttonState) ? 
+                        ColorPalette.grey: 
+                        ColorPalette.white,
+                    ),
+                  ),
+                ),
+              )
+            ]
+          ),
+
+        ]
+      )
+    );
+  }
+
+  void _updateButtonState(bool value){
+    setState((){
+      _buttonState = value;
+    }); 
+    _buttonState ? widget.transactionTypeController.text = "Expense" :  widget.transactionTypeController.text = "Income";
+    //widget.transactionTypeController.clear();
+    return;
+  }
+
 }

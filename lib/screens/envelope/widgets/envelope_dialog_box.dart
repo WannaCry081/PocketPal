@@ -51,19 +51,32 @@ class MyEnvelopeDialogBoxWidget extends StatelessWidget {
                 }
               },
             ),
-            PocketPalFormField(
-              formController: controllerAmount,
-              formHintText: envelopeAmountHintText,
-              formKeyboardType: TextInputType.number,
-              formValidator: (value){
-                if(value!.isEmpty){
-                  return "Please enter a starting amount.";
-                }
-                if(double.tryParse(value) == null){
-                  return "Please enter a valid amount.";
-                }
-                return null;
-              },
+            Row(
+              children: [
+                bodyText(
+                  "Php",
+                  bodyWeight : FontWeight.w600,
+                  bodySize : 15.sp,
+                  bodyColor: ColorPalette.grey
+                ),
+                SizedBox( width: 5.w,),
+                Expanded(
+                  child: PocketPalFormField(
+                    formController: controllerAmount,
+                    formHintText: envelopeAmountHintText,
+                    formKeyboardType: TextInputType.number,
+                    formValidator: (value){
+                      if(value!.isEmpty){
+                        return "Please enter a starting amount.";
+                      }
+                      if(double.tryParse(value) == null){
+                        return "Please enter a valid amount.";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),

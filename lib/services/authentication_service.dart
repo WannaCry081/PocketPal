@@ -1,4 +1,5 @@
 import "package:firebase_auth/firebase_auth.dart";
+import "package:firebase_storage/firebase_storage.dart";
 import "package:google_sign_in/google_sign_in.dart";
 import "package:pocket_pal/services/database_service.dart";
 
@@ -20,22 +21,18 @@ class PocketPalAuthentication {
   }
 
   Future<void> authenticationSignUpEmailAndPassword(
-    String userName, String userEmail, String userPassword
+    String userName,  String userEmail, String userPassword
   ) async {
     
-    final newUser = await _auth.createUserWithEmailAndPassword(
+    await _auth.createUserWithEmailAndPassword(
       email: userEmail, 
       password: userPassword
     );
 
-    final currentUser = newUser.user!;
-    
-    await currentUser.updateDisplayName(userName);
-    await currentUser.updatePhotoURL(
-      await PocketPalStorage().getDefaultImage()
-    );
+    String newProfilePicture = await PocketPalStorage().getDefaultImage();
 
-    await currentUser.reload();
+    await authenticationUpdateDisplayName(userName);
+    await authenticationUpdateProfile(newProfilePicture);
     return;
   }
 

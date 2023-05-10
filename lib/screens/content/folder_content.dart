@@ -73,21 +73,23 @@ class _FolderContentPageState extends State<FolderContentPage>{
               titleWeight : FontWeight.w600
             ),
             actions: [
-              IconButton(
-                icon : const Icon(
-                  FeatherIcons.messageCircle,
-                  color : Colors.black
-                ),
-                onPressed: (){
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder : (context) => FolderChatBox(
-                        folder : widget.folder
+              if (widget.code != null) ... [
+                IconButton(
+                  icon : const Icon(
+                    FeatherIcons.messageCircle,
+                    color : Colors.black
+                  ),
+                  onPressed: (){
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder : (context) => FolderChatBox(
+                          folder : widget.folder
+                        )
                       )
-                    )
-                  );
-                },
-              )
+                    );
+                  },
+                )
+              ] 
             ],
           ),
     

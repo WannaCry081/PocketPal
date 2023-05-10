@@ -148,7 +148,7 @@ class _CalendarViewState extends State<CalendarView> {
         child: Column(
           children: [
             const PocketPalAppBar(
-              pocketPalTitle: "",
+              pocketPalTitle: "Calendar",
             ),
         
             Container(

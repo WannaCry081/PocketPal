@@ -1,3 +1,4 @@
+import "package:animations/animations.dart";
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -6,19 +7,18 @@ import "package:flutter_zoom_drawer/flutter_zoom_drawer.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/const/font_style.dart";
+import "package:pocket_pal/screens/dashboard/search.dart";
 
 
 class PocketPalAppBar extends StatelessWidget {
 
   final String pocketPalTitle;
   final bool pocketPalSearchButton;
-  final void Function() ? pocketPalSearchFunction;
   
   const PocketPalAppBar({ 
     Key ? key,
     this.pocketPalTitle = "",
     this.pocketPalSearchButton = false,
-    this.pocketPalSearchFunction
 
   }) : super(key : key);
 
@@ -49,19 +49,29 @@ class PocketPalAppBar extends StatelessWidget {
 
           const Spacer(),
 
-          if (pocketPalSearchButton) ... [
-            GestureDetector(
-              onTap : pocketPalSearchFunction,
-              child : CircleAvatar(
-                radius: 20.r,
-                backgroundColor: ColorPalette.lightGrey,
-                child: Icon(
-                  FeatherIcons.search,
-                  color : ColorPalette.black
-                ),
-              )
+          if (pocketPalSearchButton) ...[
+            OpenContainer(
+              closedElevation: 0,
+              closedBuilder: (context, VoidCallback openContainer) {
+                return GestureDetector(
+                  onTap : openContainer,
+                  child : CircleAvatar(
+                    radius: 20.r,
+                    backgroundColor: ColorPalette.lightGrey,
+                    child: Icon(
+                      FeatherIcons.search,
+                      color : ColorPalette.black
+                    ),
+                  )
+                );
+              },
+              openBuilder: (context, VoidCallback __){
+                return const SearchView();
+              }
             )
-          ]          
+          ]  
+
+          
         ]
       ),
     );

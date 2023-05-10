@@ -67,19 +67,9 @@ class _DashboardViewState extends State<DashboardView> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children : [
     
-                OpenContainer(
-                  closedElevation: 0,
-                  transitionType: ContainerTransitionType.fadeThrough,
-                  transitionDuration: const Duration(milliseconds: 600),
-                  closedBuilder: ( context, VoidCallback openContainer){
-                    return PocketPalAppBar(
+                  const PocketPalAppBar(
                     pocketPalSearchButton: true,
-                    pocketPalSearchFunction: openContainer);
-                  },
-                  openBuilder: (context, VoidCallback __){
-                      return const SearchView( );
-                  }
-                ),
+                  ),
     
                   Padding(
                     padding: EdgeInsets.symmetric(

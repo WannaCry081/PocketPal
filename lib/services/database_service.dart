@@ -117,7 +117,6 @@ class PocketPalFirestore {
         orderBy ?? "envelopeDate",
         descending: true
       );
-
     return await collectionSnapshot.get();
   } 
 
@@ -182,7 +181,18 @@ class PocketPalFirestore {
   }
 
   // ChatBox ======================================================
-  Future<void> addMessage(Map<String, dynamic> data, String docName, String docId, {String ?  code}) async {
+  Future<QuerySnapshot> getMessage(String docName, {String ? code}) async {
+    final collectionSnapshot = _db.collection(code ??_userUid).doc("${code ?? _userUid}+Wall")
+      .collection(code ?? _userUid).doc(docName).collection("$docName+ChatBox")
+      .orderBy(
+        "messageDate",
+        descending: false
+      );
+
+    return await collectionSnapshot.get();
+  }
+
+  Future<void> addMessage(Map<String, dynamic> data, String docName, {String ?  code}) async {
     final collection = _db.collection(code ?? _userUid).doc("${code ?? _userUid}+Wall")
       .collection(code ?? _userUid).doc(docName).collection("$docName+ChatBox").doc();
     
@@ -260,35 +270,35 @@ class PocketPalDatabase {
     return data["messageId"];
   }
 
-  Stream<List<ChatBox>> getMessages(String docName){
-    final collection = _db.collection(_userUid).doc(docName)
-      .collection("$docName+ChatBox");
+  // Stream<List<ChatBox>> getMessages(String docName){
+  //   final collection = _db.collection(_userUid).doc(docName)
+  //     .collection("$docName+ChatBox");
 
-    return collection.snapshots().map(
-      (snapshot) => snapshot.docs.map(
-        (doc) => ChatBox.fromMap(doc.data())
-      ).toList()
-    );
-  }
+  //   return collection.snapshots().map(
+  //     (snapshot) => snapshot.docs.map(
+  //       (doc) => ChatBox.fromMap(doc.data())
+  //     ).toList()
+  //   );
+  // }
 
-  Future<void> deleteMessage(String docName, String docId) async {
-    final collection = _db.collection(_userUid).doc(docName)
-      .collection("$docName+ChatBox").doc(docId);
+  // Future<void> deleteMessage(String docName, String docId) async {
+  //   final collection = _db.collection(_userUid).doc(docName)
+  //     .collection("$docName+ChatBox").doc(docId);
 
-    await collection.delete();
-    return; 
-  }
+  //   await collection.delete();
+  //   return; 
+  // }
 
-  Future<void> updateMessage(
-    String docName, 
-    String docId, 
-    Map<String, dynamic> newData ) async{
+  // Future<void> updateMessage(
+  //   String docName, 
+  //   String docId, 
+  //   Map<String, dynamic> newData ) async{
 
-    final collection = _db.collection(_userUid).doc(docName)
-      .collection("$docName+ChatBox").doc(docId);
-    await collection.update(newData);
-    return;
-  }
+  //   final collection = _db.collection(_userUid).doc(docName)
+  //     .collection("$docName+ChatBox").doc(docId);
+  //   await collection.update(newData);
+  //   return;
+  // }
    
 
 // Envelope Transactions ===========================================================================

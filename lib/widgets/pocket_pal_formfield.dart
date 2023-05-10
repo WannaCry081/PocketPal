@@ -27,7 +27,7 @@ class PocketPalFormField extends StatelessWidget {
     super.key,
     this.formController,
     this.formPrefixIcon,
-    this.formMaxLines = 1,
+    this.formMaxLines = 100,
     this.formKeyboardType,
     required this.formHintText,
     this.formIsObsecure = false,
@@ -42,6 +42,10 @@ class PocketPalFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return TextFormField(
+      style: GoogleFonts.poppins(
+        fontSize : 14.sp,
+        color : ColorPalette.black
+      ),
       controller : formController,
       obscureText: formIsObsecure,
       readOnly: formIsReadOnly,
@@ -49,8 +53,8 @@ class PocketPalFormField extends StatelessWidget {
       onChanged: formOnChange,
       onSaved: formOnSaved,
 
-      // keyboardType: formKeyboardType,
-      // maxLines : formMaxLines,
+      keyboardType: formKeyboardType,
+      maxLines : formMaxLines,
 
       decoration: InputDecoration(
         hintText: formHintText, 

@@ -73,9 +73,6 @@ In Progress
 
 <!-- 
 -> Debug
-	- Shared Wall
-	- Google Auth 
-		-> Creation of $userUid+$email = user information 
 	- Loading Page
 	- MenuBar
 		-> Wont update the picture and display name

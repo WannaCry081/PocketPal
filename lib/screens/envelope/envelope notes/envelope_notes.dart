@@ -127,7 +127,7 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
       foregroundColor: ColorPalette.white,
       elevation: 12,
       onPressed: newNotes,
-      child: Icon(FeatherIcons.plus),
+      child: const Icon(FeatherIcons.plus),
       ),
       appBar : AppBar(
       backgroundColor:  Colors.grey[50],
@@ -147,7 +147,7 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
                stream: db.getEnvelopeNotes(
                   widget.folder.folderId, 
                   widget.envelope.envelopeId,
-                  code: widget.code
+                 // code: widget.code
                 ),
                builder: (context, snapshot) {
               if (!snapshot.hasData || snapshot.data == null) {
@@ -179,8 +179,8 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
                       final formattedDateTime = formatterDateTime.format(envelopeNoteDate.toDate()); 
                       final hasNotes = notes.isNotEmpty;
 
-                      late final TextEditingController envelopeNoteNameController = TextEditingController(text: envelopeNoteName);
-                      late final TextEditingController envelopeNoteContentController = TextEditingController(text: envelopeNoteContent);
+                      late final TextEditingController envelopeNoteNameController  = TextEditingController(text: envelopeNoteName);
+                      late final TextEditingController envelopeNoteContentController  = TextEditingController(text: envelopeNoteContent);
                       return  
                           NotesCard(
                             width: 1,
@@ -208,6 +208,8 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
                                       index,
                                       code: widget.code
                                     );
+                                    setState(() {
+                                    });
                                   },
                                     isEnabled: true,
                                     showDeleteIcon: hasNotes,
@@ -217,7 +219,6 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
                                     envelopeNoteNameController: envelopeNoteNameController,
                                     envelopeNoteContentController: envelopeNoteContentController,
                                     envelopeNoteUsername: envelopeNoteUsername,
-                                    //formattedDateTime: formattedDateTime,
                                     deleteNoteFunction: (){
                                         showDialog(
                                           context: context,
@@ -226,8 +227,8 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
                                             return PocketPalDialogBox(
                                               pocketPalDialogTitle: "Confirm Deletion",
                                               pocketPalDialogContent: Text("Are you sure you want to delete $envelopeNoteName?"),
-                                              pocketPalDialogOption1: "Yes",
-                                              pocketPalDialogOption2: "No",
+                                              pocketPalDialogOption1: "No",
+                                              pocketPalDialogOption2: "Yes",
                                               pocketPalDialogOption1OnTap: () => Navigator.of(context).pop(),
                                               pocketPalDialogOption2OnTap: () async {
                                                 db.deleteEnvelopeNote(

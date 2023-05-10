@@ -79,19 +79,21 @@ class _AddEnvelopeNoteState extends State<AddEnvelopeNote> {
                 size: 26,),
                 onPressed: (){
                   if (widget.formKey.currentState!.validate()){
-                    widget.showDeleteIcon ? 
-                      widget.updateNoteFunction
-                     :
-                      widget.addNotesFunction(widget.fieldName);
-                       _focusNode.unfocus();
+                    if(widget.showDeleteIcon){
+                      widget.updateNoteFunction;
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: widget.showDeleteIcon 
-                          ? const Text("Notes updated!") 
-                          : const Text("Notes added!"),
-                          duration: const Duration(seconds: 1),),);
-                        
-                      //Navigator.of(context).pop;
+                        const SnackBar(
+                          content:Text("Notes updated!"),
+                          duration: Duration(seconds: 1),),);
+                      Navigator.of(context).pop();
+                    } else {
+                       widget.addNotesFunction(widget.fieldName);
+                       _focusNode.unfocus();
+                       ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content:Text("Notes added!"),
+                          duration: Duration(seconds: 1),),);
+                    }
                     }
                 },
               ),
@@ -190,8 +192,6 @@ class _AddEnvelopeNoteState extends State<AddEnvelopeNote> {
                     )
                   ],
                 ),
-                // ElevatedButton(
-                //   onPressed: getCurrentDateTime, child: Text("click me")),
                 Expanded(
                   child: TextFormField(
                     enabled: widget.isEnabled,

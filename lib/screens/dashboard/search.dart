@@ -103,7 +103,7 @@ class _SearchViewState extends State<SearchView> {
               "FOLDERS",
               titleColor: ColorPalette.salmonPink,
               titleSize: 16.sp,
-              titleWeight: FontWeight.w400
+              titleWeight: FontWeight.w500
             ),
             Flexible(
               child: ListView.builder(
@@ -132,7 +132,7 @@ class _SearchViewState extends State<SearchView> {
               "ENVELOPES",
               titleColor: ColorPalette.salmonPink,
               titleSize: 16.sp,
-              titleWeight: FontWeight.w400
+              titleWeight: FontWeight.w500
             ),
             Flexible(
               child: ListView.builder(

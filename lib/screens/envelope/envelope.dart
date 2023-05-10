@@ -70,7 +70,7 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
       "Grocery",
       "Entertainment",
       "Pets",
-      "Travel",
+      "Allowance",
       "Miscellaneous",
   ];
 

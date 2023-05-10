@@ -1,5 +1,6 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
+import "package:pocket_pal/services/authentication_service.dart";
 import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/utils/envelope_util.dart";
 
@@ -35,10 +36,38 @@ class EnvelopeProvider with ChangeNotifier {
     _envelopeList = querySnapshot.docs.map(
       (doc) => Envelope.fromMap(doc.data() as Map<String, dynamic>)
     ).toList();
-    print(_envelopeList);
+    
     notifyListeners();
     return; 
   }  
+
+   Future<List<Map<String, dynamic>>> getAllEnvelopes(String docName, {String? code}) 
+   async {
+      final String _userUid = PocketPalAuthentication().getUserUID;
+      final String _email = PocketPalAuthentication().getUserEmail;
+      
+      final collectionPath =  FirebaseFirestore.instance
+          .collection(code ?? _userUid)
+          .doc("${code ?? _userUid}+Wall")
+          .collection(code ?? _userUid)
+          .doc(docName);
+
+      final querySnapshot = await collectionPath.get();
+      final envelopesList = <Map<String, dynamic>>[];
+
+      if (querySnapshot.exists) {
+        final envelopesCollection = collectionPath
+            .collection("$docName+Envelope");
+
+        final envelopesSnapshot = await envelopesCollection.get();
+
+        for (var doc in envelopesSnapshot.docs) {
+          envelopesList.add(doc.data());
+        }
+      }
+      print(envelopesList);
+      return envelopesList;
+    }
 
   Future<void> addEnvelope(Map<String, dynamic> data, String docName, {String ? code}) async {
     await PocketPalFirestore().addEnvelope(

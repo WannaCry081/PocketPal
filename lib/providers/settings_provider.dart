@@ -9,6 +9,7 @@ class SettingsProvider with ChangeNotifier {
     _initPackages();
   }
 
+
   Future<void> _initPackages() async{
     _pref = await SharedPreferences.getInstance();
     notifyListeners();
@@ -29,5 +30,4 @@ class SettingsProvider with ChangeNotifier {
 
   bool get getIsLightMode => _pref?.getBool("isLightMode") ?? true;
   bool get getIsFirstInstall => _pref?.getBool("isFirstInstall") ?? true;
-
 }

@@ -5,7 +5,6 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:flutter_svg/flutter_svg.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:image_picker/image_picker.dart";
 
@@ -118,7 +117,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 children:[
                                   overviewCountWidget(
                                     folderProvider.getFolderList.length,
-                                    (folderProvider.getFolderList.length <=1 ) ? "folder" : "folders"),
+                                    (folderProvider.getFolderList.length <=1 ) ? "Folder" : "Folders"),
                                   VerticalDivider(
                                     thickness: 2.5,
                                     color: ColorPalette.lightGrey,
@@ -127,7 +126,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     width: 45,
                                   ),
                                   overviewCountWidget("$totalEnvelopes", 
-                                  (totalEnvelopes <= 1) ? "envelope":"envelopes"),
+                                  (totalEnvelopes <= 1) ? "Envelope":"Envelopes"),
                                   VerticalDivider(
                                     thickness: 2.5,
                                     color: ColorPalette.lightGrey,
@@ -136,8 +135,8 @@ class _ProfileViewState extends State<ProfileView> {
                                     width: 45,
                                   ),
                                   overviewCountWidget( 
-                                    userProvider.getUserGroupWall.length,  
-                                    (userProvider.getUserGroupWall.length <=1 )?"group" :"groups",),
+                                    userProvider.getUserWall.length,  
+                                    (userProvider.getUserWall.length <=1 )?"Group" :"Groups",),
                                 ]
                               );
                             }
@@ -222,7 +221,7 @@ class _ProfileViewState extends State<ProfileView> {
             TextSpan(
               text: "$count\n",
               style: GoogleFonts.poppins(
-              fontSize: 20.sp,
+              fontSize: 16.sp,
               fontWeight: FontWeight.w600,
               color: ColorPalette.crimsonRed,
               )

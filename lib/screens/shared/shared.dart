@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:pocket_pal/providers/folder_provider.dart";
 import "package:pocket_pal/providers/wall_provider.dart";
 import "package:provider/provider.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
@@ -47,51 +48,57 @@ class _SharedWallViewState extends State<SharedWallView> {
       builder: (context, userProvider, child) {
         return Consumer<WallProvider>(
           builder: (context, wallProvider, child) {
-            return Scaffold(
-              floatingActionButton: FloatingActionButton(
-                onPressed: () => _sharedWallCreateGroup(
-                  userProvider,
-                  wallProvider
-                ), 
-                backgroundColor: ColorPalette.crimsonRed,
-                child : Icon(
-                  FeatherIcons.plus,
-                  color : ColorPalette.white
-                )
-              ),
-            
-              body : SafeArea(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children : [
-                      
-                      const PocketPalAppBar(
-                        pocketPalTitle: "Shared Wall",
-                      ),
-            
-                      for (int i=0; i<userProvider.getUserGroupWall.length ; i++)
-                        MyListTileWidget(
-                          listTileName : userProvider.getUserGroupWall[i]["wallName"],
-                          listTileCode : userProvider.getUserGroupWall[i]["wallId"],
-                          listTileWallOnDelete: (){
-                            
-                          },
-                          listTileWallNavigation: (){
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder : (context) => FolderGridPage(
-                                  code : userProvider.getUserGroupWall[i]["wallId"],
-                                  wallName: userProvider.getUserGroupWall[i]["wallName"],
-                                )
-                              )
-                            );
-                          },
-                        )
-            
-                    ]
+            return Consumer<FolderProvider>(
+              builder: (context, folderProvider, child) {
+                return Scaffold(
+                  floatingActionButton: FloatingActionButton(
+                    onPressed: () => _sharedWallCreateGroup(
+                      userProvider,
+                      wallProvider
+                    ), 
+                    backgroundColor: ColorPalette.crimsonRed,
+                    child : Icon(
+                      FeatherIcons.plus,
+                      color : ColorPalette.white
+                    )
                   ),
-                ),
-              )
+                
+                  body : SafeArea(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children : [
+                          
+                          const PocketPalAppBar(
+                            pocketPalTitle: "Shared Wall",
+                          ),
+                
+                          for (int i=0; i<userProvider.getUserWall.length ; i++)
+                            MyListTileWidget(
+                              listTileName : userProvider.getUserWall[i]["wallName"],
+                              listTileCode : userProvider.getUserWall[i]["wallId"],
+                              listTileWallOnDelete: (){
+                                
+                              },
+                              listTileWallNavigation: (){
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder : (context) => FolderGridPage(
+                                      code : userProvider.getUserWall[i]["wallId"],
+                                      wallName: userProvider.getUserWall[i]["wallName"],
+                                    )
+                                  )
+                                ).then((value){
+                                  folderProvider.clearFolderList();
+                                });
+                              },
+                            )
+                
+                        ]
+                      ),
+                    ),
+                  )
+                );
+              }
             );
           }
         );
@@ -134,17 +141,17 @@ class _SharedWallViewState extends State<SharedWallView> {
                 wallName: name,
               );
 
-              userProvider.getUserGroupWall.add(data.toMap());
-              userProvider.updateGroupCode( {"palGroupWall" : userProvider.getUserGroupWall} );
+              userProvider.getUserWall.add(data.toMap());
+              userProvider.updateGroupCode( {"palGroupWall" : userProvider.getUserWall} );
               wallProvider.createGroupWall(
+                data.toMap(), 
                 code,
-                data.toMap()
               );  
 
-              wallProvider.getGroupCollection.add(newMember.toMap());
+              wallProvider.getWallList.add(newMember.toMap());
               wallProvider.updateGroupWall(
+                {"wallMembers" : wallProvider.getWallList},
                 code, 
-                {"wallMembers" : wallProvider.getGroupCollection}
               );
 
               _codeController.clear();
@@ -178,13 +185,13 @@ class _SharedWallViewState extends State<SharedWallView> {
                   wallProvider.getGroupWallName 
               );
 
-              wallProvider.getGroupCollection.add(newMember.toMap());
+              wallProvider.getWallList.add(newMember.toMap());
               wallProvider.updateGroupWall(
+                {"wallMembers" : wallProvider.getWallList},
                 code, 
-                {"wallMembers" : wallProvider.getGroupCollection}
               );
-              userProvider.getUserGroupWall.add(data.toMap());
-              userProvider.updateGroupCode( {"palGroupWall" : userProvider.getUserGroupWall} );
+              userProvider.getUserWall.add(data.toMap());
+              userProvider.updateGroupCode( {"palGroupWall" : userProvider.getUserWall} );
 
               _codeController.clear();
               _nameController.clear();

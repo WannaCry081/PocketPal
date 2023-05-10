@@ -14,14 +14,6 @@ class EnvelopeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  String ? _groupCode;
-  String get getGroupCode => _groupCode ?? "";
-  set setGroupCode(String value){
-    _groupCode = value;
-    notifyListeners();
-    return;
-  }
-
   List<Envelope> _envelopeList = [];
   List<Envelope> get getEnvelopeList => _envelopeList;
 
@@ -40,35 +32,7 @@ class EnvelopeProvider with ChangeNotifier {
     return; 
   }  
 
-   Future<List<Map<String, dynamic>>> getAllEnvelopes(String docName, {String? code}) 
-   async {
-      final String _userUid = PocketPalAuthentication().getUserUID;
-      final String _email = PocketPalAuthentication().getUserEmail;
-      
-      final collectionPath =  FirebaseFirestore.instance
-          .collection(code ?? _userUid)
-          .doc("${code ?? _userUid}+Wall")
-          .collection(code ?? _userUid)
-          .doc(docName);
-
-      final querySnapshot = await collectionPath.get();
-      final envelopesList = <Map<String, dynamic>>[];
-
-      if (querySnapshot.exists) {
-        final envelopesCollection = collectionPath
-            .collection("$docName+Envelope");
-
-        final envelopesSnapshot = await envelopesCollection.get();
-
-        for (var doc in envelopesSnapshot.docs) {
-          envelopesList.add(doc.data());
-        }
-      }
-      print(envelopesList);
-      return envelopesList;
-    }
-
-  Future<void> addEnvelope(Map<String, dynamic> data, String docName, {String ? code}) async {
+  Future<void> createEnvelope(Map<String, dynamic> data, String docName, {String ? code}) async {
     await PocketPalFirestore().addEnvelope(
       data,
       docName,
@@ -101,6 +65,11 @@ class EnvelopeProvider with ChangeNotifier {
       code : code
     );
     fetchEnvelope(docName, code : code);
+    return;
+  }
+
+  void clearEnvelopeList(){
+    _envelopeList.clear();
     return;
   }
 }

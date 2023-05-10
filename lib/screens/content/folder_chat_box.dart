@@ -1,7 +1,6 @@
-import "dart:io";
+import "dart:async";
 
 import "package:flutter/material.dart";
-import "package:flutter/scheduler.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
@@ -9,10 +8,8 @@ import "package:image_picker/image_picker.dart";
 import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/const/font_style.dart";
 import "package:pocket_pal/providers/chatbox_provider.dart";
-import "package:pocket_pal/providers/user_provider.dart";
 import "package:pocket_pal/services/authentication_service.dart";
-import "package:pocket_pal/services/database_service.dart";
-import "package:pocket_pal/utils/chatbox_structure_util.dart";
+import 'package:pocket_pal/utils/chatbox_util.dart';
 import 'package:pocket_pal/utils/folder_util.dart';
 import "package:pocket_pal/widgets/pocket_pal_formfield.dart";
 import "package:provider/provider.dart";
@@ -42,26 +39,28 @@ class _FolderChatBoxState extends State<FolderChatBox> {
   @override
   void initState() {
     super.initState();
-    
+
     Provider.of<ChatBoxProvider>(context, listen : false).fetchConversation(
       widget.folder.folderId,
       code : widget.code
     );
-
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _scrollToBottom();
-      });
+      _scrollListViewToBottom();
+
     });
+    return;
   }
 
-  void _scrollToBottom() {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    });
+  Future<void> _scrollListViewToBottom() async {
+    await Future.delayed(const Duration(milliseconds: 500 ));
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+    return;
   }
-
-
   @override
   void dispose(){
     super.dispose();
@@ -95,7 +94,7 @@ class _FolderChatBoxState extends State<FolderChatBox> {
       body : Consumer<ChatBoxProvider>(
         builder: (context, chatBoxProvider, child) {
 
-          final List<ChatBox> chatBoxItemList = chatBoxProvider.getChatList; 
+          final List<ChatBox> chatBoxItemList = chatBoxProvider.getChatConversation; 
           final int chatBoxItemLength = chatBoxItemList.length;
 
           return Column(
@@ -106,18 +105,23 @@ class _FolderChatBoxState extends State<FolderChatBox> {
                   controller: _scrollController,
                   itemCount : chatBoxItemLength,
                   itemBuilder : (context, index){
-                    return _chatBoxMessage(
-                      chatBoxOnLongPress: (){}, 
-                      chatBox: chatBoxItemList[index], 
-                      chatBoxIsAppend : (
-                       !(
-                        index == 0 ||
-                        chatBoxItemList[index].messageUserName !=
-                        chatBoxItemList[index - 1].messageUserName
-                      )
 
-                      )
-                    );
+                    if (index != chatBoxItemLength-1){
+                      return _chatBoxMessage(
+                        chatBoxOnLongPress: (){}, 
+                        chatBox: chatBoxItemList[index], 
+                        chatBoxIsAppend : (
+                        !(
+                            index == 0 ||
+                            chatBoxItemList[index].messageUserName !=
+                            chatBoxItemList[index - 1].messageUserName
+                          )
+                        )
+                      );
+                    } else {
+                      return SizedBox( height : 22.h );
+                    }
+                      
                   }
                 )
               ),
@@ -141,10 +145,9 @@ class _FolderChatBoxState extends State<FolderChatBox> {
       onLongPress : chatBoxOnLongPress,
       child: Padding(
         padding: EdgeInsets.only(
-          
           right : 14.w,
           left : 14.w,
-          top : (chatBoxIsAppend) ? 0 : 10.h ,
+          top : (chatBoxIsAppend) ? 0 : 22.h ,
           bottom: 0
         ),
         child: Row(
@@ -217,7 +220,7 @@ class _FolderChatBoxState extends State<FolderChatBox> {
       color : ColorPalette.pearlWhite,
       padding: EdgeInsets.symmetric(
         horizontal: 14.w,
-        vertical: 10.h
+        vertical: 6.h
       ),
       child: Row(
         children :[
@@ -233,6 +236,8 @@ class _FolderChatBoxState extends State<FolderChatBox> {
           SizedBox(width : 14.w),
           Expanded(
             child: PocketPalFormField(
+              formOnTap: _scrollListViewToBottom,
+
               formKeyboardType: TextInputType.multiline,
               formMaxLines: null,
               formController: _textController,
@@ -243,20 +248,21 @@ class _FolderChatBoxState extends State<FolderChatBox> {
                 ),
                 onPressed: () async {
                   if (_textController.text.isNotEmpty) {
-
+            
                     ChatBox chatBox = ChatBox(
                       messageIsImage: false,
                       messageUserName: _auth.getUserDisplayName, 
                       messageUserProfile: _auth.getUserPhotoUrl, 
                       message: _textController.text.trim()
                     );
-
+            
                     await chatBoxProvider.sendMessage(
                       chatBox.toMap(), 
                       widget.folder.folderId,
                       code : widget.code
                     );
-
+            
+                    _scrollListViewToBottom();
                     _textController.clear();
                   }
                 },

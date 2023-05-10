@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/const/font_style.dart';
-import 'package:pocket_pal/utils/event_structure_util.dart';
+import 'package:pocket_pal/utils/event_util.dart';
 import 'package:intl/intl.dart';
 import 'package:pocket_pal/utils/folder_util.dart';
 

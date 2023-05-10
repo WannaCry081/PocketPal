@@ -13,14 +13,6 @@ class FolderProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  String ? _groupCode;
-  String get getGroupCode => _groupCode ?? "";
-  set setGroupCode(String value){
-    _groupCode = value;
-    notifyListeners();
-    return;
-  }
-  
   List<Folder> _folderList = [];
   List<Folder> get getFolderList => _folderList;
 
@@ -38,15 +30,18 @@ class FolderProvider with ChangeNotifier {
     return; 
   } 
 
-  Future<void> addFolder(Map<String, dynamic> data, { String ? code }) async {
+  Future<void> createFolder(
+    Map<String, dynamic> data, { 
+      String ? code 
+  }) async {
     await PocketPalFirestore().addFolder(data, code : code);
-    fetchFolder(code : _groupCode);
+    fetchFolder(code : code);
     return;
   }
 
   Future<void> updateFolder(
-    String docName, 
-    Map<String, dynamic> data, { 
+    Map<String, dynamic> data,
+    String docName, { 
       String ? code 
   }) async {
     await PocketPalFirestore().updateFolder(
@@ -54,13 +49,19 @@ class FolderProvider with ChangeNotifier {
       data, 
       code : code
     );
-    fetchFolder(code : _groupCode);
+    fetchFolder(code : code);
     return;
   }
 
   Future<void> deleteFolder(String docName, { String ? code }) async {
     await PocketPalFirestore().deleteFolder(docName, code : code);
-    fetchFolder(code : _groupCode);
+    fetchFolder(code : code);
+    return;
+  }
+
+  void clearFolderList(){
+    _folderList.clear();
+    notifyListeners();
     return;
   }
 }

@@ -1,19 +1,19 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:pocket_pal/services/database_service.dart";
-import "package:pocket_pal/utils/chatbox_structure_util.dart";
+import 'package:pocket_pal/utils/chatbox_util.dart';
 
 
 class ChatBoxProvider with ChangeNotifier{
 
-  List<ChatBox> _chatList = [];
-  List<ChatBox> get getChatList => _chatList; 
+  List<ChatBox> _chatConversation = [];
+  List<ChatBox> get getChatConversation => _chatConversation; 
 
   Future<void> fetchConversation(String docName, { String ? code }) async {
     QuerySnapshot querySnapshot = await PocketPalFirestore()
       .getMessage(docName, code : code); 
 
-    _chatList = querySnapshot.docs.map(
+    _chatConversation = querySnapshot.docs.map(
       (doc) => ChatBox.fromMap(doc.data() as Map<String, dynamic>)
     ).toList();
     notifyListeners();
@@ -29,4 +29,10 @@ class ChatBoxProvider with ChangeNotifier{
     fetchConversation(docName, code : code);
     return;
   }
+
+  void clearChatConversation(){
+    _chatConversation.clear();
+    notifyListeners();
+    return;
+  } 
 }

@@ -1,7 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:pocket_pal/services/database_service.dart";
-import "package:pocket_pal/utils/event_structure_util.dart";
+import 'package:pocket_pal/utils/event_util.dart';
 
 
 class EventProvider with ChangeNotifier {

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.pocket_pal">
    <application
-        android:label="pocket_pal"
+        android:label="Pocket Pal"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <receiver

@@ -1,7 +1,8 @@
-import "package:animations/animations.dart";
 import "package:flutter/material.dart";
-import "package:pocket_pal/screens/dashboard/search.dart";
+import "package:pocket_pal/providers/envelope_provider.dart";
+import "package:pocket_pal/providers/user_provider.dart";
 import "package:pocket_pal/services/database_service.dart";
+import "package:pocket_pal/utils/recent_tab_util.dart";
 import "package:provider/provider.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -39,6 +40,7 @@ class _DashboardViewState extends State<DashboardView> {
   void initState(){
     super.initState();
     Provider.of<FolderProvider>(context, listen : false).fetchFolder();
+    Provider.of<UserProvider>(context, listen : false).fetchRecentTab();
   }
 
   @override
@@ -52,96 +54,124 @@ class _DashboardViewState extends State<DashboardView> {
   Widget build(BuildContext context){
     return Consumer<FolderProvider>(
       builder: (context, folderProvider, child) {
-        return Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => 
-              _dashboardAddFolder(folderProvider),
-            backgroundColor: ColorPalette.crimsonRed,
-            child : Icon(
-              FeatherIcons.plus, 
-              color : ColorPalette.white
-            ),
-          ),
-          
-          body : SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children : [
-    
-                  const PocketPalAppBar(
-                    pocketPalSearchButton: true,
-                  ),
-    
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 18.w,
-                      vertical: 14.h
-                    ),
-                    child: titleText(
-                      "Manage\nall your Expenses",
-                      titleSize : 24.sp,
-                      titleWeight: FontWeight.w600
+
+        final List<Folder> folderList = folderProvider.getFolderList;
+
+        return Consumer<EnvelopeProvider>(
+          builder: (context, envelopeProvider, child) {
+
+            return Consumer<UserProvider>(
+              builder: (context, userProvider, child) {
+
+                final List<Map<String, dynamic>> recentTabs = userProvider.getRecentTab;
+                final int recentTabLength = recentTabs.length;
+
+                return Scaffold(
+                  floatingActionButton: FloatingActionButton(
+                    onPressed: () => 
+                      _dashboardAddFolder(folderProvider),
+                    backgroundColor: ColorPalette.crimsonRed,
+                    child : Icon(
+                      FeatherIcons.plus, 
+                      color : ColorPalette.white
                     ),
                   ),
-    
-                  const MyCardWidget(),
-    
-                  SizedBox( height : 10.h), 
                   
-                  MyTitleOptionWidget(
-                    folderTitleText: "My Folders",
-                    folderTitleOnTap: (){
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder : (context) => const FolderGridPage()
-                        )
-                      );
-                    },
-                  ),
-    
-                  (folderProvider.getFolderList.isEmpty) ?
-                    SizedBox(
-                      height : 160.h + 30.w,
-                      child : Center(
-                        child : titleText(
-                          "No Folders Added",
-                        )
-                      )
-                    ) :
-                    _dashboardFolderView( folderProvider ),
-    
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 18.w,
-                      vertical: 10.h
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children : [
-                        titleText(
-                          "Recents",
-                          titleWeight: FontWeight.w600,
-                          titleSize : 16.sp
-                        ),
-    
-                        GestureDetector(
-                          onTap : (){},
-                          child: bodyText(
-                            "View all",
-                            bodyWeight: FontWeight.w600,
-                            bodySize : 14.sp,
-                            bodyColor : ColorPalette.crimsonRed
+                  body : SafeArea(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children : [
+                
+                          const PocketPalAppBar(
+                            pocketPalSearchButton: true,
                           ),
-                        )
-                      ]
+                
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 18.w,
+                              vertical: 14.h
+                            ),
+                            child: titleText(
+                              "Manage\nall your Expenses",
+                              titleSize : 24.sp,
+                              titleWeight: FontWeight.w600
+                            ),
+                          ),
+                
+                          const MyCardWidget(),
+                
+                          SizedBox( height : 10.h), 
+                          
+                          MyTitleOptionWidget(
+                            folderTitleText: "My Folders",
+                            folderTitleOnTap: (){
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder : (context) => const FolderGridPage()
+                                )
+                              );
+                            },
+                          ),
+                
+                          (folderList.isEmpty) ?
+                            SizedBox(
+                              height : 160.h + 30.w,
+                              child : Center(
+                                child : titleText(
+                                  "No Folders Added",
+                                )
+                              )
+                            ) :
+                            _dashboardFolderView( 
+                              folderProvider,
+                              envelopeProvider,
+                              userProvider),
+                
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 18.w,
+                              vertical: 10.h
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children : [
+                                titleText(
+                                  "Recents",
+                                  titleWeight: FontWeight.w600,
+                                  titleSize : 16.sp
+                                ),
+                                Container(),
+                                // GestureDetector(
+                                //   onTap : (){},
+                                //   child: bodyText(
+                                //     "View all",
+                                //     bodyWeight: FontWeight.w600,
+                                //     bodySize : 14.sp,
+                                //     bodyColor : ColorPalette.crimsonRed
+                                //   ),
+                                // )
+                              ]
+                            ),
+                          ),
+
+                            
+                          for (int i = 0 ; i<recentTabLength; i++) ... [
+                            ListTile(
+                              title : titleText(
+                                recentTabs[i]["itemName"]
+                              ),
+                            )
+                          ]
+                          
+                        ]
+                      ),
                     ),
-                  ),
-                  
-                ]
-              ),
-            ),
-          )
+                  )
+                );
+              }
+            );
+          }
         );
       }
     );
@@ -163,7 +193,7 @@ class _DashboardViewState extends State<DashboardView> {
             Navigator.of(context).pop();
           },
           dialogBoxOnCreate: (){
-            folderProvider.addFolder(
+            folderProvider.createFolder(
               Folder(
                 folderName : _folderNameController.text.trim()
               ).toMap()
@@ -177,9 +207,14 @@ class _DashboardViewState extends State<DashboardView> {
     return;
   }
 
-  Widget _dashboardFolderView(FolderProvider folderProvider){
+  Widget _dashboardFolderView(
+    FolderProvider folderProvider, 
+    EnvelopeProvider envelopeProvider,
+    UserProvider userProvider){
+
     List<Folder> folderItem = folderProvider.getFolderList;
     int folderItemLength = folderItem.length;
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       physics: const BouncingScrollPhysics(),
@@ -206,7 +241,17 @@ class _DashboardViewState extends State<DashboardView> {
                         folder: folderItem[i]
                       )
                     )
-                  );
+                  ).then((value){
+                    envelopeProvider.clearEnvelopeList();
+                    userProvider.addTabItem(
+                      RecentTabItem(
+                        itemCategory: "Folder",
+                        itemName: folderItem[i].folderName,
+                        itemDocId: "",
+                        itemDocName: folderItem[i].folderId,
+                      ).toMap()
+                    );
+                  });
                 },
               ),
             )
@@ -243,8 +288,8 @@ class _DashboardViewState extends State<DashboardView> {
                   },
                   dialogBoxOnCreate: (){
                     folderProvider.updateFolder(
-                      folder.folderId,
-                      { "folderName" : _folderNameController.text.trim() }
+                      { "folderName" : _folderNameController.text.trim() },
+                      folder.folderId
                     );
                     _folderNameController.clear();
                     Navigator.of(context).pop();

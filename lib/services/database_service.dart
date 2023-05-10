@@ -1,6 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:pocket_pal/services/authentication_service.dart";
-import "package:pocket_pal/utils/chatbox_structure_util.dart";
 
 
 class PocketPalFirestore {
@@ -11,18 +10,18 @@ class PocketPalFirestore {
 
   // Folders ======================================================
   Future<QuerySnapshot> getFolderSnapshot({String ? orderBy, String ? code}) async {
-    final collectionSnapshot = _db.collection(code ??_userUid).doc("${code ?? _userUid}+Wall")
+    final collection = _db.collection(code ??_userUid).doc("${code ?? _userUid}+Wall")
       .collection(code ?? _userUid).orderBy(
       orderBy ?? "folderDate", descending: true
     );
-    return await collectionSnapshot.get();
+    return await collection.get();
   } 
 
    Future<void> addFolder(Map<String, dynamic> data, {String ? code}) async {
-    final collection = _db.collection(code ?? _userUid).doc("${code ?? _userUid}+Wall")
+    final document = _db.collection(code ?? _userUid).doc("${code ?? _userUid}+Wall")
       .collection(code ?? _userUid).doc();
-    data["folderId"] = collection.id;
-    await collection.set(data);
+    data["folderId"] = document.id;
+    await document.set(data);
     return;
   }
 
@@ -49,9 +48,9 @@ class PocketPalFirestore {
   }
 
   Future<void> updateFolder(String docName, Map<String, dynamic> data, {String ? code}) async {
-    final collection = _db.collection(code ?? _userUid).doc("${code ?? _userUid}+Wall")
+    final document = _db.collection(code ?? _userUid).doc("${code ?? _userUid}+Wall")
       .collection(code ?? _userUid).doc(docName);
-    await collection.update(data);
+    await document.update(data);
     return;
   }
 
@@ -61,26 +60,26 @@ class PocketPalFirestore {
       {String ? orderBy}
     ) async{
 
-      final collection = _db
+      final document = _db
         .collection(_userUid)
         .doc("$_userUid+Event")
         .collection(_userUid)
         .doc();
 
-      data["eventId"] = collection.id;
-      await collection.set(data);
+      data["eventId"] = document.id;
+      await document.set(data);
       getEventSnapshot();
       return;
     }
 
   Future<QuerySnapshot> getEventSnapshot({String ? orderBy,}) async {
-    final collectionSnapshot = _db
+    final collection = _db
         .collection(_userUid)
         .doc("$_userUid+Event")
         .collection(_userUid).orderBy(
       orderBy ?? "eventDate", descending: false
     );
-    return await collectionSnapshot.get();
+    return await collection.get();
   }  
 
   // Envelope ======================================================
@@ -112,37 +111,37 @@ class PocketPalFirestore {
   }
 
   Future<QuerySnapshot> getEnvelopeSnapshot(String docName, { String ? orderBy, String ? code}) async {
-    final collectionSnapshot = _db.collection(code ??_userUid).doc("${code ?? _userUid}+Wall")
+    final collection = _db.collection(code ??_userUid).doc("${code ?? _userUid}+Wall")
       .collection(code ?? _userUid).doc(docName).collection("$docName+Envelope").orderBy(
         orderBy ?? "envelopeDate",
         descending: true
       );
-    return await collectionSnapshot.get();
+    return await collection.get();
   } 
 
   Future<List<Map<String, dynamic>>> getAllEnvelopes(String docName, {String? code}) async {
-  final collectionPath = _db
-      .collection(code ?? _userUid)
-      .doc("${code ?? _userUid}+Wall")
-      .collection(code ?? _userUid)
-      .doc(docName);
+    final collectionPath = _db
+        .collection(code ?? _userUid)
+        .doc("${code ?? _userUid}+Wall")
+        .collection(code ?? _userUid)
+        .doc(docName);
 
-  final querySnapshot = await collectionPath.get();
-  final envelopesList = <Map<String, dynamic>>[];
+    final querySnapshot = await collectionPath.get();
+    final envelopesList = <Map<String, dynamic>>[];
 
-  if (querySnapshot.exists) {
-    final envelopesCollection = collectionPath
-        .collection("$docName+Envelope");
+    if (querySnapshot.exists) {
+      final envelopesCollection = collectionPath
+          .collection("$docName+Envelope");
 
-    final envelopesSnapshot = await envelopesCollection.get();
+      final envelopesSnapshot = await envelopesCollection.get();
 
-    for (var doc in envelopesSnapshot.docs) {
-      envelopesList.add(doc.data());
+      for (var doc in envelopesSnapshot.docs) {
+        envelopesList.add(doc.data());
+      }
     }
-  }
 
-  return envelopesList;
-}
+    return envelopesList;
+  }
 
 
   Future<void> updateEnvelope(String docName, String docId, Map<String, dynamic> data, {String ? code}) async {
@@ -182,22 +181,22 @@ class PocketPalFirestore {
 
   // ChatBox ======================================================
   Future<QuerySnapshot> getMessage(String docName, {String ? code}) async {
-    final collectionSnapshot = _db.collection(code ??_userUid).doc("${code ?? _userUid}+Wall")
+    final collection = _db.collection(code ??_userUid).doc("${code ?? _userUid}+Wall")
       .collection(code ?? _userUid).doc(docName).collection("$docName+ChatBox")
       .orderBy(
         "messageDate",
         descending: false
       );
 
-    return await collectionSnapshot.get();
+    return await collection.get();
   }
 
   Future<void> addMessage(Map<String, dynamic> data, String docName, {String ?  code}) async {
-    final collection = _db.collection(code ?? _userUid).doc("${code ?? _userUid}+Wall")
+    final document = _db.collection(code ?? _userUid).doc("${code ?? _userUid}+Wall")
       .collection(code ?? _userUid).doc(docName).collection("$docName+ChatBox").doc();
     
-    data["messageId"] = collection.id;
-    await collection.set(data); 
+    data["messageId"] = document.id;
+    await document.set(data); 
     return;
   }
 
@@ -206,40 +205,44 @@ class PocketPalFirestore {
   }
 
   Future<void> deleteMessage(String docName, String docId, {String ? code}) async {  
-    final collection = _db.collection(code ?? _userUid).doc("${code ?? _userUid}+Wall")
+    final document = _db.collection(code ?? _userUid).doc("${code ?? _userUid}+Wall")
       .collection(code ?? _userUid).doc(docName).collection("$docName+ChatBox").doc(docId);
-    await collection.delete();
+    await document.delete();
     return;
   }
 
   // User ======================================================
   Future<DocumentSnapshot<Map<String, dynamic>>> getUserCredential() async {
-    final collectionSnapshot = _db.collection(_userUid).doc("$_userUid+$_email");
-    return await collectionSnapshot.get();
+    final collection = _db.collection(_userUid).doc("$_userUid+$_email");
+    return await collection.get();
   } 
 
   Future<void> addUserCredential(Map<String, dynamic> data) async {
-    final collection = _db.collection(_userUid).doc("$_userUid+$_email");
-    await collection.set(data);
+    final userInformationcollection = _db.collection(_userUid).doc("$_userUid+$_email");
+    final recentTabCollection = _db.collection(_userUid).doc("$_userUid+RecentTab");
+
+    await userInformationcollection.set(data);
+    await recentTabCollection.set({
+      "RecentTabItems" : []
+    });
     return;
   }
 
   Future<void> updateUserCredential(Map<String, dynamic> data) async {
-    final collection = _db.collection(_userUid).doc("$_userUid+$_email");
-    await collection.update(data);
+    final document = _db.collection(_userUid).doc("$_userUid+$_email");
+    await document.update(data);
     return;
   }
 
-
   // Wall Manipulation ==========================================
   Future<DocumentSnapshot<Map<String, dynamic>>> getGroupCollecton(String code) async {
-    final collectionSnapshot = _db.collection(code).doc("$code+Information");
-    return await collectionSnapshot.get();
+    final document = _db.collection(code).doc("$code+Information");
+    return await document.get();
   } 
 
   Future<void> createGroupCollection(String code, Map<String, dynamic> data) async{
-    final collection = _db.collection(code).doc("$code+Information");
-    await collection.set(data);
+    final document = _db.collection(code).doc("$code+Information");
+    await document.set(data);
     return;
   }
   
@@ -248,58 +251,29 @@ class PocketPalFirestore {
     return;
   }
   Future<void> updateGroupCollection(String code, Map<String, dynamic> data) async {
-    final collection = _db.collection(code).doc("$code+Information");
-    await collection.update(data);
+    final document = _db.collection(code).doc("$code+Information");
+    await document.update(data);
     return;
   }
-  
+
+  // Recent Tab ==========================================
+  Future<void> updateRecentTab(Map<String, dynamic> data) async {
+    final document = _db.collection(_userUid).doc("$_userUid+RecentTab"); 
+    await document.update(data);
+    return;
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getRecentTab() async {
+    final document = _db.collection(_userUid).doc("$_userUid+RecentTab"); 
+    return await document.get();
+  }
+
 }
 
 class PocketPalDatabase {
 
   final _db = FirebaseFirestore.instance;
   final _userUid = PocketPalAuthentication().getUserUID;
-
-  
-  Future<String> createMessage(String docName, Map<String, dynamic> data) async {
-    final collection = _db.collection(_userUid).doc(docName)
-      .collection("$docName+ChatBox").doc();
-
-    data["messageId"] = collection.id;
-    collection.set(data);
-    return data["messageId"];
-  }
-
-  // Stream<List<ChatBox>> getMessages(String docName){
-  //   final collection = _db.collection(_userUid).doc(docName)
-  //     .collection("$docName+ChatBox");
-
-  //   return collection.snapshots().map(
-  //     (snapshot) => snapshot.docs.map(
-  //       (doc) => ChatBox.fromMap(doc.data())
-  //     ).toList()
-  //   );
-  // }
-
-  // Future<void> deleteMessage(String docName, String docId) async {
-  //   final collection = _db.collection(_userUid).doc(docName)
-  //     .collection("$docName+ChatBox").doc(docId);
-
-  //   await collection.delete();
-  //   return; 
-  // }
-
-  // Future<void> updateMessage(
-  //   String docName, 
-  //   String docId, 
-  //   Map<String, dynamic> newData ) async{
-
-  //   final collection = _db.collection(_userUid).doc(docName)
-  //     .collection("$docName+ChatBox").doc(docId);
-  //   await collection.update(newData);
-  //   return;
-  // }
-   
 
 // Envelope Transactions ===========================================================================
   Future<void> createEnvelopeTransaction(

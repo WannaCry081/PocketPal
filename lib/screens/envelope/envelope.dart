@@ -17,7 +17,7 @@ import 'package:pocket_pal/services/authentication_service.dart';
 import 'package:pocket_pal/services/database_service.dart';
 import 'package:pocket_pal/utils/envelope_util.dart';
 import 'package:pocket_pal/utils/folder_util.dart';
-import 'package:pocket_pal/utils/transaction_structure_util.dart';
+import 'package:pocket_pal/utils/transaction_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pocket_pal/screens/envelope/widgets/glassbox_widget.dart';
 

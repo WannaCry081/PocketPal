@@ -1,4 +1,7 @@
 import "package:flutter/material.dart";
+import "package:pocket_pal/providers/envelope_provider.dart";
+import "package:pocket_pal/providers/user_provider.dart";
+import "package:pocket_pal/utils/recent_tab_util.dart";
 import "package:provider/provider.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -55,59 +58,83 @@ class _FolderGridPageState extends State<FolderGridPage> {
   Widget build(BuildContext context){
     return Consumer<FolderProvider>(
       builder: (context, folderProvider, child) {
-        return Scaffold(
-          appBar : AppBar(
-            title : titleText(
-              (widget.wallName.isEmpty) ? "Personal Folder" : "${widget.wallName} Folder" , 
-              titleWeight : FontWeight.w600
-            )
-          ),
-    
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => _dashboardAddFolder(folderProvider),
-            backgroundColor: ColorPalette.crimsonRed,
-            child : Icon(
-              FeatherIcons.plus, 
-              color : ColorPalette.white
-            ),
-          ),
-          
-          body : GridView.builder(
-            itemCount : folderProvider.getFolderList.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 1.6/2,
-              crossAxisCount: 2,
-            ),
-            itemBuilder : (context, index){
-              return Padding(
-                padding: EdgeInsets.only(
-                  top : 4.h, 
-                  bottom : 16.h,
-                  left : (index%2==0) ? 
-                    16.w : 8.w,
-                  right : (index%2==0) ? 
-                    8.w : 16.w,
-                ),
-                child: PocketPalFolder(
-                  folder: folderProvider.getFolderList[index],
-                  folderEditContents: () => _dashboardFolderEdit(
-                    folderProvider, 
-                    folderProvider.getFolderList[index]
+
+        final List<Folder> folderList = folderProvider.getFolderList;
+        final int folderListLength = folderList.length;
+
+        return Consumer<EnvelopeProvider>(
+          builder: (context, envelopeProvider, child) {
+
+            return Consumer<UserProvider>(
+              builder: (context, userProvider, child) {
+
+                return Scaffold(
+                  appBar : AppBar(
+                    title : titleText(
+                      (widget.wallName.isEmpty) ? "Personal Folder" : "${widget.wallName} Folder" , 
+                      titleWeight : FontWeight.w600
+                    )
                   ),
-                  folderOpenContents: (){
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder : (context) => FolderContentPage(
-                          folder: folderProvider.getFolderList[index],
-                          code: widget.code,
-                        )
-                      )
-                    );
-                  },
-                ),
-              );
-            }
-          )
+                
+                  floatingActionButton: FloatingActionButton(
+                    onPressed: () => _dashboardAddFolder(folderProvider),
+                    backgroundColor: ColorPalette.crimsonRed,
+                    child : Icon(
+                      FeatherIcons.plus, 
+                      color : ColorPalette.white
+                    ),
+                  ),
+                  
+                  body : GridView.builder(
+                    itemCount : folderListLength,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 1.6/2,
+                      crossAxisCount: 2,
+                    ),
+                    itemBuilder : (context, index){
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          top : 4.h, 
+                          bottom : 16.h,
+                          left : (index%2==0) ? 
+                            16.w : 8.w,
+                          right : (index%2==0) ? 
+                            8.w : 16.w,
+                        ),
+                        child: PocketPalFolder(
+                          folder: folderList[index],
+                          folderEditContents: () => _dashboardFolderEdit(
+                            folderProvider, 
+                            folderList[index]
+                          ),
+                          folderOpenContents: (){
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder : (context) => FolderContentPage(
+                                  folder: folderList[index],
+                                  code: widget.code,
+                                )
+                              )
+                            ).then((value) {
+                              envelopeProvider.clearEnvelopeList();
+                              userProvider.addTabItem(
+                                RecentTabItem(
+                                  itemCategory: "Folder",
+                                  itemName: folderList[index].folderName,
+                                  itemDocId: "",
+                                  itemDocName: folderList[index].folderId,
+                                ).toMap()
+                              );
+                            },);
+                          },
+                        ),
+                      );
+                    }
+                  )
+                );
+              }
+            );
+          }
         );
       }
     );
@@ -129,7 +156,7 @@ class _FolderGridPageState extends State<FolderGridPage> {
             Navigator.of(context).pop();
           },
           dialogBoxOnCreate: (){
-            folderProvider.addFolder(
+            folderProvider.createFolder(
               Folder(
                 folderName: _folderNameController.text.trim(),
               ).toMap(),
@@ -175,8 +202,8 @@ class _FolderGridPageState extends State<FolderGridPage> {
                   },
                   dialogBoxOnCreate: (){
                     folderProvider.updateFolder(
-                      folder.folderId,
                       { "folderName" : _folderNameController.text.trim() },
+                      folder.folderId,
                       code: widget.code
                     );
                     _folderNameController.clear();

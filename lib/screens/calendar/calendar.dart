@@ -11,7 +11,7 @@ import 'package:pocket_pal/providers/envelope_provider.dart';
 import 'package:pocket_pal/providers/event_provider.dart';
 import 'package:pocket_pal/providers/folder_provider.dart';
 import 'package:pocket_pal/screens/calendar/widgets/event_tile.dart';
-import 'package:pocket_pal/utils/event_structure_util.dart';
+import 'package:pocket_pal/utils/event_util.dart';
 import 'package:pocket_pal/widgets/pocket_pal_appbar.dart';
 import 'package:pocket_pal/widgets/pocket_pal_formfield.dart';
 import 'package:provider/provider.dart';

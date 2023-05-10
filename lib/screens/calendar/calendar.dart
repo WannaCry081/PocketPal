@@ -245,7 +245,6 @@ class _CalendarViewState extends State<CalendarView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        shape: const CircleBorder(),
         backgroundColor: ColorPalette.crimsonRed,
         onPressed: (){
            showDialog(

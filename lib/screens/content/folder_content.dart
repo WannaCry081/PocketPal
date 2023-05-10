@@ -93,7 +93,6 @@ class _FolderContentPageState extends State<FolderContentPage>{
     
           floatingActionButton: FloatingActionButton(
             backgroundColor: ColorPalette.crimsonRed,
-            shape : const CircleBorder(), 
             onPressed: () => _folderContentAddEnvelope(envelopeProvider),
             child : Icon(
               FeatherIcons.plus, 

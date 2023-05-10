@@ -2,6 +2,7 @@ import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:pocket_pal/services/database_service.dart";
 import "package:provider/provider.dart";
 
 import "package:pocket_pal/providers/user_provider.dart";
@@ -74,162 +75,166 @@ class _SignUpPageState extends State<SignUpPage>{
   
   @override
   Widget build(BuildContext context){
-
-    final wSettings = context.watch<SettingsProvider>();
-    final rSettings = context.read<SettingsProvider>();
-    
-    return Scaffold(
-      body : SafeArea(
-        child: Center(
-          child : SingleChildScrollView(
-            child : Form(
-              key : _formKey, 
-              child : Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 20.h,
-                  horizontal: 16.w
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children : [
-                    MyAuthTitleWidget(
-                      authTitleTitle: "Start Saving Now!",
-                      authTitleMessage: "Sign up and get started to finance\nyour expenses. Join our community today.",
-                      authTitleTitleSize: 30.sp,
-                      authTitleTitleMessageSize: 14.sp,
-                    ),
-
-                    SizedBox( height : 32.h),
-
-                    SizedBox(
-                      height : 50.h,
-                      child: PocketPalFormField(
-                        formController: _name,
-                        formHintText: "Full Name",
-                        formValidator: (value){
-                          if (value == null || value.isEmpty){
-                            return "Please enter your Full Name";
-                          } else if (value.length < 4) { 
-                            return "Please enter a valid Name";
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                    ),
-
-                    SizedBox( height : 10.h ),
-                    SizedBox(
-                      height : 50.h,
-                      child: PocketPalFormField(
-                        formController: _email,
-                        formHintText: "Email Address",
-                        formValidator: (value){
-                          if (value == null || value.isEmpty){
-                            return "Please enter your Email Address";
-                          } else if (!isEmailAddress(value)) {
-                            return "Please enter a valid Email Address"; 
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                    ),
-
-                    SizedBox( height : 10.h ),
-                    SizedBox(
-                      height : 50.h,
-                      child: PocketPalFormField(
-                        formController: _password,
-                        formIsObsecure: _isObsecure[0],
-                        formHintText: "Password",
-                        formSuffixIcon: IconButton(
-                          icon : Icon(
-                            (_isObsecure[0]) ?
-                              FeatherIcons.eye :
-                              FeatherIcons.eyeOff,
-                          ),
-                          onPressed: () => setState(() => _isObsecure[0] = !_isObsecure[0]),
+    return Consumer<SettingsProvider>(
+      builder: (context, settingsProvider, child) {
+        return Consumer<UserProvider>(
+          builder: (context, userProvider, child) {
+            return Scaffold(
+              body : SafeArea(
+                child: Center(
+                  child : SingleChildScrollView(
+                    child : Form(
+                      key : _formKey, 
+                      child : Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 20.h,
+                          horizontal: 16.w
                         ),
-                        formValidator: (value){
-                          if (value == null || value.isEmpty){
-                            return "Please enter a Password";
-                          } else if (value.length < 8) { 
-                            return "Password must at least be 8 characters long";
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                    ),
-
-                    SizedBox( height : 10.h ),
-                    SizedBox(
-                      height : 50.h,
-                      child: PocketPalFormField(
-                        formController: _confirmPassword,
-                        formIsObsecure: _isObsecure[1],
-                        formHintText: "Confirm Password",
-                        formSuffixIcon: IconButton(
-                          icon : Icon(
-                            (_isObsecure[1]) ?
-                              FeatherIcons.eye :
-                              FeatherIcons.eyeOff,
-                          ),
-                          onPressed: () => setState(() => _isObsecure[1] = !_isObsecure[1]),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children : [
+                            MyAuthTitleWidget(
+                              authTitleTitle: "Start Saving Now!",
+                              authTitleMessage: "Sign up and get started to finance\nyour expenses. Join our community today.",
+                              authTitleTitleSize: 30.sp,
+                              authTitleTitleMessageSize: 14.sp,
+                            ),
+            
+                            SizedBox( height : 32.h),
+            
+                            SizedBox(
+                              height : 50.h,
+                              child: PocketPalFormField(
+                                formController: _name,
+                                formHintText: "Full Name",
+                                formValidator: (value){
+                                  if (value == null || value.isEmpty){
+                                    return "Please enter your Full Name";
+                                  } else if (value.length < 4) { 
+                                    return "Please enter a valid Name";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                            ),
+            
+                            SizedBox( height : 10.h ),
+                            SizedBox(
+                              height : 50.h,
+                              child: PocketPalFormField(
+                                formController: _email,
+                                formHintText: "Email Address",
+                                formValidator: (value){
+                                  if (value == null || value.isEmpty){
+                                    return "Please enter your Email Address";
+                                  } else if (!isEmailAddress(value)) {
+                                    return "Please enter a valid Email Address"; 
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                            ),
+            
+                            SizedBox( height : 10.h ),
+                            SizedBox(
+                              height : 50.h,
+                              child: PocketPalFormField(
+                                formController: _password,
+                                formIsObsecure: _isObsecure[0],
+                                formHintText: "Password",
+                                formSuffixIcon: IconButton(
+                                  icon : Icon(
+                                    (_isObsecure[0]) ?
+                                      FeatherIcons.eye :
+                                      FeatherIcons.eyeOff,
+                                  ),
+                                  onPressed: () => setState(() => _isObsecure[0] = !_isObsecure[0]),
+                                ),
+                                formValidator: (value){
+                                  if (value == null || value.isEmpty){
+                                    return "Please enter a Password";
+                                  } else if (value.length < 8) { 
+                                    return "Password must at least be 8 characters long";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                            ),
+            
+                            SizedBox( height : 10.h ),
+                            SizedBox(
+                              height : 50.h,
+                              child: PocketPalFormField(
+                                formController: _confirmPassword,
+                                formIsObsecure: _isObsecure[1],
+                                formHintText: "Confirm Password",
+                                formSuffixIcon: IconButton(
+                                  icon : Icon(
+                                    (_isObsecure[1]) ?
+                                      FeatherIcons.eye :
+                                      FeatherIcons.eyeOff,
+                                  ),
+                                  onPressed: () => setState(() => _isObsecure[1] = !_isObsecure[1]),
+                                ),
+                                formValidator: (value){
+                                  if (value == null || value.isEmpty){
+                                    return "Please enter your Password";
+                                  } else if (_password.text != value) { 
+                                    return "Password does not Match";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                            ),
+                            SizedBox( height : 50.h),
+                            PocketPalButton(
+                              buttonOnTap: (!_isButtonEnable) ? null : (){
+                                if (_formKey.currentState!.validate()){
+                                  _formKey.currentState!.save();
+                                  
+                                  _signUpPageEmailAndPasswordAuth(userProvider);
+                                  if (settingsProvider.getIsFirstInstall){
+                                    settingsProvider.setIsFirstInstall(
+                                      !settingsProvider.getIsFirstInstall
+                                    );
+                                  }
+                                }
+                              }, 
+                              buttonWidth: double.infinity, 
+                              buttonHeight: 50.h, 
+                              buttonColor: (!_isButtonEnable) ? 
+                                ColorPalette.black :
+                                ColorPalette.crimsonRed,
+                              buttonChild: bodyText(
+                                "Sign Up",
+                                bodySize : 16.sp,
+                                bodyWeight : FontWeight.w600,
+                                bodyColor : ColorPalette.white
+                              )
+                            ),
+            
+                            SizedBox(height : 18.h),
+                            MyBottomHyperlinkWidget(
+                              hyperlinkOnTap: widget.changeStateIsFirstInstall, 
+                              hyperlinkText: "Already have an account? ", 
+                              hyperlinkLink: "Sign In"
+                            )
+                          ]
                         ),
-                        formValidator: (value){
-                          if (value == null || value.isEmpty){
-                            return "Please enter your Password";
-                          } else if (_password.text != value) { 
-                            return "Password does not Match";
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                    ),
-                    SizedBox( height : 50.h),
-                    PocketPalButton(
-                      buttonOnTap: (!_isButtonEnable) ? null : (){
-                        if (_formKey.currentState!.validate()){
-                          _formKey.currentState!.save();
-                          
-                          _signUpPageEmailAndPasswordAuth();
-                          if (wSettings.getIsFirstInstall){
-                            rSettings.setIsFirstInstall(
-                              !wSettings.getIsFirstInstall
-                            );
-                          }
-                        }
-                      }, 
-                      buttonWidth: double.infinity, 
-                      buttonHeight: 50.h, 
-                      buttonColor: (!_isButtonEnable) ? 
-                        ColorPalette.black :
-                        ColorPalette.crimsonRed,
-                      buttonChild: bodyText(
-                        "Sign Up",
-                        bodySize : 16.sp,
-                        bodyWeight : FontWeight.w600,
-                        bodyColor : ColorPalette.white
                       )
-                    ),
-
-                    SizedBox(height : 18.h),
-                    MyBottomHyperlinkWidget(
-                      hyperlinkOnTap: widget.changeStateIsFirstInstall, 
-                      hyperlinkText: "Already have an account? ", 
-                      hyperlinkLink: "Sign In"
                     )
-                  ]
+                  )
                 ),
               )
-            )
-          )
-        ),
-      )
+            );
+          }
+        );
+      }
     );
   }
 
@@ -243,9 +248,7 @@ class _SignUpPageState extends State<SignUpPage>{
     return;
   }
 
-  Future<void> _signUpPageEmailAndPasswordAuth() async {
-    final userProvider = Provider.of<UserProvider>(context, listen : false);
-
+  Future<void> _signUpPageEmailAndPasswordAuth(UserProvider userProvider) async {
     try {
       await PocketPalAuthentication().authenticationSignUpEmailAndPassword(
         _name.text.trim(), 
@@ -259,6 +262,7 @@ class _SignUpPageState extends State<SignUpPage>{
           palUserEmail: _email.text.trim()
         ).toMap()
       );
+      
     } on FirebaseAuthException catch(e){
       showDialog(
         context : context,

@@ -53,7 +53,6 @@ class _SharedWallViewState extends State<SharedWallView> {
                   userProvider,
                   wallProvider
                 ), 
-                shape :  const CircleBorder(),
                 backgroundColor: ColorPalette.crimsonRed,
                 child : Icon(
                   FeatherIcons.plus,

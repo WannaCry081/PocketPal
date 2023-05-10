@@ -64,6 +64,7 @@ dependencies:
   flutter_keyboard_visibility: ^5.4.1
   table_calendar: ^3.0.8
   shortid: ^0.1.2
+  flutter_spinkit: ^5.2.0
 
 dev_dependencies:
   flutter_test:

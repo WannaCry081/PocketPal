@@ -34,6 +34,8 @@ class PocketPalAuthentication {
     await currentUser.updatePhotoURL(
       await PocketPalStorage().getDefaultImage()
     );
+
+    await currentUser.reload();
     return;
   }
 

@@ -35,21 +35,21 @@ class Glassbox extends StatelessWidget {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                      Colors.white.withOpacity(0.1),
+                      Colors.white.withOpacity(0.4),
                       Colors.white.withOpacity(0.1),
                     ],
                   ),
-                border: 1, 
-                blur: 30, 
+                border: 1.5, 
+                blur: 25, 
                 borderGradient: 
-                    LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                          Colors.white.withOpacity(0.3),
-                          Colors.white.withOpacity(0.3)
-                        ],
-                     ),),
+                  LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                        Colors.white.withOpacity(0.4),
+                        Colors.white.withOpacity(0.1)
+                      ],
+                    ),),
             ],
           )),
     );

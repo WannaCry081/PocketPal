@@ -70,3 +70,35 @@ In Progress
 
 
 
+
+<!-- 
+-> Debug
+	- Shared Wall
+	- Google Auth 
+		-> Creation of $userUid+$email = user information 
+	- Loading Page
+	- MenuBar
+		-> Wont update the picture and display name
+
+-> Need to change 
+	- ChatBox
+		-> Must use provider
+	- Providers
+		-> Use StreamBuilder to get data
+
+-> Pending Features
+	- Profile Page
+		-> Count Folder|Envelopes|Wall
+
+	- Settings Page
+		-> Adjust DarkMode
+
+	- Picture Gallery
+	- Notifications & Notification Page
+	- Edit Envelope
+	- Recent History
+		-> Shared Preferences
+	
+	- Calendar
+		-> Add Notifications 
+-->

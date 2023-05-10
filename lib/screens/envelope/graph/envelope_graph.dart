@@ -4,10 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:pocket_pal/const/color_palette.dart';
+import 'package:pocket_pal/const/font_style.dart';
 import 'package:pocket_pal/screens/envelope/envelope%20notes/widgets/graph_tab_bar.dart';
 import 'package:pocket_pal/screens/envelope/widgets/glassbox_widget.dart';
-import 'package:pocket_pal/screens/envelope/widgets/money_flow_card.dart';
-import 'package:pocket_pal/utils/envelope_structure_util.dart';
+import 'package:pocket_pal/utils/envelope_util.dart';
 
 class EnvelopeSummaryPieChart extends StatelessWidget {
 
@@ -51,54 +51,29 @@ class EnvelopeSummaryPieChart extends StatelessWidget {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text(
+          title: titleText(
             "$pageName Overview",
-             style: GoogleFonts.poppins(
-                fontSize : 18.sp,
-                color: ColorPalette.black,
-              ),
+            titleSize: 18.sp,
           ),
         ),
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(
+                  vertical: 10.h,
                   horizontal: 14.w),
             child: ListView(
             children: [
-              SizedBox( height: 5.h,),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 4.w,
-                  vertical: 10.h),
-                child: SizedBox(
-                  height: 550,
-                  child: MyPieChartTab(
-                    screenHeight: screenHeight,
-                    screenWidth: screenWidth,
-                    expensedataMap: expensedataMap,
-                    incomedataMap: incomedataMap,
-                    expenseColorList: expenseColorList,
-                    incomeColorList: incomeColorList,
-                  ),
+              SizedBox(
+                height: screenHeight * 0.85,
+                child: MyPieChartTab(
+                  screenHeight: screenHeight,
+                  screenWidth: screenWidth,
+                  expensedataMap: expensedataMap,
+                  incomedataMap: incomedataMap,
+                  expenseColorList: expenseColorList,
+                  incomeColorList: incomeColorList,
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  MoneyFlowCard(
-                    name: "Income",
-                    width: screenWidth / 2 - 25.0,
-                    amount: incomeTotal.toStringAsFixed(2), 
-                    fontSize: incomeTotal.toString().length > 5 ? 22.sp : 26.sp
-                   ),
-                  MoneyFlowCard(
-                    name: "Expense",
-                    width: screenWidth / 2 - 25.0,
-                    amount: expenseTotal.toStringAsFixed(2), 
-                    fontSize: expenseTotal.toString().length > 5 ? 22.sp : 26.sp
-                    ),
-                ],
-              )
             ],
             ),
           ),

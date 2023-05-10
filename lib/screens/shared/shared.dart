@@ -3,7 +3,7 @@ import "package:pocket_pal/providers/wall_provider.dart";
 import "package:provider/provider.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 
-import "package:pocket_pal/screens/content/folder_grid.dart";
+import 'package:pocket_pal/screens/content/folder_grid.dart';
 import "package:pocket_pal/screens/shared/widgets/bottom_sheet_widget.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 import "package:pocket_pal/utils/wall_util.dart";
@@ -53,6 +53,7 @@ class _SharedWallViewState extends State<SharedWallView> {
                   userProvider,
                   wallProvider
                 ), 
+                shape :  const CircleBorder(),
                 backgroundColor: ColorPalette.crimsonRed,
                 child : Icon(
                   FeatherIcons.plus,

@@ -56,138 +56,139 @@ class _FolderGridPageState extends State<FolderGridPage> {
     return Consumer<FolderProvider>(
       builder: (context, folderProvider, child) {
         return Scaffold(
-          // appBar : AppBar(
-          //   title : titleText(
-          //     (widget.wallName.isEmpty) ? "Personal Folder" : "${widget.wallName} Folder" , 
-          //     titleWeight : FontWeight.w600
-          //   )
-          // ),
+          appBar : AppBar(
+            title : titleText(
+              (widget.wallName.isEmpty) ? "Personal Folder" : "${widget.wallName} Folder" , 
+              titleWeight : FontWeight.w600
+            )
+          ),
     
-          // floatingActionButton: FloatingActionButton(
-          //   onPressed: () => _dashboardAddFolder(folderProvider),
-          //   backgroundColor: ColorPalette.crimsonRed,
-          //   child : Icon(
-          //     FeatherIcons.plus, 
-          //     color : ColorPalette.white
-          //   ),
-          // ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => _dashboardAddFolder(folderProvider),
+            backgroundColor: ColorPalette.crimsonRed,
+            shape: const CircleBorder(),
+            child : Icon(
+              FeatherIcons.plus, 
+              color : ColorPalette.white
+            ),
+          ),
           
-          // body : GridView.builder(
-          //   itemCount : folderProvider.getFolderList.length,
-          //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          //     childAspectRatio: 1.6/2,
-          //     crossAxisCount: 2,
-          //   ),
-          //   itemBuilder : (context, index){
-          //     return Padding(
-          //       padding: EdgeInsets.only(
-          //         top : 4.h, 
-          //         bottom : 16.h,
-          //         left : (index%2==0) ? 
-          //           16.w : 8.w,
-          //         right : (index%2==0) ? 
-          //           8.w : 16.w,
-          //       ),
-          //       child: PocketPalFolder(
-          //         folder: folderProvider.getFolderList[index],
-          //         folderEditContents: () => _dashboardFolderEdit(
-          //           folderProvider, 
-          //           folderProvider.getFolderList[index]
-          //         ),
-          //         folderOpenContents: (){
-          //           Navigator.of(context).push(
-          //             MaterialPageRoute(
-          //               builder : (context) => FolderContentPage(
-          //                 folder: folderProvider.getFolderList[index],
-          //                 code: widget.code,
-          //               )
-          //             )
-          //           );
-          //         },
-          //       ),
-          //     );
-          //   }
-          // )
+          body : GridView.builder(
+            itemCount : folderProvider.getFolderList.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: 1.6/2,
+              crossAxisCount: 2,
+            ),
+            itemBuilder : (context, index){
+              return Padding(
+                padding: EdgeInsets.only(
+                  top : 4.h, 
+                  bottom : 16.h,
+                  left : (index%2==0) ? 
+                    16.w : 8.w,
+                  right : (index%2==0) ? 
+                    8.w : 16.w,
+                ),
+                child: PocketPalFolder(
+                  folder: folderProvider.getFolderList[index],
+                  folderEditContents: () => _dashboardFolderEdit(
+                    folderProvider, 
+                    folderProvider.getFolderList[index]
+                  ),
+                  folderOpenContents: (){
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder : (context) => FolderContentPage(
+                          folder: folderProvider.getFolderList[index],
+                          code: widget.code,
+                        )
+                      )
+                    );
+                  },
+                ),
+              );
+            }
+          )
         );
       }
     );
   }
 
   void _dashboardAddFolder(FolderProvider folderProvider){
-    // showDialog(
-    //   context: context,
-    //   builder: (context) {
+    showDialog(
+      context: context,
+      builder: (context) {
 
-    //     return MyDialogBoxWidget(
-    //       controllerName: _folderNameController,
-    //       dialogBoxConfirmMessage : "Create",
-    //       dialogBoxHintText: "Untitled Folder",
-    //       dialogBoxTitle: "Add Folder",
-    //       dialogBoxErrorMessage: "Please enter a name for your Folder",
-    //       dialogBoxOnCancel: (){
-    //         _folderNameController.clear();
-    //         Navigator.of(context).pop();
-    //       },
-    //       dialogBoxOnCreate: (){
-    //         folderProvider.addFolder(
-    //           Folder(
-    //             folderName: _folderNameController.text.trim(),
-    //           ).toMap(),
-    //           code : widget.code,
-    //         );
-    //         _folderNameController.clear();
-    //         Navigator.of(context).pop();
-    //       },
-    //     );
-    //   }
-    // );
+        return MyDialogBoxWidget(
+          controllerName: _folderNameController,
+          dialogBoxConfirmMessage : "Create",
+          dialogBoxHintText: "Untitled Folder",
+          dialogBoxTitle: "Add Folder",
+          dialogBoxErrorMessage: "Please enter a name for your Folder",
+          dialogBoxOnCancel: (){
+            _folderNameController.clear();
+            Navigator.of(context).pop();
+          },
+          dialogBoxOnCreate: (){
+            folderProvider.addFolder(
+              Folder(
+                folderName: _folderNameController.text.trim(),
+              ).toMap(),
+              code : widget.code,
+            );
+            _folderNameController.clear();
+            Navigator.of(context).pop();
+          },
+        );
+      }
+    );
     return;
   }
 
   void _dashboardFolderEdit(FolderProvider folderProvider, Folder folder){
-    // showModalBottomSheet(
-    //   isDismissible: false,
-    //   context: context, 
-    //   builder: (context){
-    //     return MyFolderBottomEditSheetWidget(
-    //       folder : folder,
-    //       bottomSheetOnDelete: (){
-    //         folderProvider.deleteFolder(
-    //           folder.folderId,
-    //           code : widget.code
-    //         );
-    //         Navigator.of(context).pop();
-    //       },
-    //       bottomSheetOnEdit: (){
-    //         Navigator.of(context).pop();
-    //         showDialog(
-    //           context : context,
-    //           builder : (context) {
-    //             return MyDialogBoxWidget(
-    //               controllerName: _folderNameController,
-    //               dialogBoxHintText: folder.folderName,
-    //               dialogBoxConfirmMessage : "Rename",
-    //               dialogBoxTitle: "Rename Folder",
-    //               dialogBoxErrorMessage: "Please enter a name for your Folder",
-    //               dialogBoxOnCancel: (){
-    //                 _folderNameController.clear();
-    //                 Navigator.of(context).pop();
-    //               },
-    //               dialogBoxOnCreate: (){
-    //                 folderProvider.updateFolder(
-    //                   folder.folderId,
-    //                   { "folderName" : _folderNameController.text.trim() },
-    //                   code: widget.code
-    //                 );
-    //                 _folderNameController.clear();
-    //                 Navigator.of(context).pop();
-    //               },
-    //             );
-    //           }
-    //         );
-    //       },
-    //     );
-    //   }
-    // );
+    showModalBottomSheet(
+      isDismissible: false,
+      context: context, 
+      builder: (context){
+        return MyFolderBottomEditSheetWidget(
+          folder : folder,
+          bottomSheetOnDelete: (){
+            folderProvider.deleteFolder(
+              folder.folderId,
+              code : widget.code
+            );
+            Navigator.of(context).pop();
+          },
+          bottomSheetOnEdit: (){
+            Navigator.of(context).pop();
+            showDialog(
+              context : context,
+              builder : (context) {
+                return MyDialogBoxWidget(
+                  controllerName: _folderNameController,
+                  dialogBoxHintText: folder.folderName,
+                  dialogBoxConfirmMessage : "Rename",
+                  dialogBoxTitle: "Rename Folder",
+                  dialogBoxErrorMessage: "Please enter a name for your Folder",
+                  dialogBoxOnCancel: (){
+                    _folderNameController.clear();
+                    Navigator.of(context).pop();
+                  },
+                  dialogBoxOnCreate: (){
+                    folderProvider.updateFolder(
+                      folder.folderId,
+                      { "folderName" : _folderNameController.text.trim() },
+                      code: widget.code
+                    );
+                    _folderNameController.clear();
+                    Navigator.of(context).pop();
+                  },
+                );
+              }
+            );
+          },
+        );
+      }
+    );
   }
 }

@@ -4,6 +4,7 @@ import "package:google_fonts/google_fonts.dart";
 import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/const/font_style.dart";
 import "package:pocket_pal/widgets/pocket_pal_formfield.dart";
+import "package:shortid/shortid.dart";
 
 class MyBottomSheetWidget extends StatefulWidget{
 
@@ -208,9 +209,7 @@ class _MyBottomSheetWidgetState extends State<MyBottomSheetWidget> {
     );
   }
 
-  void _dialogBoxGenerateUUID(){
-    return;
-  }
+  void _dialogBoxGenerateUUID() => widget.codeController.text = shortid.generate();
 
    void _updateButtonState(bool value){
     setState((){

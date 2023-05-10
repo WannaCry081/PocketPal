@@ -14,11 +14,14 @@ class PocketPalAppBar extends StatelessWidget {
 
   final String pocketPalTitle;
   final bool pocketPalSearchButton;
+  final void Function() ? pocketPalSearchFunction;
   
   const PocketPalAppBar({ 
     Key ? key,
     this.pocketPalTitle = "",
     this.pocketPalSearchButton = false,
+    this.pocketPalSearchFunction
+
   }) : super(key : key);
 
   @override

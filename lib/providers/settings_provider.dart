@@ -29,4 +29,5 @@ class SettingsProvider with ChangeNotifier {
 
   bool get getIsLightMode => _pref?.getBool("isLightMode") ?? true;
   bool get getIsFirstInstall => _pref?.getBool("isFirstInstall") ?? true;
+
 }

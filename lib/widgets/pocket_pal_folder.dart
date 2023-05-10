@@ -49,6 +49,7 @@ class PocketPalFolder extends StatelessWidget {
               child: Center(
                 child: titleText(
                   folder.folderName,
+                  titleOverflow: TextOverflow.ellipsis,
                   titleWeight: FontWeight.w600,
                   titleSize : 14.sp,
                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
+import 'package:pocket_pal/const/font_style.dart';
 
 class NotesCard extends StatelessWidget {
   final double width;
@@ -12,7 +13,6 @@ class NotesCard extends StatelessWidget {
   final String userName;
 
   final void Function()? onTap;
-
 
   const NotesCard({
     required this.width,
@@ -85,13 +85,12 @@ class NotesCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              bodyText(
                 dateCreated,
-                style: GoogleFonts.poppins(
-                  color: ColorPalette.crimsonRed.shade500,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12.sp
-                ),),
+                bodyColor: ColorPalette.crimsonRed.shade500,
+                bodyWeight: FontWeight.w500,
+                bodySize: 12.sp,
+              ),
               Container(
                 padding: EdgeInsets.symmetric(
                   horizontal: 5.w,
@@ -101,14 +100,11 @@ class NotesCard extends StatelessWidget {
                   color: ColorPalette.midnightBlue,
                   borderRadius: BorderRadius.circular(5)
                 ),
-                child: Text(
+                child: bodyText(
                   userName,
-                  style: GoogleFonts.poppins(
-                    color: ColorPalette.white,
-                    fontSize: 12.sp
-                  ),
-                    
-                    ),
+                  bodyColor: ColorPalette.white,
+                  bodySize: 12.sp,
+                ),
               )
                 ],
               )

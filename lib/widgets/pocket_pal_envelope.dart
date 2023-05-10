@@ -50,6 +50,7 @@ class PocketPalEnvelope extends StatelessWidget {
               child: Center(
                 child: titleText(
                   envelope.envelopeName,
+                  titleOverflow: TextOverflow.ellipsis,
                   titleWeight: FontWeight.w600,
                   titleSize : 14.sp,
                 ),

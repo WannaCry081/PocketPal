@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:pocket_pal/const/font_style.dart";
 import "package:pocket_pal/screens/auth/auth_builder.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 
@@ -18,6 +19,10 @@ class MenuItems {
   static const home = MenuItem(
       "Dashboard", 
       FeatherIcons.home
+  );
+  static const sharedFolders = MenuItem(
+      "Shared Wall", 
+      FeatherIcons.folderPlus
   );
   static const profile = MenuItem(
       "Profile", 
@@ -42,6 +47,7 @@ class MenuItems {
 
   static const all = <MenuItem>[
     home, 
+    sharedFolders,
     profile,
     calendar,
     calculator,
@@ -65,7 +71,7 @@ class MenuView extends StatelessWidget {
     final auth = PocketPalAuthentication();
 
     return Scaffold(
-      backgroundColor: ColorPalette.black,
+      backgroundColor: ColorPalette.pearlWhite,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -85,7 +91,7 @@ class MenuView extends StatelessWidget {
               SizedBox(
                 height: 40.h,
                 child: Divider(
-                  color: ColorPalette.lightGrey,
+                  color: ColorPalette.black,
                   thickness: 0.8,
                 ),
               ),
@@ -101,15 +107,13 @@ class MenuView extends StatelessWidget {
                     builder : (context) {
                       return PocketPalDialogBox(
                         pocketPalDialogTitle: "Confirm Logout", 
-                        pocketPalDialogMessage: "Are you sure you want to log out?", 
+                        pocketPalDialogContent: bodyText(
+                          "Are you sure you want to Logout?",
+                          bodySize : 14.sp
+                        ), 
                         pocketPalDialogOption1: "No", 
                         pocketPalDialogOption2: "Yes", 
                         pocketPalDialogOption1OnTap: (){
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder : (context) => const AuthViewBuilder()
-                            )
-                          );
                           Navigator.of(context).pop();
                         },
                         pocketPalDialogOption2OnTap: (){
@@ -133,13 +137,17 @@ class MenuView extends StatelessWidget {
   Widget buildMenuItem(MenuItem item) => ListTileTheme(
     child: ListTile(
       leading: Icon(item.icon,
-          color: ColorPalette.white,
+          color: (currentItem != item)? 
+               ColorPalette.black :
+               ColorPalette.white,
           size: 20.w
         ),
       title: Text(item.title,
         style: GoogleFonts.poppins(
             fontSize: 14.sp,
-            color: ColorPalette.white,
+            color: (currentItem != item)? 
+               ColorPalette.black :
+               ColorPalette.white,
             fontWeight: FontWeight.w600
           ),),
       shape: RoundedRectangleBorder(

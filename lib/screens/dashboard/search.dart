@@ -41,158 +41,157 @@ class _SearchViewState extends State<SearchView> {
   Widget build(BuildContext context) {
 
     final FolderProvider folderProvider = context.watch<FolderProvider>();
-    // final List<Folder> folderItem = folderProvider.getFolderList;
+    final List<Folder> folderItem = folderProvider.getFolderList;
 
     final EnvelopeProvider envelopeProvider = context.watch<EnvelopeProvider>();
-    // final List<Envelope> envelopeItem = envelopeProvider.getEnvelopeList;
+    final List<Envelope> envelopeItem = envelopeProvider.getEnvelopeList;
 
 
-    return Scaffold();
-  //     appBar: AppBar(
-  //       title: Card(
-  //         child: TextField(
-  //           controller: _textEditingController,
-  //           decoration:  InputDecoration(
-  //             border: InputBorder.none,
-  //             fillColor: ColorPalette.pearlWhite,
-  //             filled: true,
-  //             enabledBorder: OutlineInputBorder(
-  //                 borderSide: BorderSide.none, 
-  //                 borderRadius: BorderRadius.circular(12.0),
-  //             ),
-  //             focusedBorder: OutlineInputBorder(
-  //                 borderSide: BorderSide.none, 
-  //                 borderRadius: BorderRadius.circular(12.0),
-  //             ),
-  //             prefixIcon: Icon(
-  //               FeatherIcons.search,
-  //               color: ColorPalette.grey
-  //               ),
-  //             hintText: "Search",
-  //             hintStyle: GoogleFonts.lato(
-  //               color: ColorPalette.grey
-  //             ),
-  //             suffix: GestureDetector(
-  //               child: Icon(FeatherIcons.x),
-  //               onTap: (){
-  //                 setState(() {
-  //                    _textFieldFocus.unfocus();
-  //                   _textEditingController.clear();
-  //                   searchText = "";
-  //                 });
-  //               },
-  //               )
-  //           ),
-  //           onChanged: (value){
-  //             setState(() {
-  //               searchText = value;
-  //             });
-  //           },
-  //         ),
-  //       )
-  //     ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Card(
+          child: TextField(
+            controller: _textEditingController,
+            decoration:  InputDecoration(
+              border: InputBorder.none,
+              fillColor: ColorPalette.pearlWhite,
+              filled: true,
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide.none, 
+                  borderRadius: BorderRadius.circular(12.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide.none, 
+                  borderRadius: BorderRadius.circular(12.0),
+              ),
+              prefixIcon: Icon(
+                FeatherIcons.search,
+                color: ColorPalette.grey
+                ),
+              hintText: "Search",
+              hintStyle: GoogleFonts.lato(
+                color: ColorPalette.grey
+              ),
+              suffix: GestureDetector(
+                child: Icon(FeatherIcons.x),
+                onTap: (){
+                  setState(() {
+                     _textFieldFocus.unfocus();
+                    _textEditingController.clear();
+                    searchText = "";
+                  });
+                },
+                )
+            ),
+            onChanged: (value){
+              setState(() {
+                searchText = value;
+              });
+            },
+          ),
+        )
+      ),
 
-  //     body: Padding(
-  //       padding: EdgeInsets.symmetric( horizontal: 14.w),
-  //       child: 
-  //       Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           SizedBox( height: 20.h),
-  //           titleText(
-  //             "FOLDERS",
-  //             titleColor: ColorPalette.salmonPink,
-  //             titleSize: 16.sp,
-  //             titleWeight: FontWeight.w400
-  //           ),
-  //           Flexible(
-  //             child: ListView.builder(
-  //               shrinkWrap: true,
-  //               itemCount: folderItem.length,
-  //               itemBuilder: (context, index){
-  //                 Folder folder = folderItem[index];
+      body: Padding(
+        padding: EdgeInsets.symmetric( horizontal: 14.w),
+        child: 
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox( height: 20.h),
+            titleText(
+              "FOLDERS",
+              titleColor: ColorPalette.salmonPink,
+              titleSize: 16.sp,
+              titleWeight: FontWeight.w400
+            ),
+            Flexible(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: folderItem.length,
+                itemBuilder: (context, index){
+                  Folder folder = folderItem[index];
                   
-  //                 if(searchText.isEmpty){
-  //                   return folderListTile(folder);
-  //                 }
-  //                 if(folder.folderName.toString().toLowerCase().contains(searchText.toLowerCase())){
-  //                   return folderListTile(folder);
-  //                 }
-  //                 return Container();
-  //               }),
-  //           ),
+                  if(searchText.isEmpty){
+                    return folderListTile(folder);
+                  }
+                  if(folder.folderName.toString().toLowerCase().contains(searchText.toLowerCase())){
+                    return folderListTile(folder);
+                  }
+                  return Container();
+                }),
+            ),
             
-  //           Divider(
-  //             height: 20.h,
-  //             color: ColorPalette.lightGrey,
-  //             thickness: 1,
-  //           ),
-  //           SizedBox( height: 15.h),
-  //           titleText(
-  //             "ENVELOPES",
-  //             titleColor: ColorPalette.salmonPink,
-  //             titleSize: 16.sp,
-  //             titleWeight: FontWeight.w400
-  //           ),
-  //           Flexible(
-  //             child: ListView.builder(
-  //               shrinkWrap: true,
-  //               itemCount: envelopeItem.length,
-  //               itemBuilder: (context, index){
-  //                 Envelope envelope =  envelopeProvider.getEnvelopeList[index];
-  //                  if(searchText.isEmpty){
-  //                   return envelopeListTile(envelope, folderItem[index]);
-  //                 }
-  //                 if(envelope.envelopeName.toString().toLowerCase().contains(searchText.toLowerCase())){
-  //                   return envelopeListTile(envelope, folderItem[index]);
-  //                 }
-  //                 return Container();
-  //           }))
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+            Divider(
+              height: 20.h,
+              color: ColorPalette.lightGrey,
+              thickness: 1,
+            ),
+            SizedBox( height: 15.h),
+            titleText(
+              "ENVELOPES",
+              titleColor: ColorPalette.salmonPink,
+              titleSize: 16.sp,
+              titleWeight: FontWeight.w400
+            ),
+            Flexible(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: envelopeItem.length,
+                itemBuilder: (context, index){
+                  Envelope envelope =  envelopeProvider.getEnvelopeList[index];
+                   if(searchText.isEmpty){
+                    return envelopeListTile(envelope, folderItem[index]);
+                  }
+                  if(envelope.envelopeName.toString().toLowerCase().contains(searchText.toLowerCase())){
+                    return envelopeListTile(envelope, folderItem[index]);
+                  }
+                  return Container();
+            }))
+          ],
+        ),
+      ),
+    );
+  }
 
 
-  // Widget folderListTile(Folder folder){
-  //   return ListTile(
-  //     leading: const Icon(FeatherIcons.folder),
-  //     title: bodyText(
-  //       folder.folderName,
-  //       bodySize: 16.sp
-  //     ),
-  //     onTap:  (){
-  //     Navigator.of(context).push(
-  //       MaterialPageRoute(
-  //         builder : (context) => FolderContentPage(
-  //           folder: folder,
-  //         )
-  //       )
-  //     );
-  //   },
-  // );
+  Widget folderListTile(Folder folder){
+    return ListTile(
+      leading: const Icon(FeatherIcons.folder),
+      title: bodyText(
+        folder.folderName,
+        bodySize: 16.sp
+      ),
+      onTap:  (){
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder : (context) => FolderContentPage(
+            folder: folder,
+          )
+        )
+      );
+    },
+  );
   }
 
   Widget envelopeListTile(Envelope envelope, Folder folder){
-    // return ListTile(
-    //   onTap:  (){
-    //   Navigator.of(context).push(
-    //     MaterialPageRoute(
-    //       builder : (context) => EnvelopeContentPage(
-    //         folder: folder,
-    //         envelope: envelope,
+    return ListTile(
+      onTap:  (){
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder : (context) => EnvelopeContentPage(
+            folder: folder,
+            envelope: envelope,
 
-    //       )
-    //     )
-    //   );
-    // },
-    //   leading: const Icon(FeatherIcons.fileMinus),
-    //   title: bodyText(
-    //     envelope.envelopeName,
-    //     bodySize: 16.sp
-    //   ),
-    // ); 
-    return Container();
+          )
+        )
+      );
+    },
+      leading: const Icon(FeatherIcons.fileMinus),
+      title: bodyText(
+        envelope.envelopeName,
+        bodySize: 16.sp
+      ),
+    ); 
   }
 }

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pie_chart/pie_chart.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/const/font_style.dart';
-import 'package:pocket_pal/screens/calculator/widgets/budget_tiles.dart';
-import 'package:pocket_pal/screens/calculator/widgets/calculator_graph.dart';
-import 'package:pocket_pal/screens/calculator/widgets/textfield_widget.dart';
 import 'package:pocket_pal/screens/envelope/widgets/glassbox_widget.dart';
+import 'package:pocket_pal/widgets/pocket_pal_appbar.dart';
 import 'package:pocket_pal/widgets/pocket_pal_button.dart';
 import 'package:pocket_pal/widgets/pocket_pal_formfield.dart';
+import 'package:pocket_pal/screens/calculator/widgets/textfield_widget.dart';
 
 class CalculatorView extends StatefulWidget {
   const CalculatorView({super.key});
@@ -31,9 +32,9 @@ class _CalculatorViewState extends State<CalculatorView> {
     };
   
   final colorList = <Color>[
-      ColorPalette.crimsonRed.shade500,
-      ColorPalette.midnightBlue.shade500,
-      ColorPalette.pearlWhite.shade500,
+      ColorPalette.midnightBlue,
+      ColorPalette.crimsonRed,
+      ColorPalette.salmonPink.shade300,
     ];
   
   String _buttonText = "Calculate";
@@ -73,23 +74,17 @@ class _CalculatorViewState extends State<CalculatorView> {
   final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Color(0xFFFEFEFE),
-      appBar: AppBar(
-        backgroundColor: Color(0xFFFEFEFE),
-        leading: GestureDetector(
-          onTap: () {
-            ZoomDrawer.of(context)!.toggle();
-          },
-          child: const Icon(FeatherIcons.arrowLeft)
-        ),
-      ),
-
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+
+                const PocketPalAppBar(
+                  pocketPalTitle: "Calculator",
+                ),
+
                 SizedBox(height: 10.h,),
                 titleText(
                   " 50/30/20 Budget Calculator",
@@ -158,16 +153,13 @@ class _CalculatorViewState extends State<CalculatorView> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                               MyCalculatorGraph(
-                                screenWidth: screenWidth,
-                                dataMap: dataMap,
-                                colorList: colorList
-                              ),
-                              MyBudgetTiles(
-                                needs:  _needs.toStringAsFixed(_needs.truncateToDouble() == _needs ? 0 : 2),
-                                wants: _wants.toStringAsFixed(_needs.truncateToDouble() == _needs ? 0 : 2),
-                                savings: _savings.toStringAsFixed(_needs.truncateToDouble() == _needs ? 0 : 2),
-                                fontSize: _needs.toString().length > 6 ? 17.sp : 26.sp
+                              calculatorGraph( dataMap, colorList, screenWidth ),
+                               
+                              myBudgetTiles(
+                                _needs.toStringAsFixed(_needs.truncateToDouble() == _needs ? 0 : 2),
+                                _wants.toStringAsFixed(_needs.truncateToDouble() == _needs ? 0 : 2),
+                                _savings.toStringAsFixed(_needs.truncateToDouble() == _needs ? 0 : 2),
+                                _incomeController.text.length > 6 ? 16.sp : 26.sp,
                               ),
                             ],
                           ),
@@ -183,6 +175,81 @@ class _CalculatorViewState extends State<CalculatorView> {
     );
   }
 
- 
-  
+  Widget calculatorGraph(dataMap, colorList, screenWidth) =>
+  Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 5,0),
+      child: PieChart(
+          dataMap: dataMap,
+          chartType: ChartType.ring,
+          chartRadius: screenWidth * 0.45,
+          ringStrokeWidth: 25,
+          colorList: colorList,
+          chartValuesOptions: ChartValuesOptions(
+            showChartValuesInPercentage: true,
+            decimalPlaces: 0,
+            chartValueBackgroundColor: ColorPalette.midnightBlue.shade100,
+            chartValueStyle: GoogleFonts.poppins(
+              fontSize: 14.sp,
+              color: ColorPalette.black
+            )
+          ),
+          legendOptions: LegendOptions(
+            legendPosition: LegendPosition.bottom,
+            legendTextStyle: GoogleFonts.poppins(
+              fontSize: 14.sp,
+            )
+          ),
+        ),
+    );
+
+  Widget myBudgetTiles (needs, wants, savings, fontSize ) =>
+  Column(
+      children: [
+        cardContent( "Needs", needs, fontSize, ColorPalette.midnightBlue ),
+        SizedBox( height: 10.h),
+        cardContent( "Wants", wants, fontSize, ColorPalette.crimsonRed),
+        SizedBox( height: 10.h),
+        cardContent( "Savings", savings, fontSize, ColorPalette.salmonPink.shade300 ),
+      ],
+  );
+
+    Widget cardContent( name, value, fontSize, color) =>
+    Container(
+      height: 140, 
+      width: 130,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: color
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          bodyText(
+            name,
+            bodySize: 16.sp,
+            bodyWeight: FontWeight.w600,
+            bodyColor: ColorPalette.white,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+             children: [
+               SvgPicture.asset(
+                  "assets/icon/peso_sign.svg",
+                  height: 14.h,
+                  color: ColorPalette.white,
+              ),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: titleText(
+                value,
+                titleColor: ColorPalette.white,
+                titleWeight: FontWeight.bold,
+                titleSize: fontSize,
+              ),
+          )
+          ],
+        ),
+        ],
+      ),
+    );
 }

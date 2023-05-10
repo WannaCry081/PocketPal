@@ -1,20 +1,33 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:pocket_pal/services/database_service.dart";
-import "package:pocket_pal/utils/folder_structure_util.dart";
+import "package:pocket_pal/utils/folder_util.dart";
 
 
 class FolderProvider with ChangeNotifier {
 
+  String ? _orderBy;
+  String get getOrderBy => _orderBy ?? "folderDate"; 
+  set setOrderBy(String ? orderBy){
+    _orderBy = orderBy;
+    notifyListeners();
+  }
+
   String ? _groupCode;
   String get getGroupCode => _groupCode ?? "";
-
+  set setGroupCode(String value){
+    _groupCode = value;
+    notifyListeners();
+    return;
+  }
+  
   List<Folder> _folderList = [];
   List<Folder> get getFolderList => _folderList;
 
   Future<void> fetchFolder({ String ? code }) async {
     QuerySnapshot querySnapshot = await PocketPalFirestore()
       .getFolderSnapshot(
+        orderBy: _orderBy ?? "folderDate",
         code : code
       );
 
@@ -25,20 +38,28 @@ class FolderProvider with ChangeNotifier {
     return; 
   } 
 
-  Future<void> addFolder(Map<String, dynamic> data) async {
-    await PocketPalFirestore().addFolder(data);
+  Future<void> addFolder(Map<String, dynamic> data, { String ? code }) async {
+    await PocketPalFirestore().addFolder(data, code : code);
     fetchFolder(code : _groupCode);
     return;
   }
 
-  Future<void> updateFolder() async {
-
+  Future<void> updateFolder(
+    String docName, 
+    Map<String, dynamic> data, { 
+      String ? code 
+  }) async {
+    await PocketPalFirestore().updateFolder(
+      docName,
+      data, 
+      code : code
+    );
     fetchFolder(code : _groupCode);
     return;
   }
 
-  Future<void> deleteFolder(String docName) async {
-    await PocketPalFirestore().deleteFolder(docName);
+  Future<void> deleteFolder(String docName, { String ? code }) async {
+    await PocketPalFirestore().deleteFolder(docName, code : code);
     fetchFolder(code : _groupCode);
     return;
   }

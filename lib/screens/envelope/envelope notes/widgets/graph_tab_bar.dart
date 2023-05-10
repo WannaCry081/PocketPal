@@ -28,7 +28,7 @@ class MyPieChartTab extends StatelessWidget {
       children: [
          Container(
           decoration: BoxDecoration(
-            color: Colors.grey[50],
+            color: ColorPalette.pearlWhite,
             borderRadius: BorderRadius.circular(12)
           ),
            child: Padding(

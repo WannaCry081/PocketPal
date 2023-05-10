@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:pocket_pal/widgets/pocket_pal_appbar.dart";
 
 
 class NotificationsView extends StatelessWidget {
@@ -7,7 +8,15 @@ class NotificationsView extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      appBar: AppBar(),
+      body : SafeArea(
+        child: Column(
+          children : [
+            const PocketPalAppBar(
+              pocketPalTitle: "Notifications",
+            )
+          ]
+        ),
+      )
     );
   }
 }

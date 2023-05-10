@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:pocket_pal/const/font_style.dart";
-import "package:pocket_pal/screens/auth/auth_builder.dart";
+import "package:pocket_pal/providers/user_provider.dart";
 import "package:pocket_pal/screens/settings/pages/change_display_name.dart";
 import "package:pocket_pal/screens/settings/pages/change_password.dart";
 import "package:pocket_pal/services/authentication_service.dart";
@@ -29,126 +29,133 @@ class _SettingsViewState extends State<SettingsView> {
 
     final auth = PocketPalAuthentication();
 
-    final rSettings = context.read<SettingsProvider>();
-    final wSettings = context.watch<SettingsProvider>();
-
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                const PocketPalAppBar(
-                  pocketPalTitle: "Settings",
-                ),
-
-                SizedBox( height: screenHeight * 0.05),
-                Container(height: 500, 
-                    width: screenWidth - (screenWidth * 0.10),
-                    padding: EdgeInsets.only(
-                      top : 10.h,
-                      left: 14.w,
-                      right: 14.w
-                    ),
-                    //margin: const EdgeInsets.only (top: 45.0),
-                    decoration: BoxDecoration(
-                      color: ColorPalette.white,
-                      border: Border.all(
-                        color: ColorPalette.lightGrey!,
-                        width: 0.5
-                      ),
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: const [
-                        BoxShadow(
-                            offset: Offset(0, 4),
-                            spreadRadius: 0,
-                            blurRadius: 4,
-                            color: Color.fromRGBO(0, 0, 0, 0.25),
-                        )
-                      ]
-                    ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 20.h, 
-                      horizontal: 14.w),
+    return Consumer<SettingsProvider>(
+      builder: (context, settingsProvider, snapshot) {
+        return Consumer<UserProvider>(
+          builder: (context, userProvider, snapshot) {
+            return Scaffold(
+              body: SafeArea(
+                child: SingleChildScrollView(
+                  child: Center(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        settingsHeader("PROFILE"),
-                        settingsItem(
-                          FeatherIcons.user, 
-                        "Change display name", 
-                        (){
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder : (context) => const ChangeDisplayNameView()
-                              )
-                            );
-                          }
+                        const PocketPalAppBar(
+                          pocketPalTitle: "Settings",
                         ),
-                        SizedBox( height: screenHeight * 0.035),
-                        settingsHeader("ACCOUNTS"),
-                        settingsItem(
-                          FeatherIcons.lock, 
-                          "Change password", 
-                          (){
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder : (context) => const ChangePasswordView()
-                              )
-                            );
-                          }
-                        ),
-                        settingsItem(
-                          FeatherIcons.trash2, 
-                          "Delete account", 
-                          (){
-                            showDialog(
-                              context: context, 
-                              builder: (context){
-                                return PocketPalDialogBox(
-                                pocketPalDialogTitle: "Confirm Deletion",
-                                pocketPalDialogContent: bodyText(
-                                  "Are you sure you want to delete your account?",
-                                  bodySize: 15.sp
+            
+                        SizedBox( height: screenHeight * 0.05),
+            
+                        Container(height: 500, 
+                            width: screenWidth - (screenWidth * 0.10),
+                            padding: EdgeInsets.only(
+                              top : 10.h,
+                              left: 14.w,
+                              right: 14.w
+                            ),
+            
+                            decoration: BoxDecoration(
+                              color: ColorPalette.white,
+                              border: Border.all(
+                                color: ColorPalette.lightGrey!,
+                                width: 0.5
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: const [
+                                BoxShadow(
+                                    offset: Offset(0, 4),
+                                    spreadRadius: 0,
+                                    blurRadius: 4,
+                                    color: Color.fromRGBO(0, 0, 0, 0.25),
+                                )
+                              ]
+                            ),
+                            
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 20.h, 
+                              horizontal: 14.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                settingsHeader("PROFILE"),
+                                settingsItem(
+                                  FeatherIcons.user, 
+                                "Change display name", 
+                                (){
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder : (context) => const ChangeDisplayNameView()
+                                      )
+                                    );
+                                  }
                                 ),
-                                pocketPalDialogOption1: "No",
-                                pocketPalDialogOption2: "Yes",
-                                pocketPalDialogOption1OnTap: () => Navigator.of(context).pop(),
-                                pocketPalDialogOption2OnTap : () {
-                                  auth.authenticationDeleteAccount();
-                                  Navigator.of(context).pop();
-                                },
-                              );
-                            });
-                          }
+                                SizedBox( height: screenHeight * 0.035),
+                                settingsHeader("ACCOUNTS"),
+                                settingsItem(
+                                  FeatherIcons.lock, 
+                                  "Change password", 
+                                  (){
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder : (context) => const ChangePasswordView()
+                                      )
+                                    );
+                                  }
+                                ),
+                                settingsItem(
+                                  FeatherIcons.trash2, 
+                                  "Delete account", 
+                                  (){
+                                    showDialog(
+                                      context: context, 
+                                      builder: (context){
+                                        return PocketPalDialogBox(
+                                        pocketPalDialogTitle: "Confirm Deletion",
+                                        pocketPalDialogContent: bodyText(
+                                          "Are you sure you want to delete your account?",
+                                          bodySize: 15.sp
+                                        ),
+                                        pocketPalDialogOption1: "No",
+                                        pocketPalDialogOption2: "Yes",
+                                        pocketPalDialogOption1OnTap: () => Navigator.of(context).pop(),
+                                        pocketPalDialogOption2OnTap : () {
+                                          auth.authenticationDeleteAccount();
+                                          Navigator.of(context).pop();
+                                        },
+                                      );
+                                    });
+                                  }
+                                ),
+                                SizedBox( height: screenHeight * 0.035),
+                                
+                                settingsHeader("APP SETTINGS"),
+                                settingsItemSwitch(
+                                  FeatherIcons.moon, 
+                                  "Dark Mode", 
+                                  settingsProvider.getIsLightMode, 
+                                  settingsProvider.setIsLightMode),
+                                settingsItemSwitch(
+                                  FeatherIcons.bell, 
+                                  "Push notifications", 
+                                  false, 
+                                  settingsProvider.setIsLightMode //temp
+                                  ),
+                              ],
+                            ),
+                          )
                         ),
-                        SizedBox( height: screenHeight * 0.035),
-                        
-                        settingsHeader("APP SETTINGS"),
-                        settingsItemSwitch(
-                          FeatherIcons.moon, 
-                          "Dark Mode", 
-                          wSettings.getIsLightMode, 
-                          rSettings.setIsLightMode),
-                        settingsItemSwitch(
-                          FeatherIcons.bell, 
-                          "Push notifications", 
-                          false, 
-                          rSettings.setIsLightMode //temp
-                          ),
                       ],
                     ),
-                  )
-                ),
-              ],
-            ),
-          ),
-        )
-      )
+                  ),
+                )
+              )
+            );
+          }
+        );
+      }
     );
   }
 

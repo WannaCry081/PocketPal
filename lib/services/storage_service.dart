@@ -12,7 +12,7 @@ class PocketPalStorage {
   Future<void> addImageToStorage(File image) async{
     String fileName = "${_userUid}_profile.png";
 
-    Reference ref = _storage.ref().child("Profile/$fileName");
+    Reference ref = _storage.ref().child("ProfilePicture/$fileName");
     await ref.putFile(image);
     return;
   }
@@ -20,15 +20,15 @@ class PocketPalStorage {
   Future<String> getImageUrl() async {
     String fileName = "${_userUid}_profile.png";
 
-    Reference ref = _storage.ref().child("Profile/$fileName");
+    Reference ref = _storage.ref().child("ProfilePicture/$fileName");
     String url = await ref.getDownloadURL();
     
     return url;
   }
 
   Future<String> getDefaultImage() async {
-    String fileName = "Profile.png";
-    Reference ref = _storage.ref().child("Profile/$fileName");
+    String fileName = "DefaultProfile.png";
+    Reference ref = _storage.ref().child("ProfilePicture/$fileName");
     String url = await ref.getDownloadURL();
     return url;
   }

@@ -14,13 +14,11 @@ class PocketPalAppBar extends StatelessWidget {
 
   final String pocketPalTitle;
   final bool pocketPalSearchButton;
-  final void Function() ? pocketPalSearchFunction;
   
   const PocketPalAppBar({ 
     Key ? key,
     this.pocketPalTitle = "",
     this.pocketPalSearchButton = false,
-    this.pocketPalSearchFunction
 
   }) : super(key : key);
 
@@ -50,7 +48,6 @@ class PocketPalAppBar extends StatelessWidget {
           ),
 
           const Spacer(),
-          
           if (pocketPalSearchButton) ...[
             OpenContainer(
               closedElevation: 0,
@@ -70,9 +67,9 @@ class PocketPalAppBar extends StatelessWidget {
               openBuilder: (context, VoidCallback __){
                 return const SearchView();
               }
-            
             )
-          ]
+          ]  
+
           
         ]
       ),

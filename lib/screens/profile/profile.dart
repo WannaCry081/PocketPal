@@ -11,9 +11,13 @@ import "package:image_picker/image_picker.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
 import "package:pocket_pal/const/font_style.dart";
+import "package:pocket_pal/providers/folder_provider.dart";
+import "package:pocket_pal/providers/user_provider.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 import "package:pocket_pal/services/storage_service.dart";
 import "package:pocket_pal/widgets/pocket_pal_appbar.dart";
+import "package:provider/provider.dart";
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 
 class ProfileView extends StatefulWidget {
@@ -27,7 +31,11 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
 
-  
+  @override
+  void initState(){
+    getTotalNumberOfEnvelopes();
+    super.initState();
+  }
   
   @override
   Widget build(BuildContext context){
@@ -35,6 +43,8 @@ class _ProfileViewState extends State<ProfileView> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
+    final FolderProvider folderProvider = context.watch<FolderProvider>();
+    final UserProvider userProvider = context.watch<UserProvider>();
     final auth = PocketPalAuthentication();
 
     return Scaffold(
@@ -42,84 +52,132 @@ class _ProfileViewState extends State<ProfileView> {
       body: Stack(
         alignment: Alignment.center,
         children: [
-          Positioned(
-            top: -50,
-            left: 0,
-            right: 0,
-            child: SvgPicture.asset(
-              "assets/svg/profile_page_bg.svg",
-              fit: BoxFit.fitHeight),
-          ),
-      
-          Align(
-            child: Container(
-                width: screenWidth - 80,
-                height: 375,
-                decoration: BoxDecoration(
-                  color: ColorPalette.white,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                        offset: const Offset(1, 4),
-                        spreadRadius: 0,
-                        blurRadius: 4,
-                        color: ColorPalette.black!.withOpacity(0.25),
-                    )
-                  ]
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    myProfileContent(
-                      auth.getUserPhotoUrl,
-                      auth.getUserDisplayName, 
-                      auth.getUserEmail,
-                      0, 0, 0
-                    ),
-                  ]
-                )
+          Container(
+            decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFFFFC8C2),
+                Color.fromARGB(255, 255, 249, 249),
+                ColorPalette.white!
+              ]
             ),
           ),
-          Positioned(
-            bottom: (screenHeight / 2) - 250,
-            child: GestureDetector(
-              onTap: _profilePageUpdateProfilePicture,
-              child: Row(
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(
-                    FeatherIcons.edit3,
-                    color: ColorPalette.crimsonRed ),
-                  SizedBox (width: 10.w),
-                  titleText(
-                    "Edit profile avatar",
-                    titleColor: ColorPalette.crimsonRed,
-                    titleSize: 16.sp,
-                    titleWeight: FontWeight.w600,
-                  ),
+                SizedBox(
+                  width : MediaQuery.of(context).size.width,
+                  height : 50.h,
+                  child: const PocketPalAppBar(
+                    pocketPalTitle: "Profile",
+                  )
+                ),
+                SizedBox(height: screenHeight*0.09.h,),
+                Container(
+                    width: screenWidth - 80,
+                    height: 375,
+                    decoration: BoxDecoration(
+                      color: ColorPalette.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          offset: const Offset(1, 4),
+                          spreadRadius: 0,
+                          blurRadius: 4,
+                          color: ColorPalette.black!.withOpacity(0.25),
+                        )
+                      ]
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        myProfileContent(
+                          auth.getUserPhotoUrl,
+                          auth.getUserDisplayName, 
+                          auth.getUserEmail,
+                        ),
+                        SizedBox(height: 10.h,),
+                        SizedBox(
+                          height: 60.h,
+                          child: FutureBuilder<int>(
+                            future: getTotalNumberOfEnvelopes(),
+                            builder: (context, snapshot) {
+                               final totalEnvelopes = snapshot.data ?? 0; 
+                               if(snapshot.connectionState == ConnectionState.waiting){
+                                return SpinKitThreeBounce(
+                                  size: 40,
+                                  color: ColorPalette.salmonPink,
+                                );
+                               }
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children:[
+                                  overviewCountWidget(
+                                    folderProvider.getFolderList.length,
+                                    (folderProvider.getFolderList.length <=1 ) ? "folder" : "folders"),
+                                  VerticalDivider(
+                                    thickness: 2.5,
+                                    color: ColorPalette.lightGrey,
+                                    indent: 5,
+                                    endIndent: 5,
+                                    width: 45,
+                                  ),
+                                  overviewCountWidget("$totalEnvelopes", 
+                                  (totalEnvelopes <= 1) ? "envelope":"envelopes"),
+                                  VerticalDivider(
+                                    thickness: 2.5,
+                                    color: ColorPalette.lightGrey,
+                                    indent: 5,
+                                    endIndent: 5,
+                                    width: 45,
+                                  ),
+                                  overviewCountWidget( 
+                                    userProvider.getUserGroupWall.length,  
+                                    (userProvider.getUserGroupWall.length <=1 )?"group" :"groups",),
+                                ]
+                              );
+                            }
+                          ),
+                        )
+                      ]
+                    )
+                ),
+                 SizedBox( height: 30.h,),
+                 GestureDetector(
+                   onTap: _profilePageUpdateProfilePicture,
+                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                     children: [
+                       Icon(
+                         FeatherIcons.edit3,
+                         color: ColorPalette.crimsonRed ),
+                       SizedBox (width: 10.w),
+                       titleText(
+                         "Edit profile avatar",
+                         titleColor: ColorPalette.crimsonRed,
+                         titleSize: 16.sp,
+                         titleWeight: FontWeight.w600,
+                       ),
+                     ],
+                   ),
+                 ),
                 ],
               ),
             ),
-          ),
+          )
+        ),
 
-          Positioned(
-            top : 24,
-            child: SizedBox(
-              width : MediaQuery.of(context).size.width,
-              height : 50.h,
-              child: const PocketPalAppBar(
-                pocketPalTitle: "Profile",
-              )
-            )
-          ),
         ],
       )
     );
   }
 
   Widget myProfileContent (
-    profilePicture, profileName, profileEmail,
-    folderNumber, envelopeNumber, groupNumber
-  ) {
+    profilePicture, profileName, profileEmail) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -152,35 +210,9 @@ class _ProfileViewState extends State<ProfileView> {
           ),
         ),
         SizedBox(height: 10.h,),
-        SizedBox(
-        height: 60.h,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children:[
-            overviewCountWidget( folderNumber, "folders"),
-            VerticalDivider(
-              thickness: 2.5,
-              color: ColorPalette.lightGrey,
-              indent: 5,
-              endIndent: 5,
-              width: 45,
-            ),
-            overviewCountWidget(envelopeNumber,  "envelopes",),
-            VerticalDivider(
-              thickness: 2.5,
-              color: ColorPalette.lightGrey,
-              indent: 5,
-              endIndent: 5,
-              width: 45,
-            ),
-            overviewCountWidget( envelopeNumber, "groups",),
-          ]
-        ),
-      )
     ],
   );
-
-  }
+}
 
   Widget overviewCountWidget (count, countTitle) =>
     RichText(
@@ -227,6 +259,21 @@ class _ProfileViewState extends State<ProfileView> {
     }      
     return;
   }
-}
+
+  Future<int> getTotalNumberOfEnvelopes() async {
+    final _db = FirebaseFirestore.instance;
+    final String _userUid = PocketPalAuthentication().getUserUID;
+    final folderDocs = _db.collection(_userUid).doc("$_userUid+Wall").collection(_userUid);
+
+    num totalNumberOfEnvelopes = 0;
+    final documentsSnapshot = await folderDocs.get();
+    for (final docSnapshot in documentsSnapshot.docs) {
+      final folderDoc = await docSnapshot.reference.get();
+      final folderNumberOfEnvelopes = folderDoc.data()?["folderNumberOfEnvelopes"] ?? 0;
+      totalNumberOfEnvelopes  += folderNumberOfEnvelopes;
+    }
+    return totalNumberOfEnvelopes.toInt();
+  }
 
  
+}

@@ -1,6 +1,7 @@
 import "package:animations/animations.dart";
 import "package:flutter/material.dart";
 import "package:pocket_pal/screens/dashboard/search.dart";
+import "package:pocket_pal/services/database_service.dart";
 import "package:provider/provider.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -32,6 +33,7 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
 
   final TextEditingController _folderNameController = TextEditingController(text : "");
+  final db = PocketPalFirestore();
 
   @override
   void initState(){

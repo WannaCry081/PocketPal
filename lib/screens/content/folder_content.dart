@@ -83,7 +83,8 @@ class _FolderContentPageState extends State<FolderContentPage>{
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder : (context) => FolderChatBox(
-                          folder : widget.folder
+                          folder : widget.folder,
+                          code : widget.code
                         )
                       )
                     );

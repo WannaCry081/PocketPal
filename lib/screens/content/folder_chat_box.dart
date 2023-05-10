@@ -1,26 +1,32 @@
 import "dart:io";
 
 import "package:flutter/material.dart";
+import "package:flutter/scheduler.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:image_picker/image_picker.dart";
-import 'package:pocket_pal/screens/dashboard/widgets/folder_bottom_edit_sheet.dart';
+import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/const/font_style.dart";
+import "package:pocket_pal/providers/chatbox_provider.dart";
+import "package:pocket_pal/providers/user_provider.dart";
 import "package:pocket_pal/services/authentication_service.dart";
 import "package:pocket_pal/services/database_service.dart";
-import "package:pocket_pal/services/storage_service.dart";
 import "package:pocket_pal/utils/chatbox_structure_util.dart";
 import 'package:pocket_pal/utils/folder_util.dart';
 import "package:pocket_pal/widgets/pocket_pal_formfield.dart";
+import "package:provider/provider.dart";
 
 
 class FolderChatBox extends StatefulWidget {
 
   final Folder folder;
+  final String ? code;
 
   const FolderChatBox({ 
     Key ? key,
-    required this.folder
+    required this.folder,
+    this.code
   }) : super(key : key);
 
   @override
@@ -32,21 +38,29 @@ class _FolderChatBoxState extends State<FolderChatBox> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _textController = TextEditingController(text : "");
   final _auth = PocketPalAuthentication();
-  final _db = PocketPalDatabase();
-
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
+    
+    Provider.of<ChatBoxProvider>(context, listen : false).fetchConversation(
+      widget.folder.folderId,
+      code : widget.code
+    );
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToBottom();
+      });
     });
-    return;
   }
+
+  void _scrollToBottom() {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    });
+  }
+
 
   @override
   void dispose(){
@@ -58,7 +72,6 @@ class _FolderChatBoxState extends State<FolderChatBox> {
 
   @override
   Widget build(BuildContext context){
-    final db = PocketPalDatabase();
     return Scaffold(
       appBar : AppBar(
         title : Text(
@@ -79,114 +92,122 @@ class _FolderChatBoxState extends State<FolderChatBox> {
         ],
       ),
 
-      body : Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children : [
-          Expanded(
-            child: _chatBoxConversation(db)
-          ),
+      body : Consumer<ChatBoxProvider>(
+        builder: (context, chatBoxProvider, child) {
 
-          _chatBoxTextField()
-        ]
+          final List<ChatBox> chatBoxItemList = chatBoxProvider.getChatList; 
+          final int chatBoxItemLength = chatBoxItemList.length;
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children : [
+              Expanded(
+                child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount : chatBoxItemLength,
+                  itemBuilder : (context, index){
+                    return _chatBoxMessage(
+                      chatBoxOnLongPress: (){}, 
+                      chatBox: chatBoxItemList[index], 
+                      chatBoxIsAppend : (
+                        chatBoxItemList[index].messageUserName == 
+                        chatBoxItemList[
+                          (index == 0) ? index : index-1
+                        ].messageUserName && 
+
+                        (
+                          index != 0 ||
+                          chatBoxItemList[index].messageUserName != 
+                          chatBoxItemList[
+                            (index == 0) ? index : index-1
+                          ].messageUserName    
+                        )
+                      )
+                    );
+                  }
+                )
+              ),
+      
+              _chatBoxTextField(
+                chatBoxProvider
+              )
+            ]
+          );
+        }
       )
     );
   }
 
+  Widget _chatBoxMessage({ 
+    required void Function() chatBoxOnLongPress, 
+    required ChatBox chatBox,
+    required bool chatBoxIsAppend }){
 
-  Widget _chatBoxConversation(PocketPalDatabase db){
-    return StreamBuilder(
-      stream : db.getMessages(widget.folder.folderId),
-      builder: (context, snapshot){
-        if (snapshot.connectionState == ConnectionState.waiting){
-          return const Center(
-            child : CircularProgressIndicator()
-          );
-        } else if (snapshot.hasData){
-          
-          final data = snapshot.data!;
-          final itemList = data.map(
-            (e) =>_chatBoxMessage(
-              chatBoxOnLongPress : () => _showBottomSheet(e),
-              chatBox : e
-            )
-          ).toList();
-              
-          return ListView.builder(
-            controller: _scrollController,
-            itemCount: itemList.length,
-            itemBuilder: (context, index){
-              return itemList[index];
-            },
-          );
-                
-        } else {
-          return Center(
-            child: Text(
-              "No Available Conversation",
-              style : GoogleFonts.poppins(
-                fontSize : 14.sp
-              )
-            ),
-          );
-        }
-      },
-    );
-  }
-  
-
-
-  Widget _chatBoxMessage({ required void Function() chatBoxOnLongPress, required ChatBox chatBox}){
     return GestureDetector(
       onLongPress : chatBoxOnLongPress,
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 14.w,
-          vertical: 10.h 
+        padding: EdgeInsets.only(
+          
+          right : 14.w,
+          left : 14.w,
+          top : (chatBoxIsAppend) ? 0 : 10.h ,
+          bottom: 0
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CircleAvatar(
-              radius : 20.r,
-              backgroundImage: NetworkImage(
-                chatBox.messageUserProfile
+
+            if (!chatBoxIsAppend) ... [
+              SizedBox(
+                width : 40.w,
+                child: Center(
+                  child: CircleAvatar(
+                    radius : 20.r,
+                    backgroundImage: NetworkImage(
+                      chatBox.messageUserProfile
+                    ),
+                  ),
+                ),
               ),
-            ),
-    
-            SizedBox(width : 14.w),
+            ],
+            
+            SizedBox(width : (chatBoxIsAppend) ? 50.w : 10.w),
+
             Expanded(
               child : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children : [
-                      Text(
-                        chatBox.messageUserName,
-                        style : GoogleFonts.poppins(
-                          fontWeight : FontWeight.w600,
-                          fontSize : 16.sp
+
+                  if (!chatBoxIsAppend) ... [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children : [
+                        Text(
+                          chatBox.messageUserName,
+                          style : GoogleFonts.poppins(
+                            fontWeight : FontWeight.w600,
+                            fontSize : 16.sp
+                          )
+                        ),
+      
+                        SizedBox( width : 10.w),
+                        Text(
+                          "${chatBox.messageDate.month}/${chatBox.messageDate.day}/${chatBox.messageDate.year}",
+                          style : GoogleFonts.poppins(
+                            fontSize : 12.sp
+                          )
                         )
-                      ),
-    
-                      SizedBox( width : 10.w),
-                      Text(
-                        "${chatBox.messageDate.month}/${chatBox.messageDate.day}/${chatBox.messageDate.year}",
-                        style : GoogleFonts.poppins(
-                          fontSize : 12.sp
-                        )
-                      )
-                    ]
-                  ),
+                      ]
+                    ),
+                  ],
                   
                   (chatBox.messageIsImage) ? 
                     Image.network(
                       chatBox.message,
                       height : 400.h
-
-                    ): Text(
+                    ) : bodyText(
                     chatBox.message,
-                    style : GoogleFonts.poppins()
+                    bodySize: 14.sp
                   )
                 ],
               ) 
@@ -197,8 +218,9 @@ class _FolderChatBoxState extends State<FolderChatBox> {
     );
   }
 
-  Widget _chatBoxTextField(){
-    return Padding(
+  Widget _chatBoxTextField(ChatBoxProvider chatBoxProvider){
+    return Container(
+      color : ColorPalette.pearlWhite,
       padding: EdgeInsets.symmetric(
         horizontal: 14.w,
         vertical: 10.h
@@ -206,7 +228,7 @@ class _FolderChatBoxState extends State<FolderChatBox> {
       child: Row(
         children :[
           GestureDetector(
-            onTap: _chatBoxSendImage,
+            // onTap: _chatBoxSendImage,
             child: const Center(
               child : Icon(
                 FeatherIcons.image
@@ -217,16 +239,16 @@ class _FolderChatBoxState extends State<FolderChatBox> {
           SizedBox(width : 14.w),
           Expanded(
             child: PocketPalFormField(
-              // formKeyboardType: TextInputType.multiline,
-              // formMaxLines: null,
+              formKeyboardType: TextInputType.multiline,
+              formMaxLines: null,
               formController: _textController,
               formHintText: "Message",
               formSuffixIcon: IconButton(
                 icon : const Icon(
                   FeatherIcons.send,
                 ),
-                onPressed: (){
-                  if (_textController.text.isNotEmpty){
+                onPressed: () async {
+                  if (_textController.text.isNotEmpty) {
 
                     ChatBox chatBox = ChatBox(
                       messageIsImage: false,
@@ -235,9 +257,10 @@ class _FolderChatBoxState extends State<FolderChatBox> {
                       message: _textController.text.trim()
                     );
 
-                    _db.createMessage(
-                      widget.folder.folderId, 
-                      chatBox.toMap()
+                    await chatBoxProvider.sendMessage(
+                      chatBox.toMap(), 
+                      widget.folder.folderId,
+                      code : widget.code
                     );
 
                     _textController.clear();
@@ -251,52 +274,49 @@ class _FolderChatBoxState extends State<FolderChatBox> {
     );
   }
 
-  void _showBottomSheet(ChatBox chatBox){
-   
-    return;
-  }
-
-  Future<void> _chatBoxSendImage() async {
-    final newPicture = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-    );  
-
-    if (newPicture != null){
-
-      final storage = PocketPalStorage();
-
-      ChatBox chatBox = ChatBox(
-        messageUserName: _auth.getUserDisplayName, 
-        messageUserProfile: _auth.getUserPhotoUrl, 
-        message: newPicture.path,
-        messageIsImage: true
-      );
-
-      String messageId = await _db.createMessage(
-        widget.folder.folderId, 
-        chatBox.toMap()
-      );
 
 
-      await storage.addImageToChatBox(
-        File(newPicture.path), 
-        widget.folder.folderId,
-        messageId
-      );
+  // Future<void> _chatBoxSendImage() async {
+  //   final newPicture = await ImagePicker().pickImage(
+  //     source: ImageSource.gallery,
+  //   );  
 
-      chatBox.message = await storage.getImageUrlFromChatBox(
-        widget.folder.folderId,
-        messageId 
-      );
+  //   if (newPicture != null){
 
-      await _db.updateMessage(
-        widget.folder.folderId, 
-        messageId,
-        chatBox.toMap()
-      );
+  //     final storage = PocketPalStorage();
 
-      _textController.clear();
-    }      
-    return;
-  }
+  //     ChatBox chatBox = ChatBox(
+  //       messageUserName: _auth.getUserDisplayName, 
+  //       messageUserProfile: _auth.getUserPhotoUrl, 
+  //       message: newPicture.path,
+  //       messageIsImage: true
+  //     );
+
+  //     String messageId = await _db.createMessage(
+  //       widget.folder.folderId, 
+  //       chatBox.toMap()
+  //     );
+
+
+  //     await storage.addImageToChatBox(
+  //       File(newPicture.path), 
+  //       widget.folder.folderId,
+  //       messageId
+  //     );
+
+  //     chatBox.message = await storage.getImageUrlFromChatBox(
+  //       widget.folder.folderId,
+  //       messageId 
+  //     );
+
+  //     await _db.updateMessage(
+  //       widget.folder.folderId, 
+  //       messageId,
+  //       chatBox.toMap()
+  //     );
+
+  //     _textController.clear();
+  //   }      
+  //   return;
+  // }
 }

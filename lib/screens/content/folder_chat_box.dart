@@ -110,18 +110,12 @@ class _FolderChatBoxState extends State<FolderChatBox> {
                       chatBoxOnLongPress: (){}, 
                       chatBox: chatBoxItemList[index], 
                       chatBoxIsAppend : (
-                        chatBoxItemList[index].messageUserName == 
-                        chatBoxItemList[
-                          (index == 0) ? index : index-1
-                        ].messageUserName && 
+                       !(
+                        index == 0 ||
+                        chatBoxItemList[index].messageUserName !=
+                        chatBoxItemList[index - 1].messageUserName
+                      )
 
-                        (
-                          index != 0 ||
-                          chatBoxItemList[index].messageUserName != 
-                          chatBoxItemList[
-                            (index == 0) ? index : index-1
-                          ].messageUserName    
-                        )
                       )
                     );
                   }

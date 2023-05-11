@@ -129,7 +129,7 @@ class _FolderContentPageState extends State<FolderContentPage>{
                       itemBuilder : (context, index){
                         return AnimationConfiguration.staggeredGrid(
                           position : index,
-                          duration : const Duration( milliseconds: 700),
+                          duration : const Duration(milliseconds: 400),
                           columnCount : envelopeListLength, 
                           child: ScaleAnimation(
                             child: FadeInAnimation(

@@ -206,6 +206,7 @@ class _AddEnvelopeNoteState extends State<AddEnvelopeNote> {
                     },
                     scrollPadding: EdgeInsets.all(20),
                     keyboardType: TextInputType.multiline,
+                    maxLines : null,
                     decoration: const InputDecoration(
                       enabledBorder:  UnderlineInputBorder(
                       borderSide: BorderSide(

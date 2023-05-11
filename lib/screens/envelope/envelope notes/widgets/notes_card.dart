@@ -37,7 +37,7 @@ class NotesCard extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.shade400,
-                offset: Offset(4,4),
+                offset:const Offset(4,4),
                 blurRadius: 15.0,
                 spreadRadius: 1
               ),

@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
@@ -11,19 +13,19 @@ import 'package:pocket_pal/services/database_service.dart';
 import 'package:pocket_pal/utils/envelope_util.dart';
 import 'package:pocket_pal/utils/folder_util.dart';
 import 'package:pocket_pal/utils/note_util.dart';
-import 'package:intl/intl.dart';
 import 'package:pocket_pal/widgets/pocket_pal_dialog_box.dart';
 
 class EnvelopeNotesPage extends StatefulWidget {
   final Folder folder;
   final Envelope envelope;
-  String ? code;
+  final String ? code;
 
-  EnvelopeNotesPage({
+  const EnvelopeNotesPage({
+    Key ? key, 
     required this.envelope,
     required this.folder,
     this.code,
-    super.key});
+  }) : super(key : key);
 
   @override
   State<EnvelopeNotesPage> createState() => _EnvelopeNotesPageState();
@@ -132,7 +134,7 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
       appBar : AppBar(
       backgroundColor:  Colors.grey[50],
         title: Text(
-            widget.envelope.envelopeName + " Notes",
+            "${widget.envelope.envelopeName} Notes",
             style: GoogleFonts.poppins(
               fontSize : 18.sp,
               color: ColorPalette.black,
@@ -160,7 +162,7 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
                   child: notes.isEmpty
                   ? Center(
                     child: Text(
-                      "No notes yet",
+                      "No Notes yet",
                       style: GoogleFonts.poppins(
                         fontSize: 14.sp
                     ),),
@@ -196,21 +198,19 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
                                     noteIndex: index,
                                     addNotesFunction: addNotes,
                                     updateNoteFunction: (envelopeId) async {
-                                    final updatedNote = EnvelopeNotes(
-                                      envelopeNoteContent: envelopeNoteContentController.text.trim(),
-                                      envelopeNoteName: envelopeNoteNameController.text.trim(),
-                                      envelopeNoteUsername: auth.getUserDisplayName,
-                                    ).toMap();
+                                      final updatedNote = EnvelopeNotes(
+                                        envelopeNoteContent: envelopeNoteContentController.text.trim(),
+                                        envelopeNoteName: envelopeNoteNameController.text.trim(),
+                                        envelopeNoteUsername: auth.getUserDisplayName,
+                                      ).toMap();
 
-                                    await db.updateEnvelopeNote(
-                                      widget.folder.folderId,
-                                      widget.envelope.envelopeId,
-                                      updatedNote,
-                                      index,
-                                      code: widget.code
-                                    );
-                                    setState(() {
-                                    });
+                                      await db.updateEnvelopeNote(
+                                        widget.folder.folderId,
+                                        widget.envelope.envelopeId,
+                                        updatedNote,
+                                        index,
+                                        code: widget.code
+                                      );
                                   },
                                     isEnabled: true,
                                     showDeleteIcon: hasNotes,
@@ -242,16 +242,8 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
                                                   const SnackBar(
                                                     content: Text("Successfully Deleted!"),
                                                     duration: Duration(seconds: 1),));
-                                                Navigator.pop(context); 
-                                                Navigator.pushAndRemoveUntil(
-                                                  context,
-                                                  MaterialPageRoute(builder: (context) => EnvelopeNotesPage(
-                                                    folder: widget.folder,
-                                                    envelope: widget.envelope,
-                                                    code: widget.code,
-                                                  )),
-                                                  ModalRoute.withName('/'),
-                                                );
+                                                Navigator.of(context).pop(); 
+                                                Navigator.of(context).pop();
                                               }
                                             );
                                           }

@@ -8,7 +8,9 @@ import "package:pocket_pal/screens/auth/auth.dart";
 
 class AuthViewBuilder extends StatelessWidget {
 
-  const AuthViewBuilder({ Key ? key }) : super(key : key);
+  const AuthViewBuilder({ 
+    Key ? key,
+  }) : super(key : key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +31,4 @@ class AuthViewBuilder extends StatelessWidget {
       ),
     );
   }
-
-
-
-
-
 }

@@ -1,3 +1,6 @@
+import "package:intl/intl.dart";
+
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -9,7 +12,8 @@ class MyListTileWidget extends StatelessWidget {
 
   final String listTileName;
   final String listTileCode;
-  final String listTileDate;
+  final DateTime listTileDate;
+
   final void Function() listTileWallNavigation;
   final void Function() listTileWallOnDelete;
 
@@ -24,6 +28,10 @@ class MyListTileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
+    final DateFormat dateFormatter = DateFormat('MMM d');
+    final DateTime itemDate = listTileDate;
+    final String date = dateFormatter.format(itemDate).toString();
+
     return GestureDetector(
       onTap : listTileWallNavigation,
       child: Slidable(
@@ -95,7 +103,7 @@ class MyListTileWidget extends StatelessWidget {
               ),
 
               bodyText(
-                listTileDate,
+                date,
                 bodySize : 10.sp,
                 bodyColor : ColorPalette.grey,
               ),

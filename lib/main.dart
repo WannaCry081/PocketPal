@@ -3,7 +3,6 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:pocket_pal/providers/chatbox_provider.dart";
 import "package:pocket_pal/screens/auth/pages/error_page.dart";
-import "package:pocket_pal/screens/auth/pages/welcome_page.dart";
 import "package:provider/provider.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -118,8 +117,7 @@ class _PocketPalAppState extends State<PocketPalApp> {
                 ThemeMode.light : 
                 ThemeMode.dark,
 
-              home: WelcomePage()
-              //home: _pocketPalAppHome(settingsProvider),
+              home: _pocketPalAppHome(settingsProvider),
             );
           },
         );
@@ -140,6 +138,10 @@ class _PocketPalAppState extends State<PocketPalApp> {
 
           if (connectivityResult == ConnectivityResult.none) {
             return const NoWifiPage();
+
+          } else if (snapshot.hasError){
+            return const ErrorPage();
+            
           } else if (snapshot.hasData) {
 
             return FutureBuilder(
@@ -156,7 +158,6 @@ class _PocketPalAppState extends State<PocketPalApp> {
                 }
               },
             );
-
           } else {
             return const LoadingPage();
           }

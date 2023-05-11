@@ -111,7 +111,7 @@ class _DashboardViewState extends State<DashboardView> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           
                           children : AnimationConfiguration.toStaggeredList(
-                            duration : const Duration(milliseconds: 700),
+                            duration : const Duration(milliseconds: 400),
                             childAnimationBuilder: (widget){
                               return SlideAnimation(
                                 horizontalOffset: 50.0,

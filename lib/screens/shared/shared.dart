@@ -1,5 +1,3 @@
-import "package:intl/intl.dart";
-
 import "package:flutter/material.dart";
 import "package:flutter_staggered_animations/flutter_staggered_animations.dart";
 import "package:pocket_pal/providers/folder_provider.dart";
@@ -30,7 +28,6 @@ class _SharedWallViewState extends State<SharedWallView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _codeController = TextEditingController(text : "");
   final TextEditingController _nameController = TextEditingController(text : "");
-  final DateFormat _formatter = DateFormat("MMM d");
 
   @override
   void initState(){
@@ -50,6 +47,9 @@ class _SharedWallViewState extends State<SharedWallView> {
 
     return Consumer<UserProvider>(
       builder: (context, userProvider, child) {
+
+        final List<Map<String, dynamic>> userWall = userProvider.getUserWall;
+        final int userWallLength = userWall.length; 
 
         return Consumer<WallProvider>(
           builder: (context, wallProvider, child) {
@@ -89,21 +89,19 @@ class _SharedWallViewState extends State<SharedWallView> {
                                 pocketPalTitle: "Shared Wall",
                               ),
                                         
-                              for (int i=0; i<userProvider.getUserWall.length ; i++) ... [
+                              for (int i=0; i<userWallLength ; i++) ... [
                                 MyListTileWidget(
-                                  listTileName : userProvider.getUserWall[i]["wallName"],
-                                  listTileCode : userProvider.getUserWall[i]["wallId"],
-                                  listTileDate : _formatter.format(
-                                    (userProvider.getUserWall[i]["wallDate"]).toDate()
-                                  ),
+                                  listTileName : userWall[i]["wallName"],
+                                  listTileCode : userWall[i]["wallId"],
+                                  listTileDate : userWall[i]["wallDate"].toDate(),
                                   listTileWallOnDelete: (){
                                   },
                                   listTileWallNavigation: (){
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder : (context) => FolderGridPage(
-                                          code : userProvider.getUserWall[i]["wallId"],
-                                          wallName: userProvider.getUserWall[i]["wallName"],
+                                          code : userWall[i]["wallId"],
+                                          wallName: userWall[i]["wallName"],
                                         )
                                       )
                                     ).then((value){

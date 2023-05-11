@@ -96,7 +96,7 @@ class _FolderGridPageState extends State<FolderGridPage> {
                       itemBuilder : (context, index){
                         return AnimationConfiguration.staggeredGrid(
                           position: index,
-                          duration: const Duration(milliseconds: 700),
+                          duration: const Duration(milliseconds: 400),
                           columnCount : folderListLength,
                           child: ScaleAnimation(
                             child: FadeInAnimation(

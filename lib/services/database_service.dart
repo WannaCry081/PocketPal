@@ -549,17 +549,20 @@ class PocketPalDatabase {
 
       final snapshot = await collection.get();
       if (!snapshot.exists) {
+      print("Failed 2");
         return;
       }
       final envelopeData = snapshot.data();
       final notesData = envelopeData?["envelopeNotes"] as List<dynamic>;
 
       if (notesData == null || notesData.length <= index) {
+      print("Failed 1");
         return;
       }
 
       final valueToUpdate = notesData[index];
       valueToUpdate.addAll(newNote);
+      print("Success");
 
       collection.update({
         "envelopeNotes": notesData 

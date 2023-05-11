@@ -2,8 +2,6 @@ import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:pocket_pal/services/database_service.dart";
-import "package:pocket_pal/services/storage_service.dart";
 import "package:provider/provider.dart";
 
 import "package:pocket_pal/providers/user_provider.dart";

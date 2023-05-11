@@ -1,3 +1,5 @@
+import "dart:async";
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,9 +7,28 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/const/font_style.dart';
+import 'package:pocket_pal/screens/auth/auth_builder.dart';
 
-class WelcomePage extends StatelessWidget {
-  const WelcomePage({super.key});
+class WelcomePage extends StatefulWidget {
+  const WelcomePage({ Key ? key }) : super(key : key);
+
+  @override
+  State<WelcomePage> createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
+
+  @override
+  void initState(){
+    super.initState();
+    Timer.periodic(const Duration(seconds : 4), (timer) { 
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder : (context) => const AuthViewBuilder()
+        )
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +70,7 @@ class WelcomePage extends StatelessWidget {
                             fontSize: 30.sp,
                             height: 1.2,
                         ),
-                        speed: const Duration(microseconds: 400)
+                        speed: const Duration(milliseconds: 100)
                       ),
                     ],
                   ),

@@ -142,18 +142,18 @@ class _SearchViewState extends State<SearchView> {
             Flexible(
               child: ListView(
                 children: [
-                  for (int i=0; i<userProvider.getUserGroupWall.length ; i++)
+                  for (int i=0; i<userProvider.getUserWall.length ; i++)
                   ListTile(
                       leading: const Icon(FeatherIcons.users),
                       title: bodyText(
-                        userProvider.getUserGroupWall[i]["wallName"],
+                        userProvider.getUserWall[i]["wallName"],
                         bodySize: 16.sp
                       ),
                       onTap:  (){
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder : (context) => FolderGridPage(
-                            wallName: userProvider.getUserGroupWall[i]["wallName"],
+                            wallName: userProvider.getUserWall[i]["wallName"],
                           )
                         )
                       );

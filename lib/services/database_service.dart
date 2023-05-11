@@ -79,8 +79,19 @@ class PocketPalFirestore {
         .collection(_userUid).orderBy(
       orderBy ?? "eventDate", descending: false
     );
-    return await collectionSnapshot.get();
-  }  
+    return await collection.get();
+  } 
+ 
+  Future<void> deleteEvent(String docName) async{
+    final document = _db
+    .collection(_userUid)
+    .doc("$_userUid+Event")
+    .collection(_userUid)
+    .doc(docName);
+
+    await document.delete();
+
+  }
 
   // Envelope ======================================================
   Future<void> addEnvelope(Map<String, dynamic> data, String docName, {String ? code}) async {

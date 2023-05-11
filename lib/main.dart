@@ -117,8 +117,7 @@ class _PocketPalAppState extends State<PocketPalApp> {
                 ThemeMode.light : 
                 ThemeMode.dark,
 
-              //home: _pocketPalAppHome(settingsProvider),
-              home: ErrorPage()
+              home: _pocketPalAppHome(settingsProvider),
             );
           },
         );

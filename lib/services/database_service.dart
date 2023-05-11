@@ -81,7 +81,21 @@ class PocketPalFirestore {
       orderBy ?? "eventDate", descending: false
     );
     return await collectionSnapshot.get();
-  }  
+  } 
+ 
+  Future<void> deleteEvent(String docName) async{
+    final document = _db
+    .collection(_userUid)
+    .doc("$_userUid+Event");
+
+    final collectionRef = document.collection(_userUid);
+    final collectionSnapshot = await collectionRef.get();
+
+    for (final doc in collectionSnapshot.docs){
+      await doc.reference.delete();
+    }
+
+  }
 
   // Envelope ======================================================
   Future<void> addEnvelope(Map<String, dynamic> data, String docName, {String ? code}) async {
@@ -120,31 +134,6 @@ class PocketPalFirestore {
     return await collectionSnapshot.get();
   } 
 
-  Future<List<Map<String, dynamic>>> getAllEnvelopes(String docName, {String? code}) async {
-  final collectionPath = _db
-      .collection(code ?? _userUid)
-      .doc("${code ?? _userUid}+Wall")
-      .collection(code ?? _userUid)
-      .doc(docName);
-
-  final querySnapshot = await collectionPath.get();
-  final envelopesList = <Map<String, dynamic>>[];
-
-  if (querySnapshot.exists) {
-    final envelopesCollection = collectionPath
-        .collection("$docName+Envelope");
-
-    final envelopesSnapshot = await envelopesCollection.get();
-
-    for (var doc in envelopesSnapshot.docs) {
-      envelopesList.add(doc.data());
-    }
-  }
-
-  return envelopesList;
-}
-
-
   Future<void> updateEnvelope(String docName, String docId, Map<String, dynamic> data, {String ? code}) async {
     final collection = _db.collection(code ?? _userUid).doc("${code ?? _userUid}+Wall")
       .collection(code ?? _userUid).doc(docName).collection("$docName+Envelope").doc(docId);
@@ -155,17 +144,17 @@ class PocketPalFirestore {
 
   Future<void> deleteEnvelope(String docName, String docId, {String ? code}) async {
      final folderDocs = _db
-    .collection(code ?? _userUid)
-    .doc("${code ?? _userUid}+Wall")
-    .collection(code ?? _userUid);
+      .collection(code ?? _userUid)
+      .doc("${code ?? _userUid}+Wall")
+      .collection(code ?? _userUid);
 
     final document = _db
-    .collection(code ?? _userUid)
-    .doc("${code ?? _userUid}+Wall")
-    .collection(code ?? _userUid)
-    .doc(docName)
-    .collection("$docName+Envelope")
-    .doc(docId);
+      .collection(code ?? _userUid)
+      .doc("${code ?? _userUid}+Wall")
+      .collection(code ?? _userUid)
+      .doc(docName)
+      .collection("$docName+Envelope")
+      .doc(docId);
     await document.delete();
 
     final folderDoc = await folderDocs.doc(docName).get();
@@ -178,6 +167,21 @@ class PocketPalFirestore {
     });
 
     return;
+  }
+
+   Future<int> getTotalNumberOfEnvelopes() async {
+    final _db = FirebaseFirestore.instance;
+    final String _userUid = PocketPalAuthentication().getUserUID;
+    final folderDocs = _db.collection(_userUid).doc("$_userUid+Wall").collection(_userUid);
+
+    num totalNumberOfEnvelopes = 0;
+    final documentsSnapshot = await folderDocs.get();
+    for (final docSnapshot in documentsSnapshot.docs) {
+      final folderDoc = await docSnapshot.reference.get();
+      final folderNumberOfEnvelopes = folderDoc.data()?["folderNumberOfEnvelopes"] ?? 0;
+      totalNumberOfEnvelopes  += folderNumberOfEnvelopes;
+    }
+    return totalNumberOfEnvelopes.toInt();
   }
 
   // ChatBox ======================================================

@@ -13,7 +13,7 @@ class Event {
   });
 
   @override
-  String toString() => this.eventName;
+  String toString() => eventName;
 
 
    

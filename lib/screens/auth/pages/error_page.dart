@@ -4,6 +4,7 @@ import "package:flutter_svg/flutter_svg.dart";
 import "package:google_fonts/google_fonts.dart";
 
 import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/const/font_style.dart";
 import "package:pocket_pal/widgets/pocket_pal_button.dart";
 
 class ErrorPage extends StatelessWidget {
@@ -14,42 +15,41 @@ class ErrorPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: ColorPalette.black,
+      backgroundColor: ColorPalette.midnightBlue.shade800,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 14.w,
-            vertical : 20.h
-          ),
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  SvgPicture.asset(
-                    "assets/svg/Error.svg",
-                    height: 400.h,
-                    width : 400.w
-                  ),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                SvgPicture.asset(
+                  "assets/svg/Error.svg",
+                  height: 400.h,
+                  width : 400.w
+                ),
 
-                  SizedBox( height : 80.h ),
-                  PocketPalButton(
+                SizedBox( height : 100.h ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 14.w,
+                    ),
+                  child: PocketPalButton(
                     buttonOnTap: () {
                       Navigator.of(context).pop();
                     },
                     buttonHeight: 50.h,
                     buttonWidth: double.infinity,
                     buttonColor: ColorPalette.crimsonRed,
-                    buttonChild: Text("Go back",
-                        style: GoogleFonts.poppins(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                          color: ColorPalette.white,
-                        )),
+                    buttonChild: bodyText(
+                        "Go back",
+                        bodySize : 16.sp,
+                        bodyWeight : FontWeight.w600,
+                        bodyColor : ColorPalette.white, 
+                      ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

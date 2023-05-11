@@ -14,6 +14,7 @@ import "package:pocket_pal/const/font_style.dart";
 import "package:pocket_pal/providers/folder_provider.dart";
 import "package:pocket_pal/providers/user_provider.dart";
 import "package:pocket_pal/services/authentication_service.dart";
+import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/services/storage_service.dart";
 import "package:pocket_pal/widgets/pocket_pal_appbar.dart";
 import "package:provider/provider.dart";
@@ -30,10 +31,11 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
+  final db = PocketPalFirestore();
 
   @override
   void initState(){
-    getTotalNumberOfEnvelopes();
+    db.getTotalNumberOfEnvelopes();
     super.initState();
   }
   

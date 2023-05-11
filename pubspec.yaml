@@ -65,6 +65,7 @@ dependencies:
   table_calendar: ^3.0.8
   shortid: ^0.1.2
   flutter_spinkit: ^5.2.0
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:
@@ -98,6 +99,7 @@ flutter:
     - assets/svg/profile_page_bg.svg
     - assets/svg/Error.svg
     - assets/svg/dashboard_card.svg
+    - assets/svg/welcome_doggie.svg
 
     - assets/icon/Facebook.svg
     - assets/icon/Github.svg

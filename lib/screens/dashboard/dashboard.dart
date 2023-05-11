@@ -1,9 +1,10 @@
 import "package:intl/intl.dart";
+
 import "package:flutter/material.dart";
+import "package:flutter_staggered_animations/flutter_staggered_animations.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:pocket_pal/providers/envelope_provider.dart";
 import "package:pocket_pal/providers/user_provider.dart";
-import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/utils/recent_tab_util.dart";
 import "package:provider/provider.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
@@ -53,6 +54,29 @@ class _DashboardViewState extends State<DashboardView> {
     return;
   }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     body: SingleChildScrollView(
+  //       child: AnimationLimiter(
+  //         child: Column(
+  //           children: AnimationConfiguration.toStaggeredList(
+  //             duration: const Duration(milliseconds: 375),
+  //             childAnimationBuilder: (widget) => SlideAnimation(
+  //               horizontalOffset: 50.0,
+  //               child: FadeInAnimation(
+  //                 child: widget,
+  //               ),
+  //             ),
+  //             children: YourColumnChildren(),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+
   @override
   Widget build(BuildContext context){
     return Consumer<FolderProvider>(
@@ -82,100 +106,112 @@ class _DashboardViewState extends State<DashboardView> {
                   
                   body : SafeArea(
                     child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children : [
-                
-                          const PocketPalAppBar(
-                            pocketPalSearchButton: true,
-                          ),
-                
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 18.w,
-                              vertical: 14.h
-                            ),
-                            child: titleText(
-                              "Manage\nall your Expenses",
-                              titleSize : 24.sp,
-                              titleWeight: FontWeight.w600
-                            ),
-                          ),
-                
-                          const MyCardWidget(),
-                
-                          SizedBox( height : 10.h), 
+                      child: AnimationLimiter(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           
-                          MyTitleOptionWidget(
-                            folderTitleText: "My Folders",
-                            folderTitleOnTap: (){
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder : (context) => const FolderGridPage()
+                          children : AnimationConfiguration.toStaggeredList(
+                            duration : const Duration(milliseconds: 700),
+                            childAnimationBuilder: (widget){
+                              return SlideAnimation(
+                                horizontalOffset: 50.0,
+                                child : FadeInAnimation(
+                                  child : widget
                                 )
                               );
                             },
-                          ),
-                
-                          (folderList.isEmpty) ?
-                            SizedBox(
-                              height : 160.h + 30.w,
-                              child : Center(
-                                child : titleText(
-                                  "No Folders Added",
-                                )
-                              )
-                            ) :
-                            _dashboardFolderView( 
-                              folderProvider,
-                              envelopeProvider,
-                              userProvider),
-                
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 18.w,
-                              vertical: 10.h
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children : [
-                                titleText(
-                                  "Recents",
-                                  titleWeight: FontWeight.w600,
-                                  titleSize : 16.sp
+
+                            children: [
+                              const PocketPalAppBar(
+                                pocketPalSearchButton: true,
+                              ),
+                                        
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 18.w,
+                                  vertical: 14.h
                                 ),
-                                Container(),
-                                // GestureDetector(
-                                //   onTap : (){},
-                                //   child: bodyText(
-                                //     "View all",
-                                //     bodyWeight: FontWeight.w600,
-                                //     bodySize : 14.sp,
-                                //     bodyColor : ColorPalette.crimsonRed
-                                //   ),
-                                // )
-                              ]
-                            ),
-                          ),
-
-                            
-                          for (int i = 0 ; i<recentTabLength; i++) ... [
-                            GestureDetector(
-                              onTap : (){},
-                              child: _dashboardRecentTabListTile(
-                                recentTabCategory: recentTabs[i]["itemCategory"],
-                                recentTabName: recentTabs[i]["itemName"],
-                                recentTabDate : _formatter.format(
-                                  (recentTabs[i]["itemDateAccessed"]).toDate()
-                                )
-                              ),  
-                            ),
-
-                            SizedBox( height : 10.h ),
-                          ]
-                            
-                          
-                        ]
+                                child: titleText(
+                                  "Manage\nall your Expenses",
+                                  titleSize : 24.sp,
+                                  titleWeight: FontWeight.w600
+                                ),
+                              ),
+                                        
+                              const MyCardWidget(),
+                                        
+                              SizedBox( height : 10.h), 
+                              
+                              MyTitleOptionWidget(
+                                folderTitleText: "My Folders",
+                                folderTitleOnTap: (){
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder : (context) => const FolderGridPage()
+                                    )
+                                  );
+                                },
+                              ),
+                                        
+                              (folderList.isEmpty) ?
+                                SizedBox(
+                                  height : 160.h + 30.w,
+                                  child : Center(
+                                    child : titleText(
+                                      "No Folders Added",
+                                    )
+                                  )
+                                ) :
+                                _dashboardFolderView( 
+                                  folderProvider,
+                                  envelopeProvider,
+                                  userProvider),
+                                        
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 18.w,
+                                  vertical: 10.h
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children : [
+                                    titleText(
+                                      "Recents",
+                                      titleWeight: FontWeight.w600,
+                                      titleSize : 16.sp
+                                    ),
+                                    Container(),
+                                    // GestureDetector(
+                                    //   onTap : (){},
+                                    //   child: bodyText(
+                                    //     "View all",
+                                    //     bodyWeight: FontWeight.w600,
+                                    //     bodySize : 14.sp,
+                                    //     bodyColor : ColorPalette.crimsonRed
+                                    //   ),
+                                    // )
+                                  ]
+                                ),
+                              ),
+                        
+                                
+                              for (int i = 0 ; i<recentTabLength; i++) ... [
+                                GestureDetector(
+                                  onTap : (){},
+                                  child: _dashboardRecentTabListTile(
+                                    recentTabCategory: recentTabs[i]["itemCategory"],
+                                    recentTabName: recentTabs[i]["itemName"],
+                                    recentTabDate : _formatter.format(
+                                      (recentTabs[i]["itemDateAccessed"]).toDate()
+                                    )
+                                  ),  
+                                ),
+                        
+                                SizedBox( height : 10.h ),
+                              ]     
+                            ]
+                          )
+                        ),
                       ),
                     ),
                   )

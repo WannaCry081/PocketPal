@@ -105,6 +105,5 @@ In Progress
 // Debug ChatBox
 // Send Picture
 
-// Staggered Grid
 
 // Add Notification

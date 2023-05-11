@@ -66,6 +66,7 @@ dependencies:
   shortid: ^0.1.2
   flutter_spinkit: ^5.2.0
   flutter_launcher_icons: ^0.13.1
+  flutter_staggered_animations: ^1.1.1
 
 dev_dependencies:
   flutter_test:

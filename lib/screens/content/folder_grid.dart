@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter_staggered_animations/flutter_staggered_animations.dart";
 import "package:pocket_pal/providers/envelope_provider.dart";
 import "package:pocket_pal/providers/user_provider.dart";
 import "package:pocket_pal/utils/recent_tab_util.dart";
@@ -85,51 +86,62 @@ class _FolderGridPageState extends State<FolderGridPage> {
                     ),
                   ),
                   
-                  body : GridView.builder(
-                    itemCount : folderListLength,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 1.6/2,
-                      crossAxisCount: 2,
-                    ),
-                    itemBuilder : (context, index){
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          top : 4.h, 
-                          bottom : 16.h,
-                          left : (index%2==0) ? 
-                            16.w : 8.w,
-                          right : (index%2==0) ? 
-                            8.w : 16.w,
-                        ),
-                        child: PocketPalFolder(
-                          folder: folderList[index],
-                          folderEditContents: () => _dashboardFolderEdit(
-                            folderProvider, 
-                            folderList[index]
-                          ),
-                          folderOpenContents: (){
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder : (context) => FolderContentPage(
+                  body : AnimationLimiter(
+                    child: GridView.builder(
+                      itemCount : folderListLength,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        childAspectRatio: 1.6/2,
+                        crossAxisCount: 2,
+                      ),
+                      itemBuilder : (context, index){
+                        return AnimationConfiguration.staggeredGrid(
+                          position: index,
+                          duration: const Duration(milliseconds: 700),
+                          columnCount : folderListLength,
+                          child: ScaleAnimation(
+                            child: FadeInAnimation(
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  top : 4.h, 
+                                  bottom : 16.h,
+                                  left : (index%2==0) ? 
+                                    16.w : 8.w,
+                                  right : (index%2==0) ? 
+                                    8.w : 16.w,
+                                ),
+                                child: PocketPalFolder(
                                   folder: folderList[index],
-                                  code: widget.code,
-                                )
-                              )
-                            ).then((value) {
-                              envelopeProvider.clearEnvelopeList();
-                              userProvider.addTabItem(
-                                RecentTabItem(
-                                  itemCategory: "Folder",
-                                  itemName: folderList[index].folderName,
-                                  itemDocId: "",
-                                  itemDocName: folderList[index].folderId,
-                                ).toMap()
-                              );
-                            },);
-                          },
-                        ),
-                      );
-                    }
+                                  folderEditContents: () => _dashboardFolderEdit(
+                                    folderProvider, 
+                                    folderList[index]
+                                  ),
+                                  folderOpenContents: (){
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder : (context) => FolderContentPage(
+                                          folder: folderList[index],
+                                          code: widget.code,
+                                        )
+                                      )
+                                    ).then((value) {
+                                      envelopeProvider.clearEnvelopeList();
+                                      userProvider.addTabItem(
+                                        RecentTabItem(
+                                          itemCategory: "Folder",
+                                          itemName: folderList[index].folderName,
+                                          itemDocId: "",
+                                          itemDocName: folderList[index].folderId,
+                                        ).toMap()
+                                      );
+                                    },);
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    ),
                   )
                 );
               }

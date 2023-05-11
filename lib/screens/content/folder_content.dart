@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter_staggered_animations/flutter_staggered_animations.dart";
 import "package:pocket_pal/providers/chatbox_provider.dart";
 import "package:pocket_pal/providers/user_provider.dart";
 import "package:pocket_pal/utils/recent_tab_util.dart";
@@ -118,52 +119,63 @@ class _FolderContentPageState extends State<FolderContentPage>{
                     ),
                   ),
                 
-                  body : GridView.builder(
-                    itemCount : envelopeListLength,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 1.6/2,
-                      crossAxisCount: 2,
-                    ),
-                    itemBuilder : (context, index){
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          top : 4.h, 
-                          bottom : 16.h,
-                          left : (index%2==0) ? 
-                            16.w : 8.w,
-                          right : (index%2==0) ? 
-                            8.w : 16.w,
-                        ),
-                        child: PocketPalEnvelope(
-                          envelope: envelopeList[index],
-                          envelopeEditContents: () => 
-                            _folderContentEditEnvelope(
-                              envelopeProvider,
-                              envelopeList[index]
+                  body : AnimationLimiter(
+                    child: GridView.builder(
+                      itemCount : envelopeListLength,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        childAspectRatio: 1.6/2,
+                        crossAxisCount: 2,
+                      ),
+                      itemBuilder : (context, index){
+                        return AnimationConfiguration.staggeredGrid(
+                          position : index,
+                          duration : const Duration( milliseconds: 700),
+                          columnCount : envelopeListLength, 
+                          child: ScaleAnimation(
+                            child: FadeInAnimation(
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  top : 4.h, 
+                                  bottom : 16.h,
+                                  left : (index%2==0) ? 
+                                    16.w : 8.w,
+                                  right : (index%2==0) ? 
+                                    8.w : 16.w,
+                                ),
+                                child: PocketPalEnvelope(
+                                  envelope: envelopeList[index],
+                                  envelopeEditContents: () => 
+                                    _folderContentEditEnvelope(
+                                      envelopeProvider,
+                                      envelopeList[index]
+                                    ),
+                                  envelopeOpenContents: (){
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder : (context) => EnvelopeContentPage(
+                                          folder: widget.folder,
+                                          envelope: envelopeList[index], 
+                                          code : widget.code
+                                        )
+                                      )
+                                    ).then((value){
+                                      userProvider.addTabItem(
+                                        RecentTabItem(
+                                          itemCategory: "Envelope",
+                                          itemName: envelopeList[index].envelopeName,
+                                          itemDocId: envelopeList[index].envelopeId,
+                                          itemDocName: widget.folder.folderId,
+                                        ).toMap()
+                                      );
+                                    });
+                                  },
+                                ),
+                              ),
                             ),
-                          envelopeOpenContents: (){
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder : (context) => EnvelopeContentPage(
-                                  folder: widget.folder,
-                                  envelope: envelopeList[index], 
-                                  code : widget.code
-                                )
-                              )
-                            ).then((value){
-                              userProvider.addTabItem(
-                                RecentTabItem(
-                                  itemCategory: "Envelope",
-                                  itemName: envelopeList[index].envelopeName,
-                                  itemDocId: envelopeList[index].envelopeId,
-                                  itemDocName: widget.folder.folderId,
-                                ).toMap()
-                              );
-                            });
-                          },
-                        ),
-                      );
-                    }
+                          ),
+                        );
+                      }
+                    ),
                   )
                 );
               }

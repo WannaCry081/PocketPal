@@ -1,6 +1,7 @@
 import "package:intl/intl.dart";
 
 import "package:flutter/material.dart";
+import "package:flutter_staggered_animations/flutter_staggered_animations.dart";
 import "package:pocket_pal/providers/folder_provider.dart";
 import "package:pocket_pal/providers/wall_provider.dart";
 import "package:provider/provider.dart";
@@ -71,37 +72,50 @@ class _SharedWallViewState extends State<SharedWallView> {
                 
                   body : SafeArea(
                     child: SingleChildScrollView(
-                      child: Column(
-                        children : [
-                          
-                          const PocketPalAppBar(
-                            pocketPalTitle: "Shared Wall",
-                          ),
-                
-                          for (int i=0; i<userProvider.getUserWall.length ; i++)
-                            MyListTileWidget(
-                              listTileName : userProvider.getUserWall[i]["wallName"],
-                              listTileCode : userProvider.getUserWall[i]["wallId"],
-                              listTileDate : _formatter.format(
-                                (userProvider.getUserWall[i]["wallDate"]).toDate()
+                      child: AnimationLimiter(
+                        child: Column(
+                          children : AnimationConfiguration.toStaggeredList(
+                            childAnimationBuilder: (widget){
+                              return SlideAnimation(
+                                horizontalOffset: 50.0,
+                                child : FadeInAnimation(
+                                  child : widget
+                                )
+
+                              );
+                            }, 
+                            children: [
+                              const PocketPalAppBar(
+                                pocketPalTitle: "Shared Wall",
                               ),
-                              listTileWallOnDelete: (){
-                              },
-                              listTileWallNavigation: (){
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder : (context) => FolderGridPage(
-                                      code : userProvider.getUserWall[i]["wallId"],
-                                      wallName: userProvider.getUserWall[i]["wallName"],
-                                    )
-                                  )
-                                ).then((value){
-                                  folderProvider.clearFolderList();
-                                });
-                              },
-                            )
-                
-                        ]
+                                        
+                              for (int i=0; i<userProvider.getUserWall.length ; i++) ... [
+                                MyListTileWidget(
+                                  listTileName : userProvider.getUserWall[i]["wallName"],
+                                  listTileCode : userProvider.getUserWall[i]["wallId"],
+                                  listTileDate : _formatter.format(
+                                    (userProvider.getUserWall[i]["wallDate"]).toDate()
+                                  ),
+                                  listTileWallOnDelete: (){
+                                  },
+                                  listTileWallNavigation: (){
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder : (context) => FolderGridPage(
+                                          code : userProvider.getUserWall[i]["wallId"],
+                                          wallName: userProvider.getUserWall[i]["wallName"],
+                                        )
+                                      )
+                                    ).then((value){
+                                      folderProvider.clearFolderList();
+                                    });
+                                  },
+                                )
+                              ]
+                                        
+                            ]
+                          ),
+                        ),
                       ),
                     ),
                   )

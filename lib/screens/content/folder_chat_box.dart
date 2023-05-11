@@ -38,16 +38,13 @@ class _FolderChatBoxState extends State<FolderChatBox> {
 
   @override
   void initState() {
-    super.initState();
-
+    super.initState();    
     Provider.of<ChatBoxProvider>(context, listen : false).fetchConversation(
       widget.folder.folderId,
       code : widget.code
     );
-    
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollListViewToBottom();
-
     });
     return;
   }
@@ -61,6 +58,7 @@ class _FolderChatBoxState extends State<FolderChatBox> {
     );
     return;
   }
+
   @override
   void dispose(){
     super.dispose();
@@ -261,7 +259,7 @@ class _FolderChatBoxState extends State<FolderChatBox> {
                       widget.folder.folderId,
                       code : widget.code
                     );
-            
+
                     _scrollListViewToBottom();
                     _textController.clear();
                   }

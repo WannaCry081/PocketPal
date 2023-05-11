@@ -95,6 +95,8 @@ flutter:
     - assets/images/onboard_image2.jpg
     - assets/images/onboard_image3.jpg
     - assets/images/onboard_image4.jpg
+
+    - assets/svg/NoWifi.svg
     - assets/svg/forgot_password.svg
     - assets/svg/Error.svg
     - assets/svg/dashboard_card.svg

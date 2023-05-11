@@ -57,8 +57,8 @@ class _ProfileViewState extends State<ProfileView> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color(0xFFFFC8C2),
-                Color.fromARGB(255, 255, 249, 249),
+                const Color(0xFFFFC8C2),
+                const Color.fromARGB(255, 255, 249, 249),
                 ColorPalette.white!
               ]
             ),

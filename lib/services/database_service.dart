@@ -538,7 +538,6 @@ class PocketPalDatabase {
       int index,
       {String ? orderBy, String ? code}
     ) async { 
-      final userUid = PocketPalAuthentication().getUserUID;
 
        final collection = _db
         .collection(code ??_userUid)

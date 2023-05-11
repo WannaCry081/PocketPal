@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:flutter_zoom_drawer/flutter_zoom_drawer.dart";
 import "package:pocket_pal/screens/calculator/calculator.dart";
 import "package:pocket_pal/screens/calendar/calendar.dart";
-import "package:pocket_pal/screens/notifications/notifications.dart";
 import 'package:pocket_pal/screens/shared/shared.dart';
 import "package:pocket_pal/utils/menu_item_util.dart";
 
@@ -68,8 +67,6 @@ class _MenuDrawerViewState extends State<MenuDrawerView> {
         return const CalendarView();
       case MenuItems.calculator:
         return const CalculatorView();
-      case MenuItems.notifications:
-        return const NotificationsView();
       case MenuItems.settings:
         return const SettingsView();
       default: 

@@ -4,20 +4,15 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
-import 'package:pocket_pal/providers/envelope_provider.dart';
 import 'package:pocket_pal/providers/event_provider.dart';
-import 'package:pocket_pal/providers/folder_provider.dart';
 import 'package:pocket_pal/screens/calendar/widgets/event_tile.dart';
 import 'package:pocket_pal/utils/event_util.dart';
 import 'package:pocket_pal/widgets/pocket_pal_appbar.dart';
-import 'package:pocket_pal/widgets/pocket_pal_formfield.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pocket_pal/screens/dashboard/widgets/dialog_box.dart';
 
 
@@ -35,7 +30,7 @@ class _CalendarViewState extends State<CalendarView> {
   DateTime focusedDay = DateTime.now();
   CalendarFormat format = CalendarFormat.month;
    
-  TextEditingController _eventController = TextEditingController(text: "");
+  final TextEditingController _eventController = TextEditingController(text: "");
 
   Map<DateTime, List<Event>> selectedEvents = {};
 

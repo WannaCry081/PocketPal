@@ -1,4 +1,6 @@
+import "package:intl/intl.dart";
 import "package:flutter/material.dart";
+import "package:flutter_svg/flutter_svg.dart";
 import "package:pocket_pal/providers/envelope_provider.dart";
 import "package:pocket_pal/providers/user_provider.dart";
 import "package:pocket_pal/services/database_service.dart";
@@ -34,7 +36,8 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
 
   final TextEditingController _folderNameController = TextEditingController(text : "");
-  final db = PocketPalFirestore();
+  final DateFormat _formatter = DateFormat("MMMM d  h:mm a");
+
 
   @override
   void initState(){
@@ -157,12 +160,20 @@ class _DashboardViewState extends State<DashboardView> {
 
                             
                           for (int i = 0 ; i<recentTabLength; i++) ... [
-                            ListTile(
-                              title : titleText(
-                                recentTabs[i]["itemName"]
-                              ),
-                            )
+                            GestureDetector(
+                              onTap : (){},
+                              child: _dashboardRecentTabListTile(
+                                recentTabCategory: recentTabs[i]["itemCategory"],
+                                recentTabName: recentTabs[i]["itemName"],
+                                recentTabDate : _formatter.format(
+                                  (recentTabs[i]["itemDateAccessed"]).toDate()
+                                )
+                              ),  
+                            ),
+
+                            SizedBox( height : 10.h ),
                           ]
+                            
                           
                         ]
                       ),
@@ -174,6 +185,79 @@ class _DashboardViewState extends State<DashboardView> {
           }
         );
       }
+    );
+  }
+
+  Widget _dashboardRecentTabListTile({
+    required String recentTabCategory,
+    required String recentTabName,
+    required String recentTabDate
+
+  }){
+    return Container(
+      height : 60.h,
+      margin : EdgeInsets.symmetric(
+        horizontal: 16.w
+      ),
+      padding : EdgeInsets.symmetric(
+        horizontal: 6.w,
+        vertical: 6.w,
+      ),
+      decoration : BoxDecoration(
+        color : ColorPalette.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color : ColorPalette.black!.withOpacity(.2),
+            blurRadius: 4,
+            offset: const Offset(0, 3)
+          )
+        ]
+      ),
+      child : Row(
+        children : [  
+          Container(
+            width : 50.w,
+
+            decoration: BoxDecoration(
+              color : ColorPalette.salmonPink[50],
+              borderRadius: BorderRadius.circular(10)
+            ),
+            child: Center(
+              child: SvgPicture.asset(
+                "assets/icon/${recentTabCategory}_lg.svg",
+                width : 28.w
+                
+              ),
+            ),
+          ), 
+
+          SizedBox( width : 10.w),
+
+          Expanded(
+            child : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+
+                titleText(
+                  recentTabName,
+                  titleSize : 14.sp, 
+                ),
+
+                const Spacer(),
+                bodyText(
+                  recentTabDate,
+                  bodySize : 10.sp,
+                  bodyColor : ColorPalette.grey
+                ),
+
+                SizedBox( width : 14.w),
+              ],
+            )
+          )
+        ]
+      )
     );
   }
 

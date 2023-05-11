@@ -101,15 +101,10 @@ In Progress
 -->
 
 
-// UI Design in Recent Tabs
-// UI Design in Shared Wall
-
-// Delete .then() in envelope.clear()
 
 // Debug ChatBox
 // Send Picture
 
 // Staggered Grid
-// Delete Notifications Page
 
 // Add Notification

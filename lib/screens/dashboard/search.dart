@@ -4,16 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/const/font_style.dart';
-import 'package:pocket_pal/providers/envelope_provider.dart';
 import 'package:pocket_pal/providers/folder_provider.dart';
 import 'package:pocket_pal/providers/user_provider.dart';
-import 'package:pocket_pal/providers/wall_provider.dart';
 import 'package:pocket_pal/screens/content/folder_content.dart';
 import 'package:pocket_pal/screens/content/folder_grid.dart';
-import 'package:pocket_pal/screens/envelope/envelope.dart';
-import 'package:pocket_pal/utils/envelope_util.dart';
 import 'package:pocket_pal/utils/folder_util.dart';
-import 'package:pocket_pal/utils/wall_util.dart';
 import 'package:provider/provider.dart';
 
 class SearchView extends StatefulWidget {
@@ -26,7 +21,7 @@ class SearchView extends StatefulWidget {
 
 class _SearchViewState extends State<SearchView> {
   String searchText = "";
-  FocusNode _textFieldFocus = FocusNode();
+  final FocusNode _textFieldFocus = FocusNode();
   TextEditingController _textEditingController = TextEditingController();
 
   @override
@@ -78,7 +73,7 @@ class _SearchViewState extends State<SearchView> {
                 color: ColorPalette.grey
               ),
               suffix: GestureDetector(
-                child: Icon(FeatherIcons.x),
+                child: const Icon(FeatherIcons.x),
                 onTap: (){
                   setState(() {
                      _textFieldFocus.unfocus();

@@ -1,3 +1,5 @@
+import "package:intl/intl.dart";
+
 import "package:flutter/material.dart";
 import "package:pocket_pal/providers/folder_provider.dart";
 import "package:pocket_pal/providers/wall_provider.dart";
@@ -27,6 +29,7 @@ class _SharedWallViewState extends State<SharedWallView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _codeController = TextEditingController(text : "");
   final TextEditingController _nameController = TextEditingController(text : "");
+  final DateFormat _formatter = DateFormat("MMM d");
 
   @override
   void initState(){
@@ -46,10 +49,13 @@ class _SharedWallViewState extends State<SharedWallView> {
 
     return Consumer<UserProvider>(
       builder: (context, userProvider, child) {
+
         return Consumer<WallProvider>(
           builder: (context, wallProvider, child) {
+
             return Consumer<FolderProvider>(
               builder: (context, folderProvider, child) {
+
                 return Scaffold(
                   floatingActionButton: FloatingActionButton(
                     onPressed: () => _sharedWallCreateGroup(
@@ -76,8 +82,10 @@ class _SharedWallViewState extends State<SharedWallView> {
                             MyListTileWidget(
                               listTileName : userProvider.getUserWall[i]["wallName"],
                               listTileCode : userProvider.getUserWall[i]["wallId"],
+                              listTileDate : _formatter.format(
+                                (userProvider.getUserWall[i]["wallDate"]).toDate()
+                              ),
                               listTileWallOnDelete: (){
-                                
                               },
                               listTileWallNavigation: (){
                                 Navigator.of(context).push(

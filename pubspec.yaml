@@ -107,11 +107,9 @@ flutter:
     - assets/icon/Menu.svg
     
     - assets/icon/Folder.svg
-    - assets/icon/Folder_sm.svg
     - assets/icon/Folder_lg.svg
 
     - assets/icon/Envelope.svg
-    - assets/icon/Envelope_sm.svg
     - assets/icon/Envelope_lg.svg
 
     - assets/icon/peso_sign.svg
@@ -158,4 +156,4 @@ flutter_native_splash:
 flutter_launcher_icons:
   android : true 
   image_path : "assets/images/Profile2.png"
-  adaptive_icon_background : "assets/images/Profile2.png"
+  adaptive_icon_background : "assets/images/Splash.png"

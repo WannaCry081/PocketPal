@@ -9,6 +9,7 @@ class MyListTileWidget extends StatelessWidget {
 
   final String listTileName;
   final String listTileCode;
+  final String listTileDate;
   final void Function() listTileWallNavigation;
   final void Function() listTileWallOnDelete;
 
@@ -17,7 +18,8 @@ class MyListTileWidget extends StatelessWidget {
     required this.listTileName,
     required this.listTileCode,
     required this.listTileWallNavigation, 
-    required this.listTileWallOnDelete
+    required this.listTileWallOnDelete,
+    required this.listTileDate,
   }) : super(key : key);
 
   @override
@@ -90,7 +92,16 @@ class MyListTileWidget extends StatelessWidget {
                     )
                   ]
                 )
-              )
+              ),
+
+              bodyText(
+                listTileDate,
+                bodySize : 10.sp,
+                bodyColor : ColorPalette.grey,
+              ),
+
+              SizedBox(width : 20.w)
+              
             ]
           )
         ),

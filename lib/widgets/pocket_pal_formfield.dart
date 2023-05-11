@@ -29,7 +29,7 @@ class PocketPalFormField extends StatelessWidget {
     this.formPrefixIcon,
     this.formMaxLines = 1,
     this.formKeyboardType,
-    required this.formHintText, 
+    required this.formHintText,
     this.formIsObsecure = false,
     this.formIsReadOnly = false,  
     this.formSuffixIcon,

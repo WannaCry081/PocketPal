@@ -1,4 +1,7 @@
 import "package:flutter/material.dart";
+import "package:pocket_pal/providers/chatbox_provider.dart";
+import "package:pocket_pal/providers/user_provider.dart";
+import "package:pocket_pal/utils/recent_tab_util.dart";
 import "package:provider/provider.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
@@ -66,81 +69,106 @@ class _FolderContentPageState extends State<FolderContentPage>{
   Widget build(BuildContext context){
     return Consumer<EnvelopeProvider>(
       builder: (context,envelopeProvider, child) {
-        return Scaffold(
-          appBar : AppBar(
-            title : titleText(
-              "${widget.folder.folderName} Folder",
-              titleWeight : FontWeight.w600
-            ),
-            actions: [
-              if (widget.code != null) ... [
-                IconButton(
-                  icon : const Icon(
-                    FeatherIcons.messageCircle,
-                    color : Colors.black
-                  ),
-                  onPressed: (){
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder : (context) => FolderChatBox(
-                          folder : widget.folder,
-                          code : widget.code
-                        )
-                      )
-                    );
-                  },
-                )
-              ] 
-            ],
-          ),
-    
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: ColorPalette.crimsonRed,
-            onPressed: () => _folderContentAddEnvelope(envelopeProvider),
-            child : Icon(
-              FeatherIcons.plus, 
-              color : ColorPalette.white,
-            ),
-          ),
-    
-          body : GridView.builder(
-            itemCount : envelopeProvider.getEnvelopeList.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 1.6/2,
-              crossAxisCount: 2,
-            ),
-            itemBuilder : (context, index){
-              return Padding(
-                padding: EdgeInsets.only(
-                  top : 4.h, 
-                  bottom : 16.h,
-                  left : (index%2==0) ? 
-                    16.w : 8.w,
-                  right : (index%2==0) ? 
-                    8.w : 16.w,
-                ),
-                child: PocketPalEnvelope(
-                  envelope: envelopeProvider.getEnvelopeList[index],
-                  envelopeEditContents: () => 
-                    _folderContentEditEnvelope(
-                      envelopeProvider,
-                      envelopeProvider.getEnvelopeList[index]
+
+        final List<Envelope> envelopeList = envelopeProvider.getEnvelopeList;
+        final int envelopeListLength = envelopeList.length;
+
+        return Consumer<ChatBoxProvider>(
+          builder: (context, chatBoxProvider, child) {
+            
+            return Consumer<UserProvider>(
+              builder: (context, userProvider, child) {
+
+                return Scaffold(
+                  appBar : AppBar(
+                    title : titleText(
+                      "${widget.folder.folderName} Folder",
+                      titleWeight : FontWeight.w600
                     ),
-                  envelopeOpenContents: (){
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder : (context) => EnvelopeContentPage(
-                          folder: widget.folder,
-                          envelope: envelopeProvider.getEnvelopeList[index], 
-                          code : widget.code
+                    actions: [
+                      if (widget.code != null) ... [
+                        IconButton(
+                          icon : const Icon(
+                            FeatherIcons.messageCircle,
+                            color : Colors.black
+                          ),
+                          onPressed: (){
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder : (context) => FolderChatBox(
+                                  folder : widget.folder,
+                                  code : widget.code
+                                )
+                              )
+                            ).then((value){
+                              chatBoxProvider.clearChatConversation();
+                            });
+                          },
                         )
-                      )
-                    );
-                  },
-                ),
-              );
-            }
-          )
+                      ] 
+                    ],
+                  ),
+                
+                  floatingActionButton: FloatingActionButton(
+                    backgroundColor: ColorPalette.crimsonRed,
+                    onPressed: () => _folderContentAddEnvelope(envelopeProvider),
+                    child : Icon(
+                      FeatherIcons.plus, 
+                      color : ColorPalette.white,
+                    ),
+                  ),
+                
+                  body : GridView.builder(
+                    itemCount : envelopeListLength,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 1.6/2,
+                      crossAxisCount: 2,
+                    ),
+                    itemBuilder : (context, index){
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          top : 4.h, 
+                          bottom : 16.h,
+                          left : (index%2==0) ? 
+                            16.w : 8.w,
+                          right : (index%2==0) ? 
+                            8.w : 16.w,
+                        ),
+                        child: PocketPalEnvelope(
+                          envelope: envelopeList[index],
+                          envelopeEditContents: () => 
+                            _folderContentEditEnvelope(
+                              envelopeProvider,
+                              envelopeList[index]
+                            ),
+                          envelopeOpenContents: (){
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder : (context) => EnvelopeContentPage(
+                                  folder: widget.folder,
+                                  envelope: envelopeList[index], 
+                                  code : widget.code
+                                )
+                              )
+                            ).then((value){
+                              userProvider.addTabItem(
+                                RecentTabItem(
+                                  itemCategory: "Envelope",
+                                  itemName: envelopeList[index].envelopeName,
+                                  itemDocId: envelopeList[index].envelopeId,
+                                  itemDocName: widget.folder.folderId,
+                                ).toMap()
+                              );
+                            });
+                          },
+                        ),
+                      );
+                    }
+                  )
+                );
+              }
+            );
+          }
         );
       }
     );
@@ -163,7 +191,7 @@ class _FolderContentPageState extends State<FolderContentPage>{
               envelopeStartingAmount: double.parse(_enevelopeAmountController.text.trim())
             );
 
-            envelopeProvider.addEnvelope(
+            envelopeProvider.createEnvelope(
               envelope.toMap(), 
               widget.folder.folderId,
               code : widget.code,

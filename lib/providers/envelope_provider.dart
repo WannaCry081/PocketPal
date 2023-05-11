@@ -1,6 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
-import "package:pocket_pal/services/authentication_service.dart";
 import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/utils/envelope_util.dart";
 
@@ -12,14 +11,6 @@ class EnvelopeProvider with ChangeNotifier {
   set setOrderBy(String orderBy){
     _orderBy = orderBy;
     notifyListeners();
-  }
-
-  String ? _groupCode;
-  String get getGroupCode => _groupCode ?? "";
-  set setGroupCode(String value){
-    _groupCode = value;
-    notifyListeners();
-    return;
   }
 
   List<Envelope> _envelopeList = [];
@@ -40,8 +31,7 @@ class EnvelopeProvider with ChangeNotifier {
     return; 
   }  
 
-  
-  Future<void> addEnvelope(Map<String, dynamic> data, String docName, {String ? code}) async {
+  Future<void> createEnvelope(Map<String, dynamic> data, String docName, {String ? code}) async {
     await PocketPalFirestore().addEnvelope(
       data,
       docName,
@@ -74,6 +64,11 @@ class EnvelopeProvider with ChangeNotifier {
       code : code
     );
     fetchEnvelope(docName, code : code);
+    return;
+  }
+
+  void clearEnvelopeList(){
+    _envelopeList.clear();
     return;
   }
 }

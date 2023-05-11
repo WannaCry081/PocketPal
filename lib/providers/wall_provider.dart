@@ -7,15 +7,15 @@ class WallProvider with ChangeNotifier{
   late String _groupWallName;
   String get getGroupWallName => _groupWallName;
 
-  List<Map<String, dynamic>> _groupCollection = [];
-  List<Map<String, dynamic>> get getGroupCollection => _groupCollection;
+  List<Map<String, dynamic>> _wallList = [];
+  List<Map<String, dynamic>> get getWallList => _wallList;
 
   // Group Wall Manipulation
   Future<void> fetchGroupWall(String code) async {
     DocumentSnapshot<Map<String, dynamic>> docSnapshot = await PocketPalFirestore()
       .getGroupCollecton(code);
 
-    _groupCollection = List<Map<String, dynamic>>.from(
+    _wallList = List<Map<String, dynamic>>.from(
       docSnapshot.get("wallMembers").map(
         (element) => Map<String, dynamic>.from(element)
       )
@@ -33,11 +33,11 @@ class WallProvider with ChangeNotifier{
   }
 
   // Future<void> deleteGroupWall(String code) async{
-  //   fetchGroupWall();
+  //   fetchGroupWall(code);
   //   return;
   // }
 
-  Future<void> createGroupWall(String code, Map<String, dynamic> data) async{
+  Future<void> createGroupWall(Map<String, dynamic> data, String code, ) async{
     await PocketPalFirestore().createGroupCollection(
       code,
       data
@@ -45,12 +45,18 @@ class WallProvider with ChangeNotifier{
     fetchGroupWall(code);
     return;
   }
-  Future<void> updateGroupWall(String code, Map<String, dynamic> data) async {
+  Future<void> updateGroupWall(Map<String, dynamic> data, String code) async {
     await PocketPalFirestore().updateGroupCollection(
       code,
       data
     );  
     fetchGroupWall(code);
+    return;
+  }
+
+  void clearWallList(){
+    _wallList.clear();
+    notifyListeners();
     return;
   }
 }

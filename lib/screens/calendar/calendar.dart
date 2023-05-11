@@ -37,14 +37,15 @@ class _CalendarViewState extends State<CalendarView> {
    
   TextEditingController _eventController = TextEditingController(text: "");
 
-  late Map<DateTime, List<Event>> selectedEvents = {};
-  List<Event> getEventfromDay(DateTime date){
-      return selectedEvents[date] ?? [];
-  }
+  Map<DateTime, List<Event>> selectedEvents = {};
 
   @override
   void initState(){
+    selectedEvents={};
     super.initState();
+  }
+  List<Event> _getEventfromDay(DateTime date){
+    return selectedEvents[date] ?? [];
   }
 
   @override
@@ -64,64 +65,6 @@ class _CalendarViewState extends State<CalendarView> {
     return;
   }
 
-  void _addCalendarEvent(){
-    showDialog(
-      context: context,
-      builder: (context){
-        return MyDialogBoxWidget(
-          dialogBoxConfirmMessage: "Create",
-          controllerName: _eventController,
-          dialogBoxHintText: "Event name",
-          dialogBoxTitle: "Add Event",
-          dialogBoxErrorMessage: "Please enter a name for your Event",
-          dialogBoxOnCancel: (){
-            _eventController.clear();
-            Navigator.of(context).pop();
-          },
-          dialogBoxOnCreate: (){
-            Provider.of<EventProvider>(
-              context,
-              listen: false
-            ).addEvent(
-              Event(
-                eventName: _eventController.text.trim(),
-                eventDate: selectedDay
-              ).toMap()
-            );
-            _eventController.clear();
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Event added!"))
-            );
-            Navigator.of(context).pop();
-
-            // if(_eventController.text.isEmpty){
-            //   return;
-            // } else {
-            //   if(selectedEvents[selectedDay]!=null){
-            //     selectedEvents[selectedDay]!.add(
-            //       Event(
-            //         eventDate: selectedDay,
-            //         eventName: _eventController.text.trim(),
-            //       )
-            //     );
-            //   } else{
-            //     selectedEvents[selectedDay] = [
-            //       Event(
-            //         eventName: _eventController.text.trim(),
-            //         eventDate: selectedDay
-            //       )
-            //     ];
-            //   }
-            // }
-            setState(() {
-              
-            });
-          },
-        );
-      });
-      return;
-  }
 
 
   @override
@@ -132,15 +75,6 @@ class _CalendarViewState extends State<CalendarView> {
 
     final EventProvider eventProvider = context.watch<EventProvider>();
     final List<Event> eventItem = eventProvider.getEventList;
-    final int eventItemLength = eventItem.length;
-
-    Map<DateTime, List<Event>> eventMap = eventProvider.getEventMap;
-
-    List<DateTime> decoratedDays = eventMap.keys.toList();
-
-    eventMap.forEach((date, events) {
-      selectedEvents[date] = List<Event>.from(events);
-    });
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -209,9 +143,7 @@ class _CalendarViewState extends State<CalendarView> {
                 },
           
                //eventLoader: (DateTime date) => eventMap[date] ?? [],
-               eventLoader: (date) {
-                  return eventMap[date] ?? [];
-                },
+               eventLoader: _getEventfromDay,
 
                 calendarStyle: CalendarStyle(
                   markerSizeScale: 1,
@@ -235,11 +167,34 @@ class _CalendarViewState extends State<CalendarView> {
             ),
 
             SizedBox( height: 10.h,),
+
             Expanded(
-              child: _eventListView(
-                  eventItem: eventItem,
-                  eventItemLength: eventItemLength
-                ),
+              child: ListView.builder(
+                itemCount: eventProvider.getEventList.length,
+                itemBuilder: (context, index){
+                  Event event  = eventItem[index];
+                  DateTime eventDate = event.eventDate;
+                    return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 14.w),
+                        child: SizedBox(
+                        height: 80.h,
+                          child: MyEventListTile(
+                            event: event,
+                            eventMonth: DateFormat('MMM').format(event.eventDate),
+                            eventDay: DateFormat('dd').format(event.eventDate),
+                            isToday: (eventDate.month == DateTime.now().month && eventDate.day == DateTime.now().day),
+                            onPressedDelete: (BuildContext context){
+                              eventProvider.deleteEvent(event.eventId);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Successfully Deleted!"),
+                                  duration: Duration(seconds: 1),));
+                            } ,
+                          ),
+                        ),
+                      );
+                }
+              )
             )
           ],
         ),
@@ -274,33 +229,33 @@ class _CalendarViewState extends State<CalendarView> {
                       const SnackBar(
                         content: Text("Event added!"))
                     );
+
+                    if(_eventController.text.isEmpty){
+                      return;
+                    } else {
+                      if(selectedEvents[selectedDay]!=null){
+                        selectedEvents[selectedDay]!.add(
+                          Event(
+                            eventDate: selectedDay,
+                            eventName: _eventController.text.trim(),
+                          )
+                        );
+                      } else{
+                        selectedEvents[selectedDay] = [
+                          Event(
+                            eventName: _eventController.text.trim(),
+                            eventDate: selectedDay
+                          )
+                        ];
+                      }
+                    }
                     Navigator.of(context).pop();
                      _eventController.clear();
                     setState(() { });
                     return;
-
-                    // if(_eventController.text.isEmpty){
-                    //   return;
-                    // } else {
-                    //   if(selectedEvents[selectedDay]!=null){
-                    //     selectedEvents[selectedDay]!.add(
-                    //       Event(
-                    //         eventDate: selectedDay,
-                    //         eventName: _eventController.text.trim(),
-                    //       )
-                    //     );
-                    //   } else{
-                    //     selectedEvents[selectedDay] = [
-                    //       Event(
-                    //         eventName: _eventController.text.trim(),
-                    //         eventDate: selectedDay
-                    //       )
-                    //     ];
-                    //   }
-                    // }
                   },
                 );
-      });
+            });
         },
         child: Icon(
           FeatherIcons.plus,
@@ -309,75 +264,51 @@ class _CalendarViewState extends State<CalendarView> {
         );
       }
 
-Widget _eventListView({
-  required List<Event> eventItem,
-  required int eventItemLength,
-}) {
-  Map<DateTime, List<String>> groupedEvents = {};
+// Widget _eventListView({
+//   required List<Event> eventItem,
+//   required int eventItemLength,
+// }) {
+//   Map<DateTime, List<String>> groupedEvents = {};
 
-  for (int i = 0; i < eventItemLength; i++) {
-    DateTime dateTime = eventItem[i].eventDate;
+//   for (int i = 0; i < eventItemLength; i++) {
+//     DateTime dateTime = eventItem[i].eventDate;
 
-    if (groupedEvents.containsKey(dateTime)) {
-      groupedEvents[dateTime]!.add(eventItem[i].eventName);
-    } 
-    else {
-      groupedEvents[dateTime] = [eventItem[i].eventName];
-    }
+//     if (groupedEvents.containsKey(dateTime)) {
+//       groupedEvents[dateTime]!.add(eventItem[i].eventName);
+//     } 
+//     else {
+//       groupedEvents[dateTime] = [eventItem[i].eventName];
+//     }
 
-     if (dateTime == focusedDay) {
-      if (groupedEvents.containsKey(DateTime.now())) {
-        groupedEvents[focusedDay]!.add(eventItem[i].eventName);
-      } else {
-        groupedEvents[DateTime.now()] = [eventItem[i].eventName];
-      }
-        }
-  }
+//      if (dateTime == focusedDay) {
+//       if (groupedEvents.containsKey(DateTime.now())) {
+//         groupedEvents[focusedDay]!.add(eventItem[i].eventName);
+//       } else {
+//         groupedEvents[DateTime.now()] = [eventItem[i].eventName];
+//       }
+//         }
+//   }
 
-  return ListView(
-    children: groupedEvents.entries.map((entry) {
-      DateTime dateTime = entry.key;
-      List<String> eventNames = entry.value;
+//   return ListView(
+//     children: groupedEvents.entries.map((entry) {
+//       DateTime dateTime = entry.key;
+//       List<String> eventNames = entry.value;
   
-      return Padding(
-        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 14.w),
-        child: SizedBox(
-         height: (eventNames.length <= 4) ? 90.h : 120.h,
-          child: MyEventListTile(
-            eventMonth: DateFormat('MMM').format(dateTime),
-            eventDay: DateFormat('dd').format(dateTime),
-            eventNames: eventNames,
-            isToday: (dateTime.month == DateTime.now().month && dateTime.day == DateTime.now().day),
-          ),
-        ),
-      );
-    }).toList(),
-  );
-}
-
-
-Widget _buildMarkers(List<Event> events) {
-  // Customize the appearance of the marker widget based on your requirements
-  return Container(
-    width: 10,
-    height: 10,
-    decoration: BoxDecoration(
-      shape: BoxShape.circle,
-      color: Colors.red,
-    ),
-    child: Center(
-      child: Text(
-        events.length.toString(),
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 8,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-  );
-}
-
+//       return Padding(
+//         padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 14.w),
+//         child: SizedBox(
+//          height: (eventNames.length <= 4) ? 90.h : 120.h,
+//           child: MyEventListTile(
+//             eventMonth: DateFormat('MMM').format(dateTime),
+//             eventDay: DateFormat('dd').format(dateTime),
+//             eventNames: eventNames,
+//             isToday: (even.month == DateTime.now().month && dateTime.day == DateTime.now().day),
+//           ),
+//         ),
+//       );
+//     }).toList(),
+//   );
+// }
 
 
 

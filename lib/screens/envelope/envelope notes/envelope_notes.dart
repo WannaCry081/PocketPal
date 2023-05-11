@@ -147,6 +147,7 @@ class _EnvelopeNotesPageState extends State<EnvelopeNotesPage> {
                stream: db.getEnvelopeNotes(
                   widget.folder.folderId, 
                   widget.envelope.envelopeId,
+                  code: widget.code,
                  // code: widget.code
                 ),
                builder: (context, snapshot) {

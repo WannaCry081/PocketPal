@@ -6,10 +6,14 @@ import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/const/font_style.dart';
 import 'package:pocket_pal/providers/envelope_provider.dart';
 import 'package:pocket_pal/providers/folder_provider.dart';
+import 'package:pocket_pal/providers/user_provider.dart';
+import 'package:pocket_pal/providers/wall_provider.dart';
 import 'package:pocket_pal/screens/content/folder_content.dart';
+import 'package:pocket_pal/screens/content/folder_grid.dart';
 import 'package:pocket_pal/screens/envelope/envelope.dart';
 import 'package:pocket_pal/utils/envelope_util.dart';
 import 'package:pocket_pal/utils/folder_util.dart';
+import 'package:pocket_pal/utils/wall_util.dart';
 import 'package:provider/provider.dart';
 
 class SearchView extends StatefulWidget {
@@ -28,6 +32,8 @@ class _SearchViewState extends State<SearchView> {
   @override
   void initState(){
     _textEditingController = TextEditingController(text: ""); 
+    Provider.of<UserProvider>(context,listen: false).fetchUserCredential();
+    super.initState();
   }
 
   @override
@@ -43,8 +49,7 @@ class _SearchViewState extends State<SearchView> {
     final FolderProvider folderProvider = context.watch<FolderProvider>();
     final List<Folder> folderItem = folderProvider.getFolderList;
 
-    final EnvelopeProvider envelopeProvider = context.watch<EnvelopeProvider>();
-    final List<Envelope> envelopeItem = envelopeProvider.getEnvelopeList;
+    final UserProvider userProvider = context.watch<UserProvider>();
 
 
     return Scaffold(
@@ -100,7 +105,7 @@ class _SearchViewState extends State<SearchView> {
           children: [
             SizedBox( height: 20.h),
             titleText(
-              "FOLDERS",
+              "Personal Folders".toUpperCase(),
               titleColor: ColorPalette.salmonPink,
               titleSize: 16.sp,
               titleWeight: FontWeight.w500
@@ -129,25 +134,34 @@ class _SearchViewState extends State<SearchView> {
             ),
             SizedBox( height: 15.h),
             titleText(
-              "ENVELOPES",
+              "Shared Wall".toUpperCase(),
               titleColor: ColorPalette.salmonPink,
               titleSize: 16.sp,
               titleWeight: FontWeight.w500
             ),
             Flexible(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: envelopeItem.length,
-                itemBuilder: (context, index){
-                  Envelope envelope =  envelopeProvider.getEnvelopeList[index];
-                   if(searchText.isEmpty){
-                    return envelopeListTile(envelope, folderItem[index]);
-                  }
-                  if(envelope.envelopeName.toString().toLowerCase().contains(searchText.toLowerCase())){
-                    return envelopeListTile(envelope, folderItem[index]);
-                  }
-                  return Container();
-            }))
+              child: ListView(
+                children: [
+                  for (int i=0; i<userProvider.getUserGroupWall.length ; i++)
+                  ListTile(
+                      leading: const Icon(FeatherIcons.users),
+                      title: bodyText(
+                        userProvider.getUserGroupWall[i]["wallName"],
+                        bodySize: 16.sp
+                      ),
+                      onTap:  (){
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder : (context) => FolderGridPage(
+                            wallName: userProvider.getUserGroupWall[i]["wallName"],
+                          )
+                        )
+                      );
+                    },
+                  )
+                ],
+              ),
+            )
           ],
         ),
       ),
@@ -172,26 +186,5 @@ class _SearchViewState extends State<SearchView> {
       );
     },
   );
-  }
-
-  Widget envelopeListTile(Envelope envelope, Folder folder){
-    return ListTile(
-      onTap:  (){
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder : (context) => EnvelopeContentPage(
-            folder: folder,
-            envelope: envelope,
-
-          )
-        )
-      );
-    },
-      leading: const Icon(FeatherIcons.fileMinus),
-      title: bodyText(
-        envelope.envelopeName,
-        bodySize: 16.sp
-      ),
-    ); 
   }
 }

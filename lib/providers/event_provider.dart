@@ -38,7 +38,6 @@ class EventProvider with ChangeNotifier {
     //     _eventMap[date] = [event];
     //   }
     // }
-
     _eventMap = {};
     querySnapshot.docs.forEach((document) {
       DateTime eventDate = (document.get("eventDate") as Timestamp).toDate();
@@ -60,6 +59,12 @@ class EventProvider with ChangeNotifier {
 
   Future<void> addEvent(Map<String, dynamic> data) async {
     await PocketPalFirestore().addEvent(data);
+    fetchEvent();
+    return;
+  }
+
+  Future<void> deleteEvent(String docName) async {
+    await PocketPalFirestore().deleteEvent(docName);
     fetchEvent();
     return;
   }

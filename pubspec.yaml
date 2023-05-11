@@ -105,8 +105,15 @@ flutter:
     - assets/icon/Github.svg
     - assets/icon/Google.svg
     - assets/icon/Menu.svg
+    
     - assets/icon/Folder.svg
+    - assets/icon/Folder_sm.svg
+    - assets/icon/Folder_lg.svg
+
     - assets/icon/Envelope.svg
+    - assets/icon/Envelope_sm.svg
+    - assets/icon/Envelope_lg.svg
+
     - assets/icon/peso_sign.svg
 
     - assets/images/Splash.png

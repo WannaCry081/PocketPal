@@ -37,7 +37,7 @@ class PocketPalFolder extends StatelessWidget {
           children : [
     
             SvgPicture.asset(
-              "assets/icon/Folder.svg",
+              "assets/icon/Folder_lg.svg",
               width : 90.h,
               height : 90.h
             ),

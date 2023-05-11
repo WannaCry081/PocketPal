@@ -38,7 +38,7 @@ class PocketPalEnvelope extends StatelessWidget {
           children : [
     
             SvgPicture.asset(
-              "assets/icon/Envelope.svg",
+              "assets/icon/Envelope_lg.svg",
               width : 90.h,
               height : 90.h
             ),

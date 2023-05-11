@@ -86,14 +86,11 @@ class PocketPalFirestore {
   Future<void> deleteEvent(String docName) async{
     final document = _db
     .collection(_userUid)
-    .doc("$_userUid+Event");
+    .doc("$_userUid+Event")
+    .collection(_userUid)
+    .doc(docName);
 
-    final collectionRef = document.collection(_userUid);
-    final collectionSnapshot = await collectionRef.get();
-
-    for (final doc in collectionSnapshot.docs){
-      await doc.reference.delete();
-    }
+    await document.delete();
 
   }
 

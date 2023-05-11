@@ -1,6 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
-import "package:pocket_pal/services/authentication_service.dart";
 import "package:pocket_pal/services/database_service.dart";
 import "package:pocket_pal/utils/envelope_util.dart";
 

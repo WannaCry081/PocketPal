@@ -53,7 +53,7 @@ To install `Pocket Pal`, you can follow these instructions:
 
 1. Clone the Repository:
    ```powershell
-   $ git clone [https://github.com/username/repository.git](https://github.com/XData08/PocketPal.git)
+   $ git clone https://github.com/XData08/PocketPal.git
    ```
    Replace `username` with the GitHub username and `repository` with the name of the repository you want to clone.
 

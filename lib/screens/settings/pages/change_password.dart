@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/const/font_style.dart';
-import 'package:pocket_pal/screens/auth/auth_builder.dart';
 import 'package:pocket_pal/services/authentication_service.dart';
 // import 'package:pocket_pal/screens/auth/widgets/password_bottom_sheet_widget.dart';
 import 'package:pocket_pal/widgets/pocket_pal_button.dart';

@@ -1,13 +1,12 @@
 import "package:connectivity_plus/connectivity_plus.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:pocket_pal/providers/chatbox_provider.dart";
-import "package:pocket_pal/screens/auth/pages/error_page.dart";
 import "package:provider/provider.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:timezone/data/latest.dart" as tz;
 
+import "package:pocket_pal/providers/chatbox_provider.dart";
 import "package:pocket_pal/providers/envelope_provider.dart";
 import "package:pocket_pal/providers/user_provider.dart";
 import "package:pocket_pal/providers/wall_provider.dart";
@@ -15,11 +14,11 @@ import "package:pocket_pal/providers/settings_provider.dart";
 import "package:pocket_pal/providers/folder_provider.dart";
 import "package:pocket_pal/providers/event_provider.dart";
 
+import "package:pocket_pal/screens/auth/pages/error_page.dart";
 import "package:pocket_pal/screens/auth/pages/loading_dart.dart";
 import "package:pocket_pal/screens/onboard/onboard.dart";
 import "package:pocket_pal/screens/auth/auth_builder.dart";
 import "package:pocket_pal/screens/auth/pages/no_wifi_page.dart";
-
 
 import "package:pocket_pal/const/dark_theme.dart";
 import "package:pocket_pal/const/light_theme.dart";
@@ -37,11 +36,9 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-
         ChangeNotifierProvider(
           create : (context) => SettingsProvider()
         ),
-
 
         ChangeNotifierProvider(
           create : (context) => WallProvider()
@@ -75,94 +72,102 @@ Future<void> main() async {
   return;
 }
 
-class PocketPalApp extends StatefulWidget {
-  const PocketPalApp({Key? key}) : super(key: key);
-
-  @override
-  State<PocketPalApp> createState() => _PocketPalAppState();
-}
-
-class _PocketPalAppState extends State<PocketPalApp> {
-  ConnectivityResult ? _connectivityResult; // Initialize the field
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeConnectivity();
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() => _connectivityResult = result );
-    });
-  }
-
-  Future<void> _initializeConnectivity() async {
-    final ConnectivityResult result = await Connectivity().checkConnectivity();
-    setState(() => _connectivityResult = result );
-  }
+class PocketPalApp extends StatelessWidget {
+  const PocketPalApp({ Key ? key }) : super(key : key);
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
+    ScreenUtil.init(
+      context,
       designSize: const Size(360, 640),
-      builder: (context, child) {
-        return Consumer<SettingsProvider>(
-          builder: (context, settingsProvider, child) {
-            return MaterialApp(
-              title: "Pocket Pal",
-              debugShowCheckedModeBanner: false,
+    );
 
-              theme: lightTheme,
-              darkTheme: darkTheme,
-
-              themeMode: settingsProvider.getIsLightMode? 
-                ThemeMode.light : 
-                ThemeMode.dark,
-
-              home: _pocketPalAppHome(settingsProvider),
-            );
-          },
-        );
-      },
+    return MultiProvider(
+      providers: [
+        Consumer<SettingsProvider>(
+          builder: (context, settingsProvider, child) => child!,
+        ),
+        Consumer<WallProvider>(
+          builder: (context, wallProvider, child) => child!,
+        ),
+        Consumer<FolderProvider>(
+          builder: (context, folderProvider, child) => child!,
+        ),
+        Consumer<EnvelopeProvider>(
+          builder: (context, envelopeProvider, child) => child!,
+        ),
+        Consumer<EventProvider>(
+          builder: (context, eventProvider, child) => child!,
+        ),
+        Consumer<UserProvider>(
+          builder: (context, userProvider, child) => child!,
+        ),
+        Consumer<ChatBoxProvider>(
+          builder: (context, chatBoxProvider, child) => child!,
+        ),
+      ],
+      child : _appBuilder(context)
     );
   }
 
-  Widget _pocketPalAppHome(SettingsProvider settingsProvider) {
-    if (_connectivityResult == ConnectivityResult.none) {
-      return const NoWifiPage();
-    } else {
-      return StreamBuilder<ConnectivityResult>(
-        stream: Connectivity().onConnectivityChanged,
-        initialData: _connectivityResult,
+  Widget _appBuilder(BuildContext context){
+    final SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
 
-        builder: (context, snapshot) {
-          final connectivityResult = snapshot.data;
+    return MaterialApp(
+      title : "Pocket Pal",
+      debugShowCheckedModeBanner: false,
 
-          if (connectivityResult == ConnectivityResult.none) {
-            return const NoWifiPage();
+      theme : lightTheme,
+      darkTheme : darkTheme,
 
-          } else if (snapshot.hasError){
-            return const ErrorPage();
-            
-          } else if (snapshot.hasData) {
+      themeMode : (settingsProvider.getBoolPreference("isLight")) ?  
+        ThemeMode.light : 
+        ThemeMode.dark,
 
-            return FutureBuilder(
-              future: Firebase.initializeApp(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (settingsProvider.getIsFirstInstall) {
-                    return const OnboardView();
-                  } else {
-                    return const AuthViewBuilder();
-                  }
+      home : (settingsProvider.getHasWifi()) ? 
+        const NoWifiPage() : 
+        _homeBuilder(
+          settingsProvider : settingsProvider
+        )
+    );
+  }
+
+  Widget _homeBuilder({ 
+    required SettingsProvider settingsProvider
+  }){
+    return StreamBuilder<ConnectivityResult>(
+      stream : settingsProvider.getConnectivityResult(),
+      builder :(context, snapshot) {
+        
+        if (snapshot.data == ConnectivityResult.none){
+          return const NoWifiPage();
+        }
+
+        else if (snapshot.hasError){
+          return const ErrorPage();
+        }
+
+        else if (snapshot.hasData){
+          return FutureBuilder(
+            future : Firebase.initializeApp(),
+            builder : (context, snapshot){
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (settingsProvider.getBoolPreference("isFirstInstall")) {
+                  return const OnboardView();
                 } else {
-                  return const LoadingPage();
+                  return const AuthViewBuilder();
                 }
-              },
-            );
-          } else {
-            return const LoadingPage();
-          }
-        },
-      );
-    }
+              } else {
+                return const LoadingPage();
+              }
+            }
+          );
+        }
+        
+        else {
+          return const LoadingPage();
+        }
+      },
+    ); 
   }
 }

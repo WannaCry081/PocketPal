@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/const/font_style.dart';
-import 'package:pocket_pal/screens/envelope/widgets/glassbox_widget.dart';
 import 'package:pocket_pal/widgets/pocket_pal_appbar.dart';
 import 'package:pocket_pal/widgets/pocket_pal_button.dart';
-import 'package:pocket_pal/widgets/pocket_pal_formfield.dart';
 import 'package:pocket_pal/screens/calculator/widgets/textfield_widget.dart';
 
 class CalculatorView extends StatefulWidget {

@@ -1,20 +1,17 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/const/font_style.dart';
 
 class MyDropDownMenuWidget extends StatefulWidget {
-  String? dropdownValue;
+  final String? dropdownValue;
   final List<String> categories;
   final List<Color> categoryColors;
   final void Function(String?)? onChanged;
   final GlobalKey<FormState> formKey;
   final String? Function(String?)? validator;
 
-  MyDropDownMenuWidget({
+  const MyDropDownMenuWidget({
     this.dropdownValue,
     required this.categories,
     required this.categoryColors,

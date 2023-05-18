@@ -428,7 +428,7 @@ class PocketPalDatabase {
     final envelopeData = snapshot.data();
     final transactions = envelopeData?["envelopeTransaction"] as List<dynamic>;
 
-    if (transactions == null || transactions.length <= index) {
+    if (transactions.isEmpty || transactions.length <= index) {
       return;
     }
 
@@ -520,7 +520,7 @@ class PocketPalDatabase {
     final envelopeData = snapshot.data();
     final notesData = envelopeData?["envelopeNotes"] as List<dynamic>;
 
-    if (notesData == null || notesData.length <= index) {
+    if (notesData.isEmpty || notesData.length <= index) {
       return;
     }
 
@@ -555,7 +555,7 @@ class PocketPalDatabase {
       final envelopeData = snapshot.data();
       final notesData = envelopeData?["envelopeNotes"] as List<dynamic>;
 
-      if (notesData == null || notesData.length <= index) {
+      if (notesData.isEmpty || notesData.length <= index) {
       print("Failed 1");
         return;
       }

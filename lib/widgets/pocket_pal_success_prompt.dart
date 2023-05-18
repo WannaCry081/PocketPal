@@ -1,8 +1,9 @@
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:google_fonts/google_fonts.dart";
+
 import "package:pocket_pal/const/color_palette.dart";
+import "package:pocket_pal/const/font_style.dart";
 import "package:pocket_pal/screens/auth/auth_builder.dart";
 import "package:pocket_pal/widgets/pocket_pal_button.dart";
 
@@ -48,23 +49,19 @@ class PocketPalSuccessPrompt extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children : [
                 SizedBox( height : 20.h ),
-                Text(
+                bodyText(
                   pocketPalSuccessTitle,
-                  style : GoogleFonts.openSans(
-                    fontSize : 18.sp,
-                    fontWeight : FontWeight.w800
-                  )
+                  bodySize: 18.sp,
+                  bodyWeight: FontWeight.w800
                 ),
             
                 SizedBox( height : 10.h ),
                 SizedBox(
                   width : 180.w,
-                  child: Text(
+                  child: bodyText(
                     pocketPalSuccessMessage,
-                    textAlign: TextAlign.center,
-                    style : GoogleFonts.montserrat(
-                      fontSize : 12.sp
-                    )
+                    bodyAlignment: TextAlign.center,
+                    bodySize: 12.sp
                   ),
                 ),
             
@@ -82,12 +79,10 @@ class PocketPalSuccessPrompt extends StatelessWidget {
                   buttonHeight: 36.h, 
                   buttonBorderRadius: 100,
                   buttonColor: ColorPalette.crimsonRed, 
-                  buttonChild: Text(
+                  buttonChild: titleText(
                     "Close",
-                    style : GoogleFonts.poppins(
-                      color : ColorPalette.white,
-                      fontSize : 14.sp
-                    )
+                    titleSize : 14.sp,
+                    titleColor: ColorPalette.white
                   )
                 )
               ]

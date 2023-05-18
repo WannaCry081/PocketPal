@@ -3,6 +3,7 @@ import "dart:async";
 import "package:flutter/material.dart";
 import "package:flutter_feather_icons/flutter_feather_icons.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:flutter_staggered_animations/flutter_staggered_animations.dart";
 
 import "package:pocket_pal/screens/auth/auth_builder.dart";
 import "package:pocket_pal/screens/onboard/widgets/pageview_indicator_widget.dart";
@@ -111,47 +112,31 @@ class _OnboardViewState extends State<OnboardView> {
             }
           ),
 
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 16.w,
+              vertical: 20.h
+            ),
+            child: AnimationLimiter(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
 
-          Positioned(
-            bottom : 0,
-            child: SizedBox(
-              width : screenSize.width, 
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16.w,
-                  vertical: 10.h
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children : [
-                          
-                    MyPageViewIndicatorWidget(
-                      pageViewItemLength: _onboardItems.length, 
-                      pageViewCurrentPage: _currentPage
-                    ),
+                children : AnimationConfiguration.toStaggeredList(
+                  childAnimationBuilder: (widget){
 
-                    SizedBox(height : 26.h ),
+                    return SlideAnimation(
+                      verticalOffset: 40.0,
+                      duration : const Duration(milliseconds: 375),
 
-                    titleText(
-                      _onboardItems[_currentPage][1].toUpperCase(),
-                      titleSize : 20.sp,
-                      titleColor : Colors.white,
-                      titleWeight : FontWeight.w700,
-                    ),  
+                      child : FadeInAnimation(
+                        duration : const Duration(milliseconds: 480),
+                        child : widget
+                      )
+                    );
+                  },
 
-                    SizedBox(height : 8.h ), 
-                
-                    bodyText(
-                      _onboardItems[_currentPage][2],
-                      bodySize: 14.sp,
-                      bodyColor : ColorPalette.grey
-                    ),
-
-                    SizedBox( height : 26.h ),
-                    _onboardButton(),
-
-                    SizedBox(height : 14.h) 
-                  ]
+                  children: _appBuilder()
                 ),
               ),
             ),
@@ -159,6 +144,36 @@ class _OnboardViewState extends State<OnboardView> {
         ],
       ),
     );
+  }
+
+  List<Widget> _appBuilder(){
+    return [
+      MyPageViewIndicatorWidget(
+        pageViewItemLength: _onboardItems.length, 
+        pageViewCurrentPage: _currentPage
+      ),
+
+      SizedBox(height : 26.h ),
+
+      titleText(
+        _onboardItems[_currentPage][1].toUpperCase(),
+        titleSize : 20.sp,
+        titleColor : Colors.white,
+        titleWeight : FontWeight.w600,
+      ),  
+
+      SizedBox(height : 8.h ), 
+  
+      bodyText(
+        _onboardItems[_currentPage][2],
+        bodySize: 14.sp,
+        bodyColor : ColorPalette.grey
+      ),
+
+      SizedBox( height : 26.h ),
+      _onboardButton(),
+
+    ];
   }
 
   Widget _onboardButton(){    
@@ -188,8 +203,8 @@ class _OnboardViewState extends State<OnboardView> {
               borderRadius: BorderRadius.circular(20),
               boxShadow : [
                 BoxShadow(
-                  color : ColorPalette.crimsonRed,
-                  blurRadius: 6
+                  color : ColorPalette.crimsonRed.withOpacity(.6),
+                  blurRadius: 10
                 )
               ]
             ),

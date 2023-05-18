@@ -3,7 +3,6 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
-import 'package:intl/intl.dart';
 
 
 // ignore: must_be_immutable
@@ -56,7 +55,6 @@ class _AddEnvelopeNoteState extends State<AddEnvelopeNote> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(

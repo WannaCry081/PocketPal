@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -66,7 +63,6 @@ class _CalendarViewState extends State<CalendarView> {
   Widget build(BuildContext context) {
 
     final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
 
     final EventProvider eventProvider = context.watch<EventProvider>();
     final List<Event> eventItem = eventProvider.getEventList;

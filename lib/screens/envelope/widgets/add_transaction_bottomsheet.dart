@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/const/font_style.dart';
 import 'package:pocket_pal/screens/envelope/widgets/drop_down_menu.dart';
@@ -15,9 +13,9 @@ class AddNewTransaction extends StatefulWidget {
   final TextEditingController transactionAmountController;
   final TextEditingController transactionCategoryController;
   final Function(String) addTransactionFunction;
-  List<String> categories; 
+  final List<String> categories; 
 
-  AddNewTransaction({
+  const AddNewTransaction({
     required this.fieldName,
     required this.formKey,
     required this.transactionTypeController,
@@ -48,7 +46,6 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
   
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
 
     return Padding(
        padding : EdgeInsets.only(
@@ -109,6 +106,8 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                   formValidator: (value){
                     if(value!.isEmpty){
                       return "Please enter a transaction name.";
+                    } else {
+                      return null;
                     }
                   },
                 ),
@@ -123,6 +122,8 @@ class _AddNewTransactionState extends State<AddNewTransaction> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please select a category';
+                    } else {
+                      return null;
                     }
                   },
                   onChanged: (value){

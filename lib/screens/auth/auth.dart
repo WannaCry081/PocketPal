@@ -16,15 +16,15 @@ class AuthView extends StatefulWidget {
 
 class _AuthViewState extends State<AuthView>{
 
-  bool _isFirstInstall = true;
+  late bool _isFirstInstall;
 
   @override
-  void didChangeDependencies(){
-    super.didChangeDependencies();
+  void initState(){
+    super.initState();
     _isFirstInstall = Provider.of<SettingsProvider>(
       context,
-      listen : true
-    ).getIsFirstInstall;
+      listen: false
+    ).getBoolPreference("isFirstInstall");
     return;
   }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:glassmorphism/glassmorphism.dart';
-import 'package:pocket_pal/const/color_palette.dart';
 
 class Glassbox extends StatelessWidget {
   final double height;

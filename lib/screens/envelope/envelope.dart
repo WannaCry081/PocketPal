@@ -1,10 +1,8 @@
-import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pocket_pal/const/color_palette.dart';
 import 'package:pocket_pal/const/font_style.dart';
 import 'package:pocket_pal/screens/envelope/widgets/add_transaction_bottomsheet.dart';
@@ -18,7 +16,6 @@ import 'package:pocket_pal/services/database_service.dart';
 import 'package:pocket_pal/utils/envelope_util.dart';
 import 'package:pocket_pal/utils/folder_util.dart';
 import 'package:pocket_pal/utils/transaction_util.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pocket_pal/screens/envelope/widgets/glassbox_widget.dart';
 
 
@@ -26,9 +23,9 @@ import 'package:pocket_pal/screens/envelope/widgets/glassbox_widget.dart';
 class EnvelopeContentPage extends StatefulWidget {
   final Envelope envelope;
   final Folder folder;
-  String ? code;
+  final String ? code;
 
-  EnvelopeContentPage({
+  const EnvelopeContentPage({
     Key ? key,
     required this.envelope,
     required this.folder,
@@ -153,7 +150,6 @@ class _EnvelopeContentPageState extends State<EnvelopeContentPage> {
   Widget build(BuildContext context) {
 
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     
     return Scaffold(
       extendBody: true,

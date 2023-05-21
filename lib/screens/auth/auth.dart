@@ -19,11 +19,11 @@ class _AuthViewState extends State<AuthView>{
   late bool _isFirstInstall;
 
   @override
-  void initState(){
-    super.initState();
+  void didChangeDependencies(){
+    super.didChangeDependencies();
     _isFirstInstall = Provider.of<SettingsProvider>(
       context,
-      listen: false
+      listen: true
     ).getBoolPreference("isFirstInstall");
     return;
   }

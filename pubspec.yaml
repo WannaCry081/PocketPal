@@ -13,38 +13,41 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
+  
   shared_preferences: ^2.0.18
   provider: ^6.0.5
-  google_fonts: ^4.0.3
-  flutter_svg: ^2.0.3
+
   firebase_core: ^2.7.1
   firebase_auth: ^4.2.10
   google_sign_in: ^6.0.2
   cloud_firestore: ^4.4.4
-  flutter_feather_icons: ^2.0.0+1
-  flutter_zoom_drawer: ^3.0.4+1
-  hidden_drawer_menu: ^3.0.1
-  flutter_native_splash: ^2.2.19
-  image_picker: ^0.8.7
-  flutter_screenutil: ^5.7.0
   firebase_storage: ^11.1.0
-  glassmorphism: ^3.0.0
-  flutter_slidable: ^2.0.0
   firebase_messaging: ^14.4.1
   
+  image_picker: ^0.8.7
+  flutter_screenutil: ^5.7.0
+  flutter_slidable: ^2.0.0
   pie_chart: ^5.3.2
   flutter_native_timezone: ^2.0.0
   rxdart: ^0.27.7
   flutter_local_notifications: ^8.2.0
   timezone: ^0.8.0
-  gradient_borders: ^1.0.0
-  animations: ^2.0.7
   connectivity_plus: ^3.0.5
-  flutter_keyboard_visibility: ^5.4.1
   table_calendar: ^3.0.8
   shortid: ^0.1.2
+  
+  glassmorphism: ^3.0.0
+  flutter_zoom_drawer: ^3.0.4+1
+  gradient_borders: ^1.0.0
   flutter_spinkit: ^5.2.0
   flutter_launcher_icons: ^0.13.1
+  google_fonts: ^4.0.3
+  flutter_svg: ^2.0.3
+  flutter_feather_icons: ^2.0.0+1
+  hidden_drawer_menu: ^3.0.1
+  flutter_native_splash: ^2.2.19
+  
+  animations: ^2.0.7
   flutter_staggered_animations: ^1.1.1
   animated_text_kit: ^4.2.2
 

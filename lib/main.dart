@@ -29,6 +29,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   tz.initializeTimeZones();
 
+  await Firebase.initializeApp();
   await SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp]
   );  
@@ -148,20 +149,11 @@ class PocketPalApp extends StatelessWidget {
         }
 
         else if (snapshot.hasData){
-          return FutureBuilder(
-            future : Firebase.initializeApp(),
-            builder : (context, snapshot){
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (settingsProvider.getBoolPreference("isFirstInstall")) {
-                  return const OnboardView();
-                } else {
-                  return const AuthViewBuilder();
-                }
-              } else {
-                return const LoadingPage();
-              }
-            }
-          );
+          if (settingsProvider.getBoolPreference("isFirstInstall")) {
+            return const OnboardView();
+          } else {
+            return const AuthViewBuilder();
+          }
         }
         
         else {
